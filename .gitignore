@@ -1,0 +1,8 @@
+node_modules/
+dist/
+dev-dist/
+*.local
+.DS_Store
+coverage/
+# Datos crudos de puzzles de Lichess (se procesan con un script, no se versionan)
+data-raw/
