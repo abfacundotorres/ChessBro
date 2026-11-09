@@ -1,6 +1,9 @@
 import { HashRouter, NavLink, Route, Routes } from 'react-router-dom'
 import { Home } from './features/home/Home'
 import { Tactics } from './features/tactics/Tactics'
+import { Lessons } from './features/lessons/Lessons'
+import { LessonView } from './features/lessons/LessonView'
+import { EndgamePlay } from './features/endgames/EndgamePlay'
 import { Games } from './features/games/Games'
 import { GameDetail } from './features/games/GameDetail'
 import { FreeBoard } from './features/board/FreeBoard'
@@ -9,9 +12,9 @@ import { UpdateBanner } from './ui/UpdateBanner'
 
 const NAV = [
   { to: '/', label: 'Inicio', end: true },
+  { to: '/lecciones', label: 'Lecciones', end: false },
   { to: '/tactica', label: 'Táctica', end: false },
   { to: '/partidas', label: 'Partidas', end: false },
-  { to: '/tablero', label: 'Tablero', end: false },
   { to: '/ajustes', label: 'Ajustes', end: false },
 ]
 
@@ -23,6 +26,9 @@ export function App() {
         <main className="flex-1 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-24">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/lecciones" element={<Lessons />} />
+            <Route path="/lecciones/:id" element={<LessonView />} />
+            <Route path="/finales/:id" element={<EndgamePlay />} />
             <Route path="/tactica" element={<Tactics />} />
             <Route path="/partidas" element={<Games />} />
             <Route path="/partidas/:id" element={<GameDetail />} />

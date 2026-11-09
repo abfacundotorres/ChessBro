@@ -185,8 +185,18 @@ export function sanLineToUci(startFen: string, sans: readonly string[]): string[
 export function validateFen(fen: string): string | null {
   try {
     new Chess(fen)
-    return null
   } catch (e) {
     return e instanceof Error ? e.message : 'FEN inválido'
   }
+  // chess.js no rechaza una posición en la que el bando que NO mueve está en jaque
+  // (el rival "pasó" con su rey atacado). Se detecta dando vuelta el turno.
+  const parts = fen.split(' ')
+  parts[1] = parts[1] === 'w' ? 'b' : 'w'
+  parts[3] = '-'
+  try {
+    if (new Chess(parts.join(' ')).inCheck()) return 'Posición ilegal: el rey del bando que no mueve está en jaque'
+  } catch {
+    /* el FEN con turno invertido puede ser inválido por otras razones; ya se validó el original */
+  }
+  return null
 }

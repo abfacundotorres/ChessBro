@@ -112,4 +112,10 @@ describe('notación', () => {
     expect(validateFen(START_FEN)).toBeNull()
     expect(validateFen('esto no es un fen')).not.toBeNull()
   })
+
+  it('validateFen rechaza que el bando que no mueve esté en jaque', () => {
+    // Peón blanco en e5 da jaque al rey negro en f6, pero mueven las blancas.
+    expect(validateFen('8/8/5k2/2K1P3/8/8/8/8 w - - 0 1')).toMatch(/ilegal/)
+    expect(validateFen('8/8/5k2/2K1P3/8/8/8/8 b - - 0 1')).toBeNull()
+  })
 })

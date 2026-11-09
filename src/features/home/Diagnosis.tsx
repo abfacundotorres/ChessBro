@@ -6,22 +6,24 @@ import { isProvisional } from '../../engine/glicko2'
 import { db } from '../../data/db'
 import { getProfile } from '../../data/tactics'
 import { summarize } from '../../data/games'
+import { endgameStats } from '../../data/lessons'
 
 const ICON: Record<CheckState, string> = { ok: '✓', todo: '○', nodata: '…', pending: '·' }
 const TONE: Record<CheckState, string> = { ok: 'text-accent', todo: '', nodata: 'text-muted', pending: 'text-muted' }
 
 export function Diagnosis() {
   const data = useLiveQuery(async () => {
-    const [profile, games] = await Promise.all([getProfile(), db.games.toArray()])
-    return { profile, summary: summarize(games) }
+    const [profile, games, eg] = await Promise.all([getProfile(), db.games.toArray(), endgameStats()])
+    return { profile, summary: summarize(games), endgameBest: Object.fromEntries([...eg].map(([k, v]) => [k, v.bestClean])) }
   }, [])
   if (!data) return null
-  const { profile, summary } = data
+  const { profile, summary, endgameBest } = data
   const { index, checks } = currentBand(BANDS, {
     puzzleRating: profile.rating,
     puzzleProvisional: isProvisional(profile),
     blundersPerGame: summary?.blundersPerGame ?? null,
     analyzedGames: summary?.analyzed ?? 0,
+    endgameBest,
   })
   const band = BANDS[index]!
 

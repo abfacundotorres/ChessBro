@@ -19,6 +19,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `npm run build` — typecheck + build + service worker
 - `BASE=/ChessBro/ npm run build && npx vite preview --base /ChessBro/` — probar como en Pages
 - `node scripts/gen-icons.mjs` — regenerar PNG desde `public/icons/icon.svg`
+- `node scripts/build-lesson-puzzles.mjs` — regenerar `src/content/lessonPuzzles.json` (ejercicios tácticos de las lecciones)
 - `node scripts/build-puzzles.mjs` — regenerar `public/puzzles/` desde `data-raw/lichess_db_puzzle.csv`
   (ver cabecera del script para la descarga y descompresión)
 
@@ -32,6 +33,9 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/<pantalla>/` — pantallas. `src/ui/` — componentes reutilizables (Board, MoveList).
 - `src/lib/` — integración con el navegador (PWA, motor).
 - `src/features/games/` — importación de Lichess, análisis y detalle de partida.
+- `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
+- `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`) y `author.test.ts`, que imprime las
+  jugadas buenas de posiciones candidatas para escribir ejercicios nuevos.
 
 ## Convenciones
 - Español rioplatense (es-AR). Notación figurativa (♘f3) en UI; SAN inglés internamente.
@@ -41,11 +45,13 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   CSP inyectada en build (`vite.config.ts`).
 - Pocas dependencias: sin librería de UI, de gráficos ni state manager.
 - Un commit por hito, tests en verde. Supuestos nuevos → `docs/DECISIONES.md`.
+- Todo ejercicio escrito a mano se verifica con Stockfish en los tests (`verifyExercise`); toda posición
+  pasa `validateFen` (rechaza posiciones ilegales).
 
 ## Hitos
 - [x] H0 Esqueleto PWA, tablero interactivo, CI y deploy
 - [x] H1 Táctica: subset de puzzles Lichess, Glicko-2, repaso espaciado (Dexie)
 - [x] H2 Importar partidas de Lichess + análisis Stockfish + tarjetas de error + diagnóstico
-- [ ] H3 Currículo 800–1400: lecciones y finales jugables
+- [x] H3 Currículo 800–1400: lecciones y finales jugables
 - [ ] H4 Repertorio con repaso espaciado + plan semanal
 - [ ] H5 Currículo 1400–1800, pulido, e2e offline

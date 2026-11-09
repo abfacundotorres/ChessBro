@@ -72,3 +72,31 @@
   muestran como pendientes y no bloquean.
 - **Backup v2** incluye partidas, análisis y ajustes; sigue importando backups v1.
 - Cambiar de modo (nuevos/repaso) o de tema carga otro puzzle al instante.
+
+## H3
+- **Dos tipos de ejercicios en las lecciones**: los *tácticos* (horquilla, clavada, descubierta…) salen de
+  puzzles de Lichess elegidos por `scripts/build-lesson-puzzles.mjs` (los más populares y fáciles de cada
+  tema, un solo motivo por puzzle, sin repetir entre lecciones); los de *mates y finales* están escritos
+  a mano y los verifica un test con Stockfish.
+- **Verificación con el motor de los ejercicios escritos a mano** (`src/test/verifyExercise.ts`): para cada
+  posición evalúa TODAS las jugadas legales (profundidad 12) y exige que `accept` sea exactamente el conjunto
+  de jugadas buenas (< 8 puntos de probabilidad de ganar menos que la mejor; para mate en n, las que dan
+  mate en ≤ n). Si el motor encuentra otra jugada tan buena, el test falla: o se agrega a `accept` o se cambia
+  la posición. Los mates en 2+ exigen clave única. Así nunca se marca como error una jugada correcta.
+- **Las respuestas del rival en los ejercicios de finales son ilustrativas**: se muestra la línea del motor,
+  pero el ejercicio es de una jugada (la clave).
+- **`validateFen` ahora rechaza posiciones ilegales** (el bando que no mueve está en jaque), que chess.js
+  acepta. Salió de un error propio: tres ejercicios de oposición tenían el rey negro en jaque con las blancas
+  a mover y el motor los evaluaba igual.
+- **Finales jugables contra el motor**: el rival juega a profundidad 10 y se calcula en el teléfono. Los
+  límites de jugadas (25 dama, 29 torre, 40 rey y peón, 30 para salvar tablas) se comprobaron con una
+  simulación motor contra motor en los tests. Mate de torre "en menos de 30 jugadas" = 29 jugadas propias.
+- **Pistas en finales**: muestran la mejor jugada del motor (profundidad 12) pero la partida deja de contar
+  para el progreso (el criterio del diagnóstico usa solo victorias sin pistas).
+- **Diagnóstico**: el criterio "mate de torre en < 30 jugadas" de la banda 1100–1400 ahora se mide con el
+  mejor resultado sin pistas del final de torre. Lucena/Philidor siguen pendientes hasta H5.
+- **Lecciones de lectura sin ejercicios** (apertura, mate de dama/torre) se marcan como terminadas al leerlas.
+- **No se implementaron** "Cálculo: jaques, capturas, amenazas" ni "Repertorio mínimo" como lecciones: la
+  primera ya está en *Chequeo de seguridad*; el repertorio es H4.
+- **La barra de navegación** pasó a: Inicio · Lecciones · Táctica · Partidas · Ajustes. El tablero libre
+  se abre desde Inicio.

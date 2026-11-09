@@ -45,6 +45,26 @@ export interface GameRecord extends ImportedGame {
   }
 }
 
+export interface LessonProgress {
+  id: string
+  /** Ejercicios resueltos (ids). */
+  exercises: string[]
+  /** ms desde epoch al marcarla como terminada. */
+  doneAt?: number
+}
+
+export interface EndgameResult {
+  id?: number
+  endgameId: string
+  ts: number
+  date: string
+  success: boolean
+  /** Jugadas del usuario hasta el final. */
+  moves: number
+  /** Veces que pidió pista en esa partida. */
+  hints: number
+}
+
 export interface Setting {
   key: string
   value: string
@@ -56,6 +76,8 @@ export class ChessBroDB extends Dexie {
   reviews!: EntityTable<ReviewRecord, 'puzzleId'>
   games!: EntityTable<GameRecord, 'id'>
   settings!: EntityTable<Setting, 'key'>
+  lessons!: EntityTable<LessonProgress, 'id'>
+  endgames!: EntityTable<EndgameResult, 'id'>
 
   constructor(name = 'chessbro') {
     super(name)
@@ -68,6 +90,10 @@ export class ChessBroDB extends Dexie {
     this.version(2).stores({
       games: '&id, createdAt',
       settings: '&key',
+    })
+    this.version(3).stores({
+      lessons: '&id',
+      endgames: '++id, endgameId, date',
     })
   }
 }

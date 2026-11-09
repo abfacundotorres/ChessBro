@@ -28,7 +28,7 @@ export const BANDS: Band[] = [
     criteria: [
       { kind: 'puzzle', min: 1450 },
       { kind: 'blunders', max: 0.7 },
-      { kind: 'pending', label: 'Mate de torre en menos de 30 jugadas', milestone: 'H3' },
+      { kind: 'endgame', id: 'krk', max: 29, label: 'Mate de torre y rey en menos de 30 jugadas' },
     ],
   },
   {
@@ -66,6 +66,6 @@ export const MODULES: Module[] = [
   { name: 'Táctica', description: 'Puzzles por tema y nivel, con repaso de los que fallás.', to: '/tactica' },
   { name: 'Tablero libre', description: 'Mové piezas, probá ideas, deshacé.', to: '/tablero' },
   { name: 'Tus partidas', description: 'Importá de Lichess; tus errores se vuelven ejercicios.', to: '/partidas' },
-  { name: 'Lecciones y finales', description: 'Currículo guiado y finales jugables contra el motor.', milestone: 'H3' },
+  { name: 'Lecciones y finales', description: 'Currículo guiado y finales jugables contra el motor.', to: '/lecciones' },
   { name: 'Repertorio', description: 'Aperturas con repaso espaciado.', milestone: 'H4' },
 ]
