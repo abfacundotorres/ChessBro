@@ -103,3 +103,17 @@ describe('alternativas en ejercicios de partidas', () => {
     expect(isGoodAlternative(9990, { mate: -2 }, winPercent)).toBe(true)
   })
 })
+
+describe('recálculo de análisis', () => {
+  it('recalcula una sola vez con las evaluaciones guardadas', async () => {
+    const { refreshAnalyses } = await import('../games')
+    const g = parseLichessGame(RAW, 'Facu')!
+    await saveImported([g], 1, db)
+    const evals: PositionEval[] = [ev({ cp: 30 }), ev({ cp: -30 }), ev({ cp: 30 }), ev({ cp: -30 }), ev({ cp: 30 }), ev({ cp: -20 }), ev({ mate: 1 }), ev({ mate: 0 })]
+    await saveAnalysis(g.id, evals, 14, '2026-11-09', 5, db)
+    await setSetting('analysisRules', null, db)
+    expect(await refreshAnalyses('2026-11-09', db)).toBe(1)
+    expect((await db.games.get(g.id))!.analysis!.analyzedAt).toBe(5)
+    expect(await refreshAnalyses('2026-11-09', db)).toBe(0)
+  })
+})

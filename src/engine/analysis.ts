@@ -63,11 +63,14 @@ export function winPercent(cp: number): number {
   return 50 + 50 * (2 / (1 + Math.exp(-0.00368208 * c)) - 1)
 }
 
-/** Umbrales de Lichess: 10 / 20 / 30 puntos de probabilidad de ganar. */
+/**
+ * Umbrales en puntos de probabilidad de ganar perdidos: 5 / 10 / 20, como las bandas de "puntos esperados" de Chess.com
+ * (los de Lichess, 10 / 20 / 30, dejaban pasar demasiado en partidas de nivel bajo).
+ */
 export function severityOf(winLoss: number): Severity | null {
-  if (winLoss >= 30) return 'blunder'
-  if (winLoss >= 20) return 'mistake'
-  if (winLoss >= 10) return 'inaccuracy'
+  if (winLoss >= 20) return 'blunder'
+  if (winLoss >= 10) return 'mistake'
+  if (winLoss >= 5) return 'inaccuracy'
   return null
 }
 
@@ -217,7 +220,7 @@ export function analyzeGame({ startFen, moves, evals, me }: GameAnalysisInput): 
   const errors: MoveError[] = []
   const counts: Record<Severity, number> = { inaccuracy: 0, mistake: 0, blunder: 0 }
   let lossSum = 0
-  let accSum = 0
+  let invAccSum = 0
   let mine = 0
   const startNumber = Number.parseInt(startFen.split(' ')[5] ?? '1', 10) || 1
   const startsBlack = startFen.split(' ')[1] === 'b'
@@ -232,7 +235,7 @@ export function analyzeGame({ startFen, moves, evals, me }: GameAnalysisInput): 
     const c = classify({ fenBefore, played: moves[i]!, before, after, moveNumber })
     const loss = Math.max(0, winPercent(toCp(before.score)) - winPercent(-toCp(after.score)))
     lossSum += loss
-    accSum += moveAccuracy(loss)
+    invAccSum += 1 / Math.max(1, moveAccuracy(loss))
     mine++
     if (!c || !before.best) continue
     const severity = severityOf(c.winLoss)
@@ -254,7 +257,8 @@ export function analyzeGame({ startFen, moves, evals, me }: GameAnalysisInput): 
   return {
     errors,
     avgWinLoss: mine ? lossSum / mine : 0,
-    accuracy: mine ? Math.round(accSum / mine) : 100,
+    // Media armónica: un error grave pesa más que muchas jugadas buenas (el promedio simple daba 90 % hasta con blunders).
+    accuracy: mine ? Math.round(mine / invAccSum) : 100,
     counts,
   }
 }

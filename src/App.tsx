@@ -1,7 +1,10 @@
+import { useEffect } from 'react'
 import { HashRouter, NavLink, Route, Routes } from 'react-router-dom'
 import { Home } from './features/home/Home'
 import { Tactics } from './features/tactics/Tactics'
 import { Welcome } from './features/welcome/Welcome'
+import { refreshAnalyses } from './data/games'
+import { toDateStr } from './engine/dates'
 import { useStyleChoice } from './data/style'
 import { useLevelChoice } from './data/level'
 import { Repertoire } from './features/repertoire/Repertoire'
@@ -30,6 +33,10 @@ const NAV = [
 export function App() {
   const style = useStyleChoice()
   const level = useLevelChoice()
+  useEffect(() => {
+    // Si cambiaron las reglas de análisis, recalcula las partidas ya analizadas con las evaluaciones guardadas.
+    void refreshAnalyses(toDateStr(new Date())).catch(() => undefined)
+  }, [])
   if (style === undefined || level === undefined) return null // cargando
   if (style === null || level === null) return <Welcome />
   return (

@@ -8,10 +8,10 @@ describe('escalas', () => {
     expect(winPercent(0)).toBe(50)
     expect(winPercent(300)).toBeGreaterThan(70)
     expect(winPercent(-5000)).toBeCloseTo(100 - winPercent(5000))
-    expect(severityOf(9)).toBeNull()
-    expect(severityOf(10)).toBe('inaccuracy')
-    expect(severityOf(25)).toBe('mistake')
-    expect(severityOf(30)).toBe('blunder')
+    expect(severityOf(4)).toBeNull()
+    expect(severityOf(5)).toBe('inaccuracy')
+    expect(severityOf(15)).toBe('mistake')
+    expect(severityOf(20)).toBe('blunder')
   })
 
   it('mate a centipeones', () => {
@@ -76,6 +76,22 @@ describe('analyzeGame', () => {
     expect(a.errors[0]).toMatchObject({ ply: 5, san: 'Nf6', bestSan: 'g6', kind: 'allowedMate', severity: 'blunder', prevUci: 'd1h5' })
     expect(a.counts.blunder).toBe(1)
     expect(a.accuracy).toBeLessThan(100)
+  })
+})
+
+describe('precisión', () => {
+  it('un error grave baja la precisión más que el promedio simple', () => {
+    // 20 jugadas de las blancas, todas perfectas salvo una que pierde ~50 puntos de probabilidad
+    const moves: string[] = []
+    const evals: PositionEval[] = []
+    const shuffle = ['g1f3', 'g8f6', 'f3g1', 'f6g8']
+    for (let i = 0; i < 40; i++) moves.push(shuffle[i % 4]!)
+    for (let i = 0; i <= 40; i++) evals.push(ev({ cp: i % 2 === 0 ? 20 : -20 }))
+    evals[20] = ev({ cp: 20 }, ['g1f3'])
+    evals[21] = ev({ cp: 500 }) // tras la jugada 20 (blancas), el rival (negras) está ganando por 500: error grande
+    const a = analyzeGame({ startFen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', moves, evals, me: 'w' })
+    expect(a.counts.blunder).toBeGreaterThanOrEqual(1)
+    expect(a.accuracy).toBeLessThan(90)
   })
 })
 

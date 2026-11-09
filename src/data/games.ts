@@ -61,6 +61,21 @@ export async function saveAnalysis(
   })
 }
 
+/** Versión de las reglas de análisis (umbrales y precisión). Si cambia, se recalculan las partidas ya analizadas. */
+export const ANALYSIS_RULES = '2'
+
+/**
+ * Recalcula errores y precisión de las partidas analizadas con reglas viejas, usando las evaluaciones guardadas
+ * (no vuelve a correr el motor). Devuelve cuántas se actualizaron.
+ */
+export async function refreshAnalyses(today: string, db: ChessBroDB = defaultDb): Promise<number> {
+  if ((await getSetting('analysisRules', db)) === ANALYSIS_RULES) return 0
+  const games = await db.games.filter((g) => !!g.analysis).toArray()
+  for (const g of games) await saveAnalysis(g.id, g.analysis!.evals, g.analysis!.depth, today, g.analysis!.analyzedAt, db)
+  await setSetting('analysisRules', ANALYSIS_RULES, db)
+  return games.length
+}
+
 export interface GamesSummary {
   analyzed: number
   /** Errores graves (blunders) por partida, en las últimas analizadas. */
