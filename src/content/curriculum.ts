@@ -67,5 +67,6 @@ export const MODULES: Module[] = [
   { name: 'Tablero libre', description: 'Mové piezas, probá ideas, deshacé.', to: '/tablero' },
   { name: 'Tus partidas', description: 'Importá de Lichess; tus errores se vuelven ejercicios.', to: '/partidas' },
   { name: 'Lecciones y finales', description: 'Currículo guiado y finales jugables contra el motor.', to: '/lecciones' },
-  { name: 'Repertorio', description: 'Aperturas con repaso espaciado.', milestone: 'H4' },
+  { name: 'Repertorio', description: 'Aperturas con repaso espaciado: 1.e4 con blancas, 1…e5 y 1…d5 con negras.', to: '/repertorio' },
+  { name: 'Plan semanal', description: 'Qué estudiar hoy y cuánto llevás de la semana.', to: '/plan' },
 ]

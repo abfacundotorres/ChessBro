@@ -138,3 +138,39 @@
 - **Bug del tablero encontrado probando**: al terminar de mover una pieza del rival en un final, mi script
   leyó el tablero a mitad de la animación; no era un error de la app, pero confirmó que el tablero necesita
   ~150 ms para estabilizarse tras cada jugada.
+
+## H4
+- **Repertorio elegido (mi recomendación, aceptada)**: con blancas 1.e4; con negras 1…e5 contra 1.e4,
+  1…d5 contra 1.d4 y 1…e5 contra 1.c4. Criterio: pocas ideas, poca teoría, estructuras repetidas (Italiana
+  tranquila, Alapin, Avance francés, Londres/Colle) y buen rendimiento a nivel 800–1600. 24 líneas: 13 con
+  blancas y 11 con negras, de 5 a 9 jugadas propias cada una.
+- **Qué NO cubre**: el Gambito de Rey, 1.d4 con ideas raras (Blackmar, Trompowsky…), 1.Cf3 que no transponga
+  y la Siciliana con 2.c3 evitada por las negras con …e6 o …Cc6. Esas partidas se juegan con los principios
+  de la apertura; si aparecen seguido en tus partidas importadas, se agregan líneas.
+- **Verificación**: un test juega cada línea con Stockfish: ninguna jugada propia puede perder más de 8
+  puntos de probabilidad de ganar respecto de la mejor, ninguna respuesta del rival puede regalar más de 15
+  (si no, la línea enseña a ganarle a un rival que no existe) y la posición final tiene que ser sana
+  (≥ −60 cp para quien la juega). Otro test comprueba que el repertorio no se contradiga (una sola jugada por
+  posición y color). **El motor verifica las jugadas, no las explicaciones**: las ideas, planes y notas son
+  texto mío, sin consulta a fuentes externas en esta etapa; conviene que los revises. Un error mío que
+  salió en la revisión: había escrito que las negras "recapturan con el peón h" en el Londres (eso lo hacen
+  las blancas).
+- **Tarjetas de repaso**: una por cada posición en la que te toca mover. Dos líneas que llegan a la misma
+  posición (transposición) comparten la tarjeta. Se crean al practicar una línea completa y vencen al día
+  siguiente. Cajas de 1, 3, 7, 16 y 35 días como los puzzles, pero **nunca se "gradúan"**: una tarjeta
+  dominada vuelve cada 35 días para no olvidar la línea.
+- **El resultado de una tarjeta cuenta en el primer intento**: si fallás o pedís la respuesta, vuelve mañana
+  desde la primera caja, aunque después encuentres la jugada. (Bug encontrado probando: antes de arreglarlo,
+  una tarjeta fallada quedaba como vencida y sin fallo anotado.)
+- **Practicar vs. estudiar**: *Estudiar* recorre la línea con la idea, el plan y las notas; *Practicar* te
+  hace jugar tus jugadas contra las respuestas del rival de la línea. Una jugada legal pero distinta de la
+  línea cuenta como error, aunque sea buena: el repertorio entrena una respuesta concreta.
+- **Plan semanal**: las horas por semana (2 a 5, por defecto 3) fijan las metas: 12 puzzles por hora, 1–2
+  lecciones, 1–2 líneas nuevas y 1–3 partidas lentas analizadas (30 min cada una). La semana va de lunes a
+  domingo. Es una **guía**: nada se bloquea ni se penaliza si no se cumple.
+- **"Para hoy"**: primero lo que vence (repertorio y puzzles fallados), después puzzles, lección, línea
+  nueva y partidas. Se recorta al tiempo de una sesión (se tolera pasarse un 25 %); el resto queda en "si te
+  queda tiempo". La próxima línea alterna de color según cuál tengas menos practicado.
+- **Dexie v5** (`repcards`, `replines`) y backup v5, compatible con los anteriores.
+- **Navegación**: el repertorio y el plan se abren desde Inicio (tarjeta "Para hoy" y módulos); la barra
+  inferior sigue con cinco pestañas.

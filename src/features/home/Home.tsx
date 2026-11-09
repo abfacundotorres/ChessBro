@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { BANDS, MODULES } from '../../content/curriculum'
 import { Diagnosis } from './Diagnosis'
+import { Today } from './Today'
 import { StreakChip } from '../../ui/StreakChip'
 
 export function Home() {
@@ -13,6 +14,8 @@ export function Home() {
           <StreakChip />
         </div>
       </header>
+
+      <Today />
 
       <Diagnosis />
 

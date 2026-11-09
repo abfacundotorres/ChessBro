@@ -1,6 +1,10 @@
 import { HashRouter, NavLink, Route, Routes } from 'react-router-dom'
 import { Home } from './features/home/Home'
 import { Tactics } from './features/tactics/Tactics'
+import { Repertoire } from './features/repertoire/Repertoire'
+import { LineView } from './features/repertoire/LineView'
+import { ReviewRepertoire } from './features/repertoire/Review'
+import { Plan } from './features/plan/Plan'
 import { Lessons } from './features/lessons/Lessons'
 import { LessonView } from './features/lessons/LessonView'
 import { EndgamePlay } from './features/endgames/EndgamePlay'
@@ -26,6 +30,10 @@ export function App() {
         <main className="flex-1 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-24">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/repertorio" element={<Repertoire />} />
+            <Route path="/repertorio/repaso" element={<ReviewRepertoire />} />
+            <Route path="/repertorio/:id" element={<LineView />} />
+            <Route path="/plan" element={<Plan />} />
             <Route path="/lecciones" element={<Lessons />} />
             <Route path="/lecciones/:id" element={<LessonView />} />
             <Route path="/finales/:id" element={<EndgamePlay />} />

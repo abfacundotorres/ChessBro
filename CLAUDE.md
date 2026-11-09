@@ -36,8 +36,11 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
 - `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
   de autoría que imprimen lo que dice el motor de posiciones candidatas: `author.test.ts` (ejercicios),
-  `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`).
+  `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`) y `author4.test.ts` (líneas de repertorio, `REP_LINES=…`).
 - `src/content/lessonKit.ts` — helpers para escribir lecciones; `lessonsNuevas.ts` — lecciones lúdicas.
+- `src/content/repertoire.ts` — las 24 líneas del repertorio (1.e4; 1…e5 / 1…d5); `src/engine/repertoire.ts`
+  deriva las tarjetas de repaso. `src/engine/plan.ts` — metas y tareas del plan semanal.
+- `src/features/repertoire/`, `src/features/plan/` — repertorio (estudiar, practicar, repasar) y plan.
 
 ## Convenciones
 - Español rioplatense (es-AR). Notación figurativa (♘f3) en UI; SAN inglés internamente.
@@ -51,6 +54,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   pasa `validateFen` (rechaza posiciones ilegales). Las respuestas de los mini-juegos de tocar salen de
   `engine/structure.ts` (con tests); las adivinanzas de jugadas, de Stockfish. Lo que no se puede verificar
   por código va como opción múltiple de concepto, con fuentes que coincidan.
+- El repertorio no puede contradecirse (una jugada por posición) y Stockfish verifica cada línea; las
+  explicaciones no las verifica nadie: revisarlas.
 - Lecciones lúdicas: tono cálido, personajes, frases cortas; cada desafío explica el porqué al resolver.
 
 ## Hitos
@@ -58,5 +63,5 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H1 Táctica: subset de puzzles Lichess, Glicko-2, repaso espaciado (Dexie)
 - [x] H2 Importar partidas de Lichess + análisis Stockfish + tarjetas de error + diagnóstico
 - [x] H3 Currículo 800–1400: lecciones y finales jugables
-- [ ] H4 Repertorio con repaso espaciado + plan semanal
+- [x] H4 Repertorio con repaso espaciado + plan semanal
 - [ ] H5 Currículo 1400–1800, pulido, e2e offline

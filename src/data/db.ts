@@ -55,6 +55,31 @@ export interface LessonProgress {
   stars?: number
 }
 
+/** Tarjeta de repaso de repertorio: una posición y la jugada que hay que recordar. */
+export interface RepCard {
+  id: string
+  color: 'w' | 'b'
+  /** Primera línea que la contiene (para mostrar de dónde viene). */
+  lineId: string
+  fen: string
+  uci: string
+  san: string
+  box: number
+  due: string
+  lapses: number
+  /** Último día en que se repasó. */
+  last?: string
+}
+
+export interface RepLineProgress {
+  id: string
+  /** Veces que se practicó completa. */
+  practiced: number
+  /** Primer día en que se practicó (se usa para el plan semanal). */
+  firstDate: string
+  lastDate: string
+}
+
 /** Un día con práctica (para la racha). */
 export interface ActivityDay {
   date: string
@@ -87,6 +112,8 @@ export class ChessBroDB extends Dexie {
   lessons!: EntityTable<LessonProgress, 'id'>
   endgames!: EntityTable<EndgameResult, 'id'>
   activity!: EntityTable<ActivityDay, 'date'>
+  repcards!: EntityTable<RepCard, 'id'>
+  replines!: EntityTable<RepLineProgress, 'id'>
 
   constructor(name = 'chessbro') {
     super(name)
@@ -106,6 +133,10 @@ export class ChessBroDB extends Dexie {
     })
     this.version(4).stores({
       activity: '&date',
+    })
+    this.version(5).stores({
+      repcards: '&id, due, lineId',
+      replines: '&id',
     })
   }
 }

@@ -63,12 +63,12 @@ describe('finales', () => {
   })
 })
 
-describe('backup v4', () => {
+describe('backup v5', () => {
   it('conserva lecciones, estrellas, finales y racha, y acepta backups viejos', async () => {
     await markExercise('mate1', 'm1-pasillo', 5, 1, db)
     await saveEndgameResult({ endgameId: 'krk', ts: 1, date: '2026-11-09', success: true, moves: 20, hints: 0 }, db)
     const backup = JSON.parse(JSON.stringify(await exportBackup(db)))
-    expect(backup.version).toBe(4)
+    expect(backup.version).toBe(5)
     const other = new ChessBroDB(`lessons-${n++}`)
     expect(await importBackup(backup, other)).toMatchObject({ lessons: 1 })
     expect((await endgameStats(other)).get('krk')?.bestClean).toBe(20)
