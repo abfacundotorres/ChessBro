@@ -8,7 +8,7 @@ Diseño aprobado: `docs/DISEÑO.md`. Decisiones y supuestos: `docs/DECISIONES.md
 ## Stack
 Vite 8 + React 19 + TypeScript (strict) + Tailwind 4 + vite-plugin-pwa (Workbox)
 + react-router (HashRouter) + Vitest + chess.js (reglas) + react-chessboard (tablero).
-Próximos: Dexie (H1), Stockfish WASM lite single-thread (H2).
+Dexie + dexie-react-hooks + zod (datos). Próximo: Stockfish WASM lite single-thread (H2).
 Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages por Actions.
 
 ## Comandos
@@ -18,11 +18,15 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `npm run build` — typecheck + build + service worker
 - `BASE=/ChessBro/ npm run build && npx vite preview --base /ChessBro/` — probar como en Pages
 - `node scripts/gen-icons.mjs` — regenerar PNG desde `public/icons/icon.svg`
+- `node scripts/build-puzzles.mjs` — regenerar `public/puzzles/` desde `data-raw/lichess_db_puzzle.csv`
+  (ver cabecera del script para la descarga y descompresión)
 
 ## Estructura
 - `src/engine/` — lógica pura de TS. Solo puede importar relativos y `chess.js`
   (regla ESLint). Tests en `src/engine/__tests__/`.
-- `src/content/` — contenido estático (currículo, lecciones). Toda posición/solución
+- `src/data/` — Dexie (`db.ts`; migraciones: agregar `version(n)`, nunca editar las viejas),
+  táctica (`tactics.ts`), carga de puzzles (`puzzles.ts`), backup (`backup.ts`).
+- `src/content/` — contenido estático (currículo, temas, lecciones). Toda posición/solución
   se valida en tests con chess.js (y con Stockfish desde H2).
 - `src/features/<pantalla>/` — pantallas. `src/ui/` — componentes reutilizables (Board, MoveList).
 - `src/lib/` — integración con el navegador (PWA).
@@ -38,7 +42,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 
 ## Hitos
 - [x] H0 Esqueleto PWA, tablero interactivo, CI y deploy
-- [ ] H1 Táctica: subset de puzzles Lichess, Glicko-2, repaso espaciado (Dexie)
+- [x] H1 Táctica: subset de puzzles Lichess, Glicko-2, repaso espaciado (Dexie)
 - [ ] H2 Importar partidas de Lichess + análisis Stockfish + tarjetas de error + diagnóstico
 - [ ] H3 Currículo 800–1400: lecciones y finales jugables
 - [ ] H4 Repertorio con repaso espaciado + plan semanal

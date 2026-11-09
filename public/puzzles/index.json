@@ -1,0 +1,99 @@
+{
+ "version": 1,
+ "source": "Lichess puzzle database (CC0)",
+ "themes": [
+  "mateIn1",
+  "mateIn2",
+  "mateLong",
+  "hangingPiece",
+  "fork",
+  "pin",
+  "skewer",
+  "discoveredAttack",
+  "doubleCheck",
+  "backRankMate",
+  "smotheredMate",
+  "trappedPiece",
+  "deflection",
+  "attraction",
+  "capturingDefender",
+  "clearance",
+  "interference",
+  "intermezzo",
+  "xRayAttack",
+  "sacrifice",
+  "quietMove",
+  "defensiveMove",
+  "promotion",
+  "zugzwang",
+  "kingsideAttack",
+  "pawnEndgame",
+  "rookEndgame",
+  "endgame",
+  "opening",
+  "middlegame",
+  "mate"
+ ],
+ "chunks": [
+  {
+   "file": "p0400.json",
+   "min": 400,
+   "max": 600,
+   "count": 522
+  },
+  {
+   "file": "p0600.json",
+   "min": 600,
+   "max": 800,
+   "count": 1962
+  },
+  {
+   "file": "p0800.json",
+   "min": 800,
+   "max": 1000,
+   "count": 2460
+  },
+  {
+   "file": "p1000.json",
+   "min": 1000,
+   "max": 1200,
+   "count": 2437
+  },
+  {
+   "file": "p1200.json",
+   "min": 1200,
+   "max": 1400,
+   "count": 2342
+  },
+  {
+   "file": "p1400.json",
+   "min": 1400,
+   "max": 1600,
+   "count": 2275
+  },
+  {
+   "file": "p1600.json",
+   "min": 1600,
+   "max": 1800,
+   "count": 2257
+  },
+  {
+   "file": "p1800.json",
+   "min": 1800,
+   "max": 2000,
+   "count": 2061
+  },
+  {
+   "file": "p2000.json",
+   "min": 2000,
+   "max": 2200,
+   "count": 2110
+  },
+  {
+   "file": "p2200.json",
+   "min": 2200,
+   "max": 2400,
+   "count": 2032
+  }
+ ]
+}

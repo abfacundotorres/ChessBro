@@ -122,6 +122,12 @@ export function needsPromotion(fen: string, from: string, to: string): boolean {
     .some((m) => m.to === to && m.promotion !== undefined)
 }
 
+/** Casilla del rey en jaque en la posición, o null. */
+export function checkSquareOf(fen: string): string | null {
+  const chess = load(fen)
+  return chess.inCheck() ? kingSquare(chess, chess.turn()) : null
+}
+
 /** Color de la pieza en una casilla, o null. */
 export function pieceColorAt(fen: string, square: string): Color | null {
   const sq = asSquare(square)

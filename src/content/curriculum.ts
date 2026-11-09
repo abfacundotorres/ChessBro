@@ -42,8 +42,8 @@ export interface Module {
 }
 
 export const MODULES: Module[] = [
+  { name: 'Táctica', description: 'Puzzles por tema y nivel, con repaso de los que fallás.', to: '/tactica' },
   { name: 'Tablero libre', description: 'Mové piezas, probá ideas, deshacé.', to: '/tablero' },
-  { name: 'Táctica', description: 'Puzzles por tema y nivel, con repaso de los que fallás.', milestone: 'H1' },
   { name: 'Tus partidas', description: 'Importá de Lichess; tus errores se vuelven ejercicios.', milestone: 'H2' },
   { name: 'Lecciones y finales', description: 'Currículo guiado y finales jugables contra el motor.', milestone: 'H3' },
   { name: 'Repertorio', description: 'Aperturas con repaso espaciado.', milestone: 'H4' },

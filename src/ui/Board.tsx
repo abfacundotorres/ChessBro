@@ -18,6 +18,8 @@ interface BoardProps {
   movableColor?: Color | 'both' | null
   /** Devuelve true si la jugada fue aceptada. */
   onMove?: (move: MoveInput) => boolean
+  /** Casillas a resaltar (pistas). */
+  highlights?: readonly string[]
 }
 
 const LIGHT = '#dee3e6'
@@ -30,6 +32,7 @@ const TARGET_EMPTY: CSSProperties = {
 const TARGET_CAPTURE: CSSProperties = {
   background: 'radial-gradient(transparent 0%, transparent 78%, rgba(20, 85, 30, 0.45) 80%)',
 }
+const HINT: CSSProperties = { boxShadow: 'inset 0 0 0 4px rgba(36, 120, 255, 0.85)' }
 const CHECK: CSSProperties = {
   background: 'radial-gradient(rgba(255, 0, 0, 0.9) 0%, rgba(231, 0, 0, 0.5) 40%, transparent 72%)',
 }
@@ -41,7 +44,7 @@ function turnOf(fen: string): Color {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w'
 }
 
-export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove }: BoardProps) {
+export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights }: BoardProps) {
   const [selected, setSelected] = useState<{ fen: string; square: string } | null>(null)
   const [promo, setPromo] = useState<{ fen: string; from: string; to: string } | null>(null)
 
@@ -90,6 +93,7 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
     squareStyles[lastMove.to] = LAST_MOVE
   }
   if (checkSquare) squareStyles[checkSquare] = { ...squareStyles[checkSquare], ...CHECK }
+  for (const h of highlights ?? []) squareStyles[h] = { ...squareStyles[h], ...HINT }
   if (sel) squareStyles[sel] = SELECTED
   for (const t of targets) {
     const occupied = pieceColorAt(fen, t) !== null
