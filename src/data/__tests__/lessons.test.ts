@@ -1,9 +1,12 @@
 import 'fake-indexeddb/auto'
 import { beforeEach, describe, expect, it } from 'vitest'
 import { ChessBroDB } from '../db'
-import { endgameStats, getProgress, markExercise, markLessonDone, resetLesson, saveEndgameResult } from '../lessons'
+import { endgameStats, finishLesson, getProgress, markExercise, markLessonDone, resetLesson, saveEndgameResult } from '../lessons'
+import { currentStreak } from '../activity'
+import { recordAttempt } from '../tactics'
 import { exportBackup, importBackup } from '../backup'
 
+const day = (iso: string) => new Date(`${iso}T12:00:00`).getTime()
 let n = 0
 let db: ChessBroDB
 beforeEach(() => {
@@ -30,6 +33,25 @@ describe('progreso de lecciones', () => {
   })
 })
 
+describe('estrellas y racha', () => {
+  it('guarda la mejor pasada y no baja las estrellas al repetir peor', async () => {
+    expect((await finishLesson('peones', 0, 6, day('2026-11-08'), db)).stars).toBe(3)
+    const worse = await finishLesson('peones', 5, 6, day('2026-11-09'), db)
+    expect(worse).toEqual({ stars: 1, best: 3 })
+    const p = await db.lessons.get('peones')
+    expect(p?.stars).toBe(3)
+    expect(p?.doneAt).toBe(day('2026-11-08'))
+  })
+
+  it('todo lo que se practica suma a la racha: lecciones, puzzles y finales', async () => {
+    await markExercise('mate1', 'a', 5, day('2026-11-07'), db)
+    await recordAttempt({ puzzle: { id: 'p', fen: '8/8/8/8/8/8/8/8 w - - 0 1', moves: ['a1a2'], rating: 1300, rd: 75, themes: 0 }, solved: true, mode: 'new', today: '2026-11-08' }, db)
+    await saveEndgameResult({ endgameId: 'krk', ts: 1, date: '2026-11-09', success: true, moves: 20, hints: 0 }, db)
+    expect(await currentStreak('2026-11-09', db)).toEqual({ current: 3, best: 3, activeToday: true })
+    expect((await currentStreak('2026-11-12', db)).current).toBe(0)
+  })
+})
+
 describe('finales', () => {
   it('estadísticas: la mejor marca solo cuenta sin pistas', async () => {
     const base = { endgameId: 'krk', date: '2026-11-09' }
@@ -41,15 +63,19 @@ describe('finales', () => {
   })
 })
 
-describe('backup v3', () => {
-  it('conserva lecciones y finales, y acepta backups viejos sin esos campos', async () => {
+describe('backup v4', () => {
+  it('conserva lecciones, estrellas, finales y racha, y acepta backups viejos', async () => {
     await markExercise('mate1', 'm1-pasillo', 5, 1, db)
     await saveEndgameResult({ endgameId: 'krk', ts: 1, date: '2026-11-09', success: true, moves: 20, hints: 0 }, db)
     const backup = JSON.parse(JSON.stringify(await exportBackup(db)))
-    expect(backup.version).toBe(3)
+    expect(backup.version).toBe(4)
     const other = new ChessBroDB(`lessons-${n++}`)
     expect(await importBackup(backup, other)).toMatchObject({ lessons: 1 })
     expect((await endgameStats(other)).get('krk')?.bestClean).toBe(20)
+    expect(await other.activity.count()).toBeGreaterThan(0)
+
+    await finishLesson('peones', 0, 4, day('2026-11-09'), db)
+    expect((await importBackup(JSON.parse(JSON.stringify(await exportBackup(db))), new ChessBroDB(`lessons-${n++}`))).lessons).toBe(2)
 
     const old = { app: 'chessbro', version: 2, exportedAt: 'x', profile: null, attempts: [], reviews: [], games: [], settings: [] }
     const third = new ChessBroDB(`lessons-${n++}`)

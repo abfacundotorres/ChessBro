@@ -12,7 +12,7 @@ const OUT = new URL('../src/content/lessonPuzzles.json', import.meta.url)
 
 // tema de Lichess → [rating mínimo, máximo, cantidad]
 const WANT = {
-  hangingPiece: [500, 900, 4],
+  hangingPiece: [500, 900, 8],
   fork: [500, 900, 4],
   pin: [600, 1000, 4],
   skewer: [600, 1000, 3],
@@ -23,6 +23,7 @@ const WANT = {
   trappedPiece: [800, 1200, 3],
   mateIn2: [500, 900, 4],
   doubleCheck: [900, 1300, 2],
+  advancedPawn: [500, 1100, 3],
 }
 
 const best = Object.fromEntries(Object.keys(WANT).map((k) => [k, []]))
@@ -49,8 +50,10 @@ for await (const line of rl) {
 }
 
 const out = {}
+// Un puzzle no puede aparecer en dos temas (las lecciones no deben repetir ejercicios).
+const taken = new Set()
 for (const [t, [, , count]] of Object.entries(WANT)) {
-  const list = best[t].sort((a, b) => b.pop - a.pop || b.plays - a.plays || (a.id < b.id ? -1 : 1))
+  const list = best[t].filter((p) => !taken.has(p.id)).sort((a, b) => b.pop - a.pop || b.plays - a.plays || (a.id < b.id ? -1 : 1))
   const picked = []
   for (const p of list) {
     const chess = new Chess(p.fen)
@@ -62,6 +65,7 @@ for (const [t, [, , count]] of Object.entries(WANT)) {
     } catch {
       continue
     }
+    taken.add(p.id)
     if (picked.length === count) break
   }
   picked.sort((a, b) => a.rating - b.rating)

@@ -2,6 +2,7 @@ import { INITIAL_RATING, ratePuzzle } from '../engine/glicko2'
 import { isDue, newCard, review } from '../engine/srs'
 import type { Puzzle } from '../engine/puzzle'
 import { db as defaultDb, type Attempt, type ChessBroDB, type Profile, type ReviewRecord } from './db'
+import { touchActivity } from './activity'
 
 export function initialProfile(): Profile {
   return { id: 'me', ...INITIAL_RATING, ratedCount: 0, updatedAt: 0 }
@@ -42,7 +43,8 @@ export interface AttemptOutcome {
 export async function recordAttempt(input: AttemptInput, db: ChessBroDB = defaultDb): Promise<AttemptOutcome> {
   const { puzzle, solved, mode, today } = input
   const now = input.now ?? Date.now()
-  return db.transaction('rw', db.profile, db.attempts, db.reviews, async () => {
+  return db.transaction('rw', db.profile, db.attempts, db.reviews, db.activity, async () => {
+    await touchActivity(today, db)
     const profile = await getProfile(db)
     const base: Attempt = { puzzleId: puzzle.id, date: today, ts: now, mode, solved, puzzleRating: puzzle.rating, themes: puzzle.themes }
 

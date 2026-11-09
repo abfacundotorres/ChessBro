@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { BANDS, MODULES } from '../../content/curriculum'
 import { Diagnosis } from './Diagnosis'
+import { StreakChip } from '../../ui/StreakChip'
 
 export function Home() {
   return (
@@ -8,6 +9,9 @@ export function Home() {
       <header>
         <h1 className="text-2xl font-bold">ChessBro</h1>
         <p className="text-muted">De lo básico a 1800, a tu ritmo.</p>
+        <div className="mt-2">
+          <StreakChip />
+        </div>
       </header>
 
       <Diagnosis />

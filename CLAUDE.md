@@ -34,8 +34,10 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/lib/` — integración con el navegador (PWA, motor).
 - `src/features/games/` — importación de Lichess, análisis y detalle de partida.
 - `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
-- `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`) y `author.test.ts`, que imprime las
-  jugadas buenas de posiciones candidatas para escribir ejercicios nuevos.
+- `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
+  de autoría que imprimen lo que dice el motor de posiciones candidatas: `author.test.ts` (ejercicios),
+  `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`).
+- `src/content/lessonKit.ts` — helpers para escribir lecciones; `lessonsNuevas.ts` — lecciones lúdicas.
 
 ## Convenciones
 - Español rioplatense (es-AR). Notación figurativa (♘f3) en UI; SAN inglés internamente.
@@ -46,7 +48,10 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - Pocas dependencias: sin librería de UI, de gráficos ni state manager.
 - Un commit por hito, tests en verde. Supuestos nuevos → `docs/DECISIONES.md`.
 - Todo ejercicio escrito a mano se verifica con Stockfish en los tests (`verifyExercise`); toda posición
-  pasa `validateFen` (rechaza posiciones ilegales).
+  pasa `validateFen` (rechaza posiciones ilegales). Las respuestas de los mini-juegos de tocar salen de
+  `engine/structure.ts` (con tests); las adivinanzas de jugadas, de Stockfish. Lo que no se puede verificar
+  por código va como opción múltiple de concepto, con fuentes que coincidan.
+- Lecciones lúdicas: tono cálido, personajes, frases cortas; cada desafío explica el porqué al resolver.
 
 ## Hitos
 - [x] H0 Esqueleto PWA, tablero interactivo, CI y deploy

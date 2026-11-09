@@ -9,10 +9,13 @@ import { judgeEndgame } from '../../engine/endgame'
 import { replay, validateFen } from '../../engine/game'
 import { startExercise, tryExercise } from '../../engine/lesson'
 import { uciToMove } from '../../engine/puzzle'
+import { tapAnswer } from '../../engine/structure'
+import type { Challenge } from '../../engine/challenge'
 import { nodeEngine } from '../../test/stockfishNode'
-import { verifyExercise } from '../../test/verifyExercise'
+import { verifyExercise, verifyMoveChallenge } from '../../test/verifyExercise'
 
 const SQUARE = /^[a-h][1-8]$/
+const allChallenges = LESSONS.flatMap((l) => l.steps.flatMap((st, i) => (st.challenge ? [{ id: `${l.id}#${i + 1}`, ch: st.challenge }] : [])))
 const allExercises = LESSONS.flatMap((l) => l.exercises.map((e) => ({ lesson: l.id, ex: e })))
 
 describe('estructura de las lecciones', () => {
@@ -28,6 +31,7 @@ describe('estructura de las lecciones', () => {
       for (const s of l.steps) {
         expect(s.text.length).toBeGreaterThan(20)
         if (s.fen) expect(validateFen(s.fen), `${l.id}: ${s.fen}`).toBeNull()
+        if (s.challenge && 'fen' in s.challenge && s.challenge.fen) expect(validateFen(s.challenge.fen), `${l.id}: desafío`).toBeNull()
         for (const a of s.arrows ?? []) expect([a.from, a.to].every((q) => SQUARE.test(q))).toBe(true)
         for (const h of s.highlights ?? []) expect(SQUARE.test(h)).toBe(true)
       }
@@ -42,9 +46,51 @@ describe('estructura de las lecciones', () => {
   })
 
   it('hay ejercicios para cada tema táctico de la banda', () => {
-    for (const id of ['seguridad', 'mate1', 'mate2', 'horquilla', 'clavada', 'ensartada', 'descubierta', 'desviacion', 'defensor', 'atrapada', 'cuadrado', 'oposicion']) {
+    for (const id of ['seguridad', 'balanza', 'mate1', 'mate2', 'horquilla', 'clavada', 'ensartada', 'descubierta', 'desviacion', 'defensor', 'atrapada', 'cuadrado', 'oposicion', 'cerrar']) {
       expect(LESSONS.find((l) => l.id === id)?.exercises.length, id).toBeGreaterThan(0)
     }
+  })
+})
+
+describe('desafíos de las lecciones (adivinanzas y mini-juegos)', () => {
+  it('hay desafíos en las lecciones lúdicas', () => {
+    for (const id of ['balanza', 'carrera', 'peones', 'piezas', 'torre', 'refugio', 'cerrar'])
+      expect(allChallenges.filter((c) => c.id.startsWith(`${id}#`)).length, id).toBeGreaterThanOrEqual(3)
+  })
+
+  it('opción múltiple: opciones distintas y respuesta válida', () => {
+    for (const { id, ch } of allChallenges.filter((c): c is { id: string; ch: Extract<Challenge, { kind: 'choice' }> } => c.ch.kind === 'choice')) {
+      expect(ch.options.length, id).toBeGreaterThanOrEqual(2)
+      expect(new Set(ch.options).size, id).toBe(ch.options.length)
+      expect(ch.answer >= 0 && ch.answer < ch.options.length, id).toBe(true)
+      expect(ch.why.length, id).toBeGreaterThan(10)
+    }
+  })
+
+  it('tocar casillas: el diagrama es legal y la respuesta coincide con la regla calculada por código', () => {
+    for (const { id, ch } of allChallenges.filter((c): c is { id: string; ch: Extract<Challenge, { kind: 'tap' }> } => c.ch.kind === 'tap')) {
+      expect(validateFen(ch.fen), id).toBeNull()
+      const computed = tapAnswer(ch.rule, ch.fen, ch.side)
+      expect([...ch.answer].sort(), id).toEqual([...computed].sort())
+      expect(ch.answer.length, id).toBeGreaterThan(0)
+      // En modo "todas" tiene que ser razonable de tocar con el dedo.
+      if (ch.mode === 'all') expect(ch.answer.length, id).toBeLessThanOrEqual(6)
+      // Y si hay una sola casilla correcta en modo "todas", mejor que sea "any".
+      if (ch.mode === 'all') expect(ch.answer.length, id).toBeGreaterThan(1)
+    }
+  })
+
+  const moves = allChallenges.filter((c): c is { id: string; ch: Extract<Challenge, { kind: 'move' }> } => c.ch.kind === 'move')
+  it.each(moves.map((m) => [m.id, m.ch] as const))('adivinanza de jugadas %s: la verifica Stockfish', async (_id, ch) => {
+    expect(validateFen(ch.fen)).toBeNull()
+    expect(ch.options.length).toBeGreaterThanOrEqual(2)
+    expect(ch.options.length).toBeLessThanOrEqual(4)
+    const v = await verifyMoveChallenge(ch.fen, ch.options, ch.answer)
+    expect(v.problems, v.problems.join(' | ')).toEqual([])
+  }, 120_000)
+
+  it('las lecturas relacionadas son enlaces https', () => {
+    for (const l of LESSONS) for (const s of l.sources ?? []) expect(s.url, `${l.id}: ${s.title}`).toMatch(/^https:\/\/[^ ]+$/)
   })
 })
 

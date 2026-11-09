@@ -1,5 +1,7 @@
+import type { Challenge } from '../engine/challenge'
 import type { Exercise } from '../engine/lesson'
-import PUZZLES from './lessonPuzzles.json'
+import { lichess, mate1, pos } from './lessonKit'
+import { NEW_LESSONS } from './lessonsNuevas'
 
 /**
  * Lecciones del currículo (bandas 800–1400). Cada lección tiene pasos de lectura con un
@@ -22,6 +24,13 @@ export interface LessonStep {
   orientation?: 'white' | 'black'
   arrows?: Arrow[]
   highlights?: string[]
+  /** Desafío para responder antes de seguir (adivinanza o mini-juego). */
+  challenge?: Challenge
+}
+
+export interface Source {
+  title: string
+  url: string
 }
 
 export interface Lesson {
@@ -35,37 +44,11 @@ export interface Lesson {
   practice?: string
   /** Final jugable asociado (id de content/endgames.ts). */
   endgame?: string
+  /** Lecturas relacionadas (de donde salieron las ideas; el texto es propio). */
+  sources?: Source[]
 }
 
-type RawPuzzle = { id: string; fen: string; line: string[]; rating: number }
-
-const usedPuzzles = new Set<string>()
-
-/** Ejercicios a partir de puzzles de Lichess de un tema (sin repetir uno ya usado en otra lección). */
-function lichess(theme: string, why: string, take = 4): Exercise[] {
-  const list = ((PUZZLES as Record<string, RawPuzzle[]>)[theme] ?? []).filter((p) => !usedPuzzles.has(p.id)).slice(0, take)
-  for (const p of list) usedPuzzles.add(p.id)
-  return list.map((p) => ({
-    id: `li-${p.id}`,
-    fen: p.fen,
-    goal: { kind: 'win' as const },
-    line: p.line,
-    accept: [p.line[0]!],
-    why,
-    source: 'lichess' as const,
-  }))
-}
-
-/** Ejercicio escrito a mano de finales (win/hold). La respuesta del rival es solo ilustrativa. */
-function pos(id: string, fen: string, goal: 'win' | 'hold', line: [string, string], accept: string[], why: string): Exercise {
-  return { id, fen, goal: { kind: goal }, line, accept, why }
-}
-
-function mate1(id: string, fen: string, line: string, accept: string[], why: string): Exercise {
-  return { id, fen, goal: { kind: 'mate', in: 1 }, line: [line], accept, why }
-}
-
-export const LESSONS: Lesson[] = [
+const BASE_LESSONS: Lesson[] = [
   // ───────────── Banda 800–1100 ─────────────
   {
     id: 'seguridad',
@@ -455,6 +438,14 @@ export const LESSONS: Lesson[] = [
     ],
   },
 ]
+
+/** Orden de las lecciones en pantalla (dentro de cada banda). */
+const ORDER = [
+  'seguridad', 'balanza', 'mate1', 'mate2', 'horquilla', 'clavada', 'ensartada', 'apertura', 'carrera', 'mate-dama', 'mate-torre',
+  'peones', 'piezas', 'torre', 'refugio', 'descubierta', 'desviacion', 'defensor', 'atrapada', 'cuadrado', 'oposicion', 'cerrar',
+]
+
+export const LESSONS: Lesson[] = [...BASE_LESSONS, ...NEW_LESSONS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
 
 export function lessonById(id: string): Lesson | undefined {
   return LESSONS.find((l) => l.id === id)

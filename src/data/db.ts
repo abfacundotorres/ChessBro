@@ -51,6 +51,14 @@ export interface LessonProgress {
   exercises: string[]
   /** ms desde epoch al marcarla como terminada. */
   doneAt?: number
+  /** Mejor puntaje (1 a 3 estrellas) de las pasadas completas. */
+  stars?: number
+}
+
+/** Un día con práctica (para la racha). */
+export interface ActivityDay {
+  date: string
+  count: number
 }
 
 export interface EndgameResult {
@@ -78,6 +86,7 @@ export class ChessBroDB extends Dexie {
   settings!: EntityTable<Setting, 'key'>
   lessons!: EntityTable<LessonProgress, 'id'>
   endgames!: EntityTable<EndgameResult, 'id'>
+  activity!: EntityTable<ActivityDay, 'date'>
 
   constructor(name = 'chessbro') {
     super(name)
@@ -94,6 +103,9 @@ export class ChessBroDB extends Dexie {
     this.version(3).stores({
       lessons: '&id',
       endgames: '++id, endgameId, date',
+    })
+    this.version(4).stores({
+      activity: '&date',
     })
   }
 }

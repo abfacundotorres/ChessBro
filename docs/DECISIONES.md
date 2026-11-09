@@ -100,3 +100,41 @@
   primera ya está en *Chequeo de seguridad*; el repertorio es H4.
 - **La barra de navegación** pasó a: Inicio · Lecciones · Táctica · Partidas · Ajustes. El tablero libre
   se abre desde Inicio.
+
+## Clases lúdicas (entre H3 y H4)
+- **Pedido**: lecciones nuevas hasta 1400 que sean lúdicas y pedagógicas, usando información de internet.
+  Se eligió: historias y personajes, mini-juegos en el tablero, desafíos con estrellas y rachas, y
+  adivinanzas; fuentes cualesquiera, reescritas.
+- **Cómo se usó internet**: se hicieron búsquedas web para contrastar los conceptos (estructura de
+  peones, alfil bueno/malo y avanzadas, columnas abiertas y séptima fila, desarrollo y tempo, cambios
+  cuando se va ganando, seguridad del rey). Solo se leyeron los resúmenes de la búsqueda, no las páginas
+  completas. Se tomaron las ideas en las que coinciden varias fuentes y **se descartaron las cifras sueltas**
+  (por ejemplo, "el par de alfiles vale cinco peones"), que son reglas empíricas. **Todo el texto es propio**;
+  los enlaces de "Para seguir leyendo" son lecturas relacionadas, no material copiado.
+- **Siete lecciones nuevas**: La balanza de las piezas, La carrera del desarrollo (banda 800–1100); Los
+  peones, El alfil/el caballo y su balcón, La torre pide columnas abiertas, El refugio del rey, Cómo cerrar
+  una partida ganada (banda 1100–1400). Cada una trae historia con personajes y 3 a 5 desafíos.
+- **Tres tipos de desafío, todos verificables**:
+  - *Tocar casillas* (mini-juego): la respuesta sale de funciones puras con tests
+    (`engine/structure.ts`: aislados, doblados, pasados, piezas colgadas, avanzadas, columnas abiertas,
+    alfil malo, piezas sin desarrollar). El test exige que la respuesta que escribí coincida con la calculada.
+  - *Elegir jugada*: Stockfish verifica que la respuesta es buena y que cada distractor es claramente peor
+    (≥ 12 puntos de probabilidad de ganar). Solo se usa donde la diferencia es objetiva (regalar material,
+    dejarse mate): **no se pueden "verificar" preguntas de estilo** como "¿cuál desarrolla mejor?".
+  - *Opción múltiple*: para conceptos que no se pueden calcular (valores aproximados, planes). Las
+    respuestas vienen de lo que coincide en varias fuentes y se redactaron con las salvedades del caso
+    (por ejemplo, que cambiar piezas cuando se va ganando solo sirve si el final resultante se gana).
+- **El verificador encontró un error mío**: en la defensa contra el mate del pastor yo había puesto ...♘f6
+  como respuesta correcta; es justo la jugada que permite ♕xf7 mate. Las buenas son ...♕e7 y ...g6.
+- **Definiciones simplificadas, dichas como tales en la lección**: "alfil malo" = 4 o más peones propios en
+  el color de su casilla y ≤ 5 jugadas posibles; "pieza colgada" = atacada y sin defensa, o atacada por una
+  pieza de menor valor (no considera clavadas ni rayos X); "avanzada" = casilla vacía en la 4.ª–6.ª fila
+  (desde cada bando), defendida por un peón y que ningún peón rival puede atacar.
+- **Estrellas**: 3 sin errores; 2 si los errores no pasan de uno cada cuatro desafíos (mínimo uno); 1 si hay
+  más. Cada intento equivocado y cada "ver solución" cuenta. Se guarda la mejor marca. Las lecciones de pura
+  lectura (apertura, mates de dama y torre) no tienen puntaje.
+- **Racha**: días seguidos con alguna práctica (puzzle, ejercicio o desafío de lección, final). Sigue viva si
+  practicaste hoy o ayer. Se guarda por día en Dexie v4 (`activity`), entra en el backup v4.
+- **Bug del tablero encontrado probando**: al terminar de mover una pieza del rival en un final, mi script
+  leyó el tablero a mitad de la animación; no era un error de la app, pero confirmó que el tablero necesita
+  ~150 ms para estabilizarse tras cada jugada.

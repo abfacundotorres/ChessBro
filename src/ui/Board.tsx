@@ -22,6 +22,10 @@ interface BoardProps {
   highlights?: readonly string[]
   /** Flechas fijas (análisis): jugada hecha, mejor jugada. */
   arrows?: Arrow[]
+  /** Modo "tocar casillas" (mini-juegos): cada toque se informa y no se mueven piezas. */
+  onSquareTap?: (square: string) => void
+  /** Casillas marcadas: seleccionada, correcta o incorrecta. */
+  marks?: Readonly<Record<string, 'sel' | 'ok' | 'bad'>>
 }
 
 const LIGHT = '#dee3e6'
@@ -33,6 +37,11 @@ const TARGET_EMPTY: CSSProperties = {
 }
 const TARGET_CAPTURE: CSSProperties = {
   background: 'radial-gradient(transparent 0%, transparent 78%, rgba(20, 85, 30, 0.45) 80%)',
+}
+const MARK_STYLES: Record<'sel' | 'ok' | 'bad', CSSProperties> = {
+  sel: { boxShadow: 'inset 0 0 0 5px rgba(36, 120, 255, 0.9)' },
+  ok: { backgroundColor: 'rgba(22, 163, 74, 0.55)' },
+  bad: { backgroundColor: 'rgba(220, 38, 38, 0.5)' },
 }
 const HINT: CSSProperties = { boxShadow: 'inset 0 0 0 4px rgba(36, 120, 255, 0.85)' }
 const CHECK: CSSProperties = {
@@ -46,7 +55,7 @@ function turnOf(fen: string): Color {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w'
 }
 
-export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights, arrows }: BoardProps) {
+export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights, arrows, onSquareTap, marks }: BoardProps) {
   const [selected, setSelected] = useState<{ fen: string; square: string } | null>(null)
   const [promo, setPromo] = useState<{ fen: string; from: string; to: string } | null>(null)
 
@@ -70,6 +79,10 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
   }
 
   function onSquareClick(square: string) {
+    if (onSquareTap) {
+      onSquareTap(square)
+      return
+    }
     if (!canMove || pendingPromo) return
     if (sel && targets.includes(square)) {
       attempt(sel, square)
@@ -96,6 +109,7 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
   }
   if (checkSquare) squareStyles[checkSquare] = { ...squareStyles[checkSquare], ...CHECK }
   for (const h of highlights ?? []) squareStyles[h] = { ...squareStyles[h], ...HINT }
+  for (const [q, m] of Object.entries(marks ?? {})) squareStyles[q] = { ...squareStyles[q], ...MARK_STYLES[m] }
   if (sel) squareStyles[sel] = SELECTED
   for (const t of targets) {
     const occupied = pieceColorAt(fen, t) !== null

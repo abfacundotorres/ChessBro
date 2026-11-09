@@ -87,3 +87,38 @@ export async function verifyExercise(ex: Exercise): Promise<Verdict> {
   const bestMove = Object.keys(all).find((u) => all[u] === best) ?? ''
   return { id: ex.id, best, good, all, bestLine: [bestMove, ...(lines[bestMove] ?? [])].slice(0, 6), problems }
 }
+
+
+export interface ChallengeVerdict {
+  /** Evaluación (cp, perspectiva de quien mueve) de cada jugada legal. */
+  all: Record<string, number>
+  best: number
+  problems: string[]
+}
+
+/**
+ * Verifica una adivinanza de jugadas: la respuesta es una buena jugada (a menos de 10 puntos de
+ * probabilidad de ganar de la mejor) y cada distractor es claramente peor (12 puntos o más).
+ */
+export async function verifyMoveChallenge(fen: string, options: string[], answer: string): Promise<ChallengeVerdict> {
+  const sf = await nodeEngine()
+  const chess = new Chess(fen)
+  const all: Record<string, number> = {}
+  for (const m of chess.moves({ verbose: true })) {
+    const c = new Chess(fen)
+    c.move(m)
+    const uci = `${m.from}${m.to}${m.promotion ?? ''}`
+    if (c.isCheckmate()) all[uci] = 10_000
+    else if (c.isDraw()) all[uci] = 0
+    else all[uci] = -toCp((await sf.evaluate(c.fen(), DEPTH)).score)
+  }
+  const best = Math.max(...Object.values(all))
+  const problems: string[] = []
+  for (const o of options) if (!(o in all)) problems.push(`jugada ilegal: ${o}`)
+  if (!options.includes(answer)) problems.push('la respuesta no está entre las opciones')
+  if (answer in all && winPercent(best) - winPercent(all[answer]!) >= 10) problems.push(`la respuesta no es buena (${all[answer]} cp vs mejor ${best})`)
+  for (const o of options)
+    if (o !== answer && o in all && answer in all && winPercent(all[answer]!) - winPercent(all[o]!) < 12)
+      problems.push(`el distractor ${o} no es claramente peor (${all[o]} cp vs ${all[answer]})`)
+  return { all, best, problems }
+}

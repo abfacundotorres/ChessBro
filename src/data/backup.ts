@@ -25,7 +25,7 @@ const gameSchema = z
 
 export const backupSchema = z.object({
   app: z.literal('chessbro'),
-  version: z.union([z.literal(1), z.literal(2), z.literal(3)]),
+  version: z.union([z.literal(1), z.literal(2), z.literal(3), z.literal(4)]),
   exportedAt: z.string(),
   profile: z
     .object({
@@ -67,7 +67,7 @@ export const backupSchema = z.object({
   games: z.array(gameSchema).default([]),
   settings: z.array(z.object({ key: z.string(), value: z.string() })).default([]),
   // v3
-  lessons: z.array(z.object({ id: z.string(), exercises: z.array(z.string()), doneAt: z.number().optional() })).default([]),
+  lessons: z.array(z.object({ id: z.string(), exercises: z.array(z.string()), doneAt: z.number().optional(), stars: z.number().optional() })).default([]),
   endgames: z
     .array(
       z.object({
@@ -81,15 +81,17 @@ export const backupSchema = z.object({
       }),
     )
     .default([]),
+  // v4
+  activity: z.array(z.object({ date, count: z.number().int() })).default([]),
 })
 
 export type Backup = z.infer<typeof backupSchema>
 export type BackupOut = Omit<Backup, 'games'> & { games: GameRecord[] }
 
 export async function exportBackup(db: ChessBroDB = defaultDb, now = new Date()): Promise<BackupOut> {
-  return db.transaction('r', [db.profile, db.attempts, db.reviews, db.games, db.settings, db.lessons, db.endgames], async () => ({
+  return db.transaction('r', [db.profile, db.attempts, db.reviews, db.games, db.settings, db.lessons, db.endgames, db.activity], async () => ({
     app: 'chessbro' as const,
-    version: 3 as const,
+    version: 4 as const,
     exportedAt: now.toISOString(),
     profile: (await db.profile.get('me')) ?? null,
     attempts: await db.attempts.toArray(),
@@ -98,6 +100,7 @@ export async function exportBackup(db: ChessBroDB = defaultDb, now = new Date())
     settings: await db.settings.toArray(),
     lessons: await db.lessons.toArray(),
     endgames: await db.endgames.toArray(),
+    activity: await db.activity.toArray(),
   }))
 }
 
@@ -109,8 +112,8 @@ export async function importBackup(
   const parsed = backupSchema.safeParse(json)
   if (!parsed.success) throw new Error('El archivo no es un backup válido de ChessBro.')
   const data = parsed.data
-  await db.transaction('rw', [db.profile, db.attempts, db.reviews, db.games, db.settings, db.lessons, db.endgames], async () => {
-    await Promise.all([db.profile.clear(), db.attempts.clear(), db.reviews.clear(), db.games.clear(), db.settings.clear(), db.lessons.clear(), db.endgames.clear()])
+  await db.transaction('rw', [db.profile, db.attempts, db.reviews, db.games, db.settings, db.lessons, db.endgames, db.activity], async () => {
+    await Promise.all([db.profile.clear(), db.attempts.clear(), db.reviews.clear(), db.games.clear(), db.settings.clear(), db.lessons.clear(), db.endgames.clear(), db.activity.clear()])
     if (data.profile) await db.profile.put(data.profile)
     await db.attempts.bulkAdd(data.attempts)
     await db.reviews.bulkPut(data.reviews as ReviewRecord[])
@@ -118,6 +121,7 @@ export async function importBackup(
     await db.settings.bulkPut(data.settings)
     await db.lessons.bulkPut(data.lessons)
     await db.endgames.bulkAdd(data.endgames)
+    await db.activity.bulkPut(data.activity)
   })
   return { attempts: data.attempts.length, reviews: data.reviews.length, games: data.games.length, lessons: data.lessons.length }
 }

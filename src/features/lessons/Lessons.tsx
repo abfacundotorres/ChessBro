@@ -4,6 +4,7 @@ import { BANDS } from '../../content/curriculum'
 import { ENDGAMES } from '../../content/endgames'
 import { LESSONS } from '../../content/lessons'
 import { endgameStats, getProgress } from '../../data/lessons'
+import { StreakChip } from '../../ui/StreakChip'
 
 export function Lessons() {
   const progress = useLiveQuery(() => getProgress(), [])
@@ -13,7 +14,10 @@ export function Lessons() {
     <div className="flex flex-col gap-5">
       <header>
         <h1 className="text-2xl font-bold">Lecciones</h1>
-        <p className="text-muted">Leé, practicá y pasá a la siguiente.</p>
+        <p className="text-muted">Leé, adiviná, practicá y ganá estrellas.</p>
+        <div className="mt-2">
+          <StreakChip />
+        </div>
       </header>
 
       {(['b1', 'b2'] as const).map((bid) => {
@@ -31,8 +35,19 @@ export function Lessons() {
                     <p className="font-semibold">{l.title}</p>
                     <p className="text-sm text-muted">{l.summary}</p>
                   </div>
-                  <span className={`shrink-0 text-sm tabular-nums ${done ? 'text-accent' : 'text-muted'}`}>
-                    {done ? '✓' : l.exercises.length > 0 ? `${solved}/${l.exercises.length}` : ''}
+                  <span className={`shrink-0 text-right text-sm tabular-nums ${done ? 'text-accent' : 'text-muted'}`}>
+                    {p?.stars ? (
+                      <span aria-label={`${p.stars} de 3 estrellas`}>
+                        {'★'.repeat(p.stars)}
+                        <span className="text-border">{'★'.repeat(3 - p.stars)}</span>
+                      </span>
+                    ) : done ? (
+                      '✓'
+                    ) : l.exercises.length > 0 ? (
+                      `${solved}/${l.exercises.length}`
+                    ) : (
+                      ''
+                    )}
                   </span>
                 </Link>
               )

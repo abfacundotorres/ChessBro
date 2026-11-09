@@ -5,8 +5,10 @@ import { Board } from '../../ui/Board'
 import { lessonById } from '../../content/lessons'
 import { endgameById } from '../../content/endgames'
 import { db } from '../../data/db'
-import { markExercise, markLessonDone } from '../../data/lessons'
+import { finishLesson, markExercise, markLessonDone, touchPractice } from '../../data/lessons'
+import { StreakChip } from '../../ui/StreakChip'
 import { ExerciseView } from './ExerciseView'
+import { ChallengeView } from './ChallengeView'
 
 /** Reinicia el estado al cambiar de lección (por ejemplo, con atrás/adelante del navegador). */
 export function LessonView() {
@@ -18,6 +20,9 @@ function LessonBody({ id }: { id: string }) {
   const lesson = lessonById(id)
   const progress = useLiveQuery(() => db.lessons.get(id), [id], undefined)
   const [phase, setPhase] = useState<{ kind: 'read'; i: number } | { kind: 'practice'; i: number } | { kind: 'end' }>({ kind: 'read', i: 0 })
+  const [cleared, setCleared] = useState<ReadonlySet<number>>(new Set())
+  const [mistakes, setMistakes] = useState(0)
+  const [result, setResult] = useState<{ stars: 1 | 2 | 3; best: number } | null>(null)
 
   if (!lesson) {
     return (
@@ -28,12 +33,26 @@ function LessonBody({ id }: { id: string }) {
   }
   const l = lesson
 
+  const challenges = l.steps.filter((st) => st.challenge).length
+  const items = challenges + l.exercises.length
+
+  function goEnd() {
+    // Las lecciones de pura lectura no tienen puntaje: solo se marcan como vistas.
+    if (items === 0) void markLessonDone(l.id).then(() => touchPractice())
+    else void finishLesson(l.id, mistakes, items).then(setResult)
+    setPhase({ kind: 'end' })
+  }
+
   function afterReading() {
     if (l.exercises.length > 0) setPhase({ kind: 'practice', i: 0 })
-    else {
-      void markLessonDone(l.id)
-      setPhase({ kind: 'end' })
-    }
+    else goEnd()
+  }
+
+  function restart() {
+    setCleared(new Set())
+    setMistakes(0)
+    setResult(null)
+    setPhase({ kind: 'read', i: 0 })
   }
 
   const header = (
@@ -68,8 +87,22 @@ function LessonBody({ id }: { id: string }) {
         )}
         <div className="rounded-xl bg-surface p-4">
           {step.title && <p className="font-semibold">{step.title}</p>}
-          <p className="mt-1">{step.text}</p>
+          <p className="mt-1 whitespace-pre-line">{step.text}</p>
         </div>
+        {step.challenge && (
+          <div className="rounded-xl border border-accent p-3">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-accent">Adiviná</p>
+            <ChallengeView
+              key={`${l.id}-${phase.i}`}
+              challenge={step.challenge}
+              onMistake={() => setMistakes((m) => m + 1)}
+              onSolved={() => {
+                void touchPractice()
+                setCleared((c) => new Set(c).add(phase.i))
+              }}
+            />
+          </div>
+        )}
         <p className="text-center text-xs text-muted">
           {phase.i + 1} de {l.steps.length}
         </p>
@@ -77,7 +110,12 @@ function LessonBody({ id }: { id: string }) {
           <button type="button" className="btn" disabled={phase.i === 0} onClick={() => setPhase({ kind: 'read', i: phase.i - 1 })}>
             Anterior
           </button>
-          <button type="button" className="btn-primary" onClick={() => (last ? afterReading() : setPhase({ kind: 'read', i: phase.i + 1 }))}>
+          <button
+            type="button"
+            className="btn-primary"
+            disabled={!!step.challenge && !cleared.has(phase.i)}
+            onClick={() => (last ? afterReading() : setPhase({ kind: 'read', i: phase.i + 1 }))}
+          >
             {last ? (l.exercises.length > 0 ? 'A practicar' : 'Terminar') : 'Siguiente'}
           </button>
         </div>
@@ -99,7 +137,8 @@ function LessonBody({ id }: { id: string }) {
           exercise={ex}
           isLast={lastEx}
           onSolved={() => void markExercise(l.id, ex.id, l.exercises.length)}
-          onNext={() => setPhase(lastEx ? { kind: 'end' } : { kind: 'practice', i: phase.i + 1 })}
+          onMistake={() => setMistakes((m) => m + 1)}
+          onNext={() => (lastEx ? goEnd() : setPhase({ kind: 'practice', i: phase.i + 1 }))}
         />
       </div>
     )
@@ -110,13 +149,29 @@ function LessonBody({ id }: { id: string }) {
   return (
     <div className="flex flex-col gap-3">
       {header}
-      <div className="flex flex-col gap-2 rounded-xl bg-surface p-4">
-        <p className="text-lg font-semibold">¡Lección terminada!</p>
-        {l.exercises.length > 0 && (
-          <p className="text-sm text-muted">
-            Resolviste {solved} de {l.exercises.length} ejercicios por tu cuenta.
+      <div className="flex flex-col items-center gap-2 rounded-xl bg-surface p-5 text-center">
+        {items > 0 && (
+          <p className="text-4xl tracking-widest text-accent" aria-label={`${result?.stars ?? 0} de 3 estrellas`}>
+            {'★'.repeat(result?.stars ?? 0)}
+            <span className="text-border">{'★'.repeat(3 - (result?.stars ?? 0))}</span>
           </p>
         )}
+        <p className="text-lg font-semibold">
+          {items === 0 ? '¡Lección terminada!' : result?.stars === 3 ? '¡Perfecta!' : result?.stars === 2 ? '¡Muy bien!' : '¡Lección completada!'}
+        </p>
+        {items > 0 && (
+          <p className="text-sm text-muted">
+            {mistakes === 0 ? 'Sin ningún error.' : mistakes === 1 ? 'Con un error.' : `Con ${mistakes} errores.`}
+            {result && result.best > result.stars && ` Tu mejor marca: ${result.best} ★.`}
+            {result && result.stars !== 3 && ' Podés repasarla para conseguir las 3 estrellas.'}
+          </p>
+        )}
+        {l.exercises.length > 0 && (
+          <p className="text-sm text-muted">
+            Ejercicios resueltos por tu cuenta: {solved} de {l.exercises.length}.
+          </p>
+        )}
+        <StreakChip />
       </div>
       {l.practice && (
         <Link to={`/tactica?tema=${l.practice}`} className="btn-primary flex items-center justify-center">
@@ -128,8 +183,23 @@ function LessonBody({ id }: { id: string }) {
           Jugar el final: {eg.title}
         </Link>
       )}
+      {l.sources && l.sources.length > 0 && (
+        <details className="rounded-xl bg-surface p-4 text-sm">
+          <summary className="cursor-pointer font-semibold">Para seguir leyendo</summary>
+          <p className="mt-2 text-muted">Ideas relacionadas (en inglés, sitios externos). El texto de la lección es propio.</p>
+          <ul className="mt-1 list-disc pl-5">
+            {l.sources.map((src) => (
+              <li key={src.url}>
+                <a href={src.url} target="_blank" rel="noopener noreferrer" className="underline">
+                  {src.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </details>
+      )}
       <div className="grid grid-cols-2 gap-2">
-        <button type="button" className="btn" onClick={() => setPhase({ kind: 'read', i: 0 })}>
+        <button type="button" className="btn" onClick={restart}>
           Repasar
         </button>
         <Link to="/lecciones" className="btn flex items-center justify-center">

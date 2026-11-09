@@ -10,6 +10,8 @@ interface Props {
   onSolved: () => void
   onNext: () => void
   isLast: boolean
+  /** Cada intento equivocado y cuando se pide la solución. */
+  onMistake?: () => void
 }
 
 const GOAL_TEXT = {
@@ -18,7 +20,7 @@ const GOAL_TEXT = {
   hold: () => 'Encontrá la jugada que salva la posición.',
 }
 
-export function ExerciseView({ exercise, onSolved, onNext, isLast }: Props) {
+export function ExerciseView({ exercise, onSolved, onNext, isLast, onMistake }: Props) {
   const [state, setState] = useState<PuzzleState>(() => startExercise(exercise))
   const [shown, setShown] = useState(0)
   const [wrong, setWrong] = useState(false)
@@ -45,6 +47,7 @@ export function ExerciseView({ exercise, onSolved, onNext, isLast }: Props) {
     const r = tryExercise(exercise, state, m)
     if (!r.ok) {
       setWrong(true)
+      onMistake?.()
       return false
     }
     setWrong(false)
@@ -62,6 +65,7 @@ export function ExerciseView({ exercise, onSolved, onNext, isLast }: Props) {
   function onReveal() {
     const s = revealSolution({ ...state, ply: state.played.length })
     setRevealed(true)
+    onMistake?.()
     setState(s)
   }
 
