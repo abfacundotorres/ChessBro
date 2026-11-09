@@ -1,11 +1,13 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db, type GameRecord } from '../../data/db'
-import { LICHESS_USER, getSetting, saveImported, setSetting, summarize } from '../../data/games'
-import { USERNAME_RE, fetchLichessGames } from '../../data/lichess'
+import { CHESSCOM_USER, LICHESS_USER, getSetting, saveImported, setSetting, summarize } from '../../data/games'
+import { USERNAME_RE, fetchLichessGames, type ImportedGame } from '../../data/lichess'
+import { CHESSCOM_USERNAME_RE, fetchChesscomGames } from '../../data/chesscom'
 import { KIND_LABELS, KIND_TRAINING, type ErrorKind } from '../../engine/analysis'
 import { formatDayMonth, toDateStr } from '../../engine/dates'
+import { runAnalysis } from './runAnalysis'
 
 export function resultText(g: GameRecord): { text: string; tone: 'win' | 'loss' | 'draw' } {
   if (!g.winner) return { text: 'Tablas', tone: 'draw' }
@@ -13,63 +15,114 @@ export function resultText(g: GameRecord): { text: string; tone: 'win' | 'loss' 
   return won ? { text: 'Ganaste', tone: 'win' } : { text: 'Perdiste', tone: 'loss' }
 }
 
-const SPEED: Record<string, string> = { blitz: 'Blitz', rapid: 'Rápida', classical: 'Clásica', correspondence: 'Por correspondencia' }
+const SPEED: Record<string, string> = { blitz: 'Blitz', rapid: 'Rápida', classical: 'Clásica', correspondence: 'Por correspondencia', daily: 'Diaria' }
+const SOURCE: Record<string, string> = { lichess: 'Lichess', chesscom: 'Chess.com' }
+/** Cuántas partidas se analizan por tanda (cada una tarda un par de minutos en un celular). */
+const BATCH = 5
+
+function errText(e: unknown, site: string): string {
+  return e instanceof Error && e.name !== 'TypeError' ? e.message : `Sin conexión con ${site}. Probá más tarde.`
+}
 
 export function Games() {
-  const user = useLiveQuery(() => getSetting(LICHESS_USER), [], undefined)
+  const lichess = useLiveQuery(() => getSetting(LICHESS_USER), [], undefined)
+  const chesscom = useLiveQuery(() => getSetting(CHESSCOM_USER), [], undefined)
   const games = useLiveQuery(() => db.games.orderBy('createdAt').reverse().toArray(), [], [])
-  const [draft, setDraft] = useState('')
+  const [draftL, setDraftL] = useState('')
+  const [draftC, setDraftC] = useState('')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState<string | null>(null)
+  const [batch, setBatch] = useState<{ game: number; of: number; done: number; total: number } | null>(null)
+  const abort = useRef<AbortController | null>(null)
 
-  async function onImport(username: string) {
+  async function onImport(users: { lichess: string | null; chesscom: string | null }) {
     setBusy(true)
     setMsg(null)
-    try {
-      const list = await fetchLichessGames(username, 20)
-      const fresh = await saveImported(list)
-      setMsg(list.length === 0 ? 'No encontré partidas blitz, rápidas o clásicas.' : fresh === 0 ? 'No hay partidas nuevas.' : fresh === 1 ? '1 partida nueva.' : `${fresh} partidas nuevas.`)
-    } catch (e) {
-      setMsg(e instanceof Error && e.name !== 'TypeError' ? e.message : 'Sin conexión con Lichess. Probá más tarde.')
-    } finally {
-      setBusy(false)
+    const notes: string[] = []
+    let fresh = 0
+    let found = 0
+    const jobs: [string, string | null, (u: string) => Promise<ImportedGame[]>][] = [
+      ['Lichess', users.lichess, (u) => fetchLichessGames(u, 20)],
+      ['Chess.com', users.chesscom, (u) => fetchChesscomGames(u, 20)],
+    ]
+    for (const [site, user, fetcher] of jobs) {
+      if (!user) continue
+      try {
+        const list = await fetcher(user)
+        found += list.length
+        fresh += await saveImported(list)
+      } catch (e) {
+        notes.push(`${site}: ${errText(e, site)}`)
+      }
     }
+    const base = found === 0 ? 'No encontré partidas blitz, rápidas o clásicas.' : fresh === 0 ? 'No hay partidas nuevas.' : fresh === 1 ? '1 partida nueva.' : `${fresh} partidas nuevas.`
+    setMsg(notes.length === 0 ? base : [found > 0 ? base : '', ...notes].filter(Boolean).join(' '))
+    setBusy(false)
   }
 
-  if (user === undefined) return null
+  async function onAnalyzePending() {
+    const pending = games.filter((g) => !g.analysis).slice(0, BATCH)
+    if (pending.length === 0) return
+    const ctrl = new AbortController()
+    abort.current = ctrl
+    setMsg(null)
+    let cards = 0
+    let doneGames = 0
+    try {
+      for (const [i, g] of pending.entries()) {
+        setBatch({ game: i + 1, of: pending.length, done: 0, total: g.moves.length + 1 })
+        const r = await runAnalysis(g, (done, total) => setBatch({ game: i + 1, of: pending.length, done, total }), ctrl.signal)
+        cards += r.cards
+        doneGames++
+      }
+    } catch {
+      /* cancelado o el motor falló: se informa lo que alcanzó a terminar */
+    }
+    setBatch(null)
+    setMsg(`${doneGames} ${doneGames === 1 ? 'partida analizada' : 'partidas analizadas'}${cards > 0 ? ` · ${cards} ${cards === 1 ? 'ejercicio nuevo' : 'ejercicios nuevos'} en el repaso` : ''}.`)
+  }
 
-  if (user === null) {
+  if (lichess === undefined || chesscom === undefined) return null
+
+  if (lichess === null && chesscom === null) {
+    const l = draftL.trim()
+    const c = draftC.trim()
+    const input = (id: string, label: string, v: string, set: (s: string) => void) => (
+      <>
+        <label className="text-sm font-medium" htmlFor={id}>
+          {label}
+        </label>
+        <input
+          id={id}
+          className="min-h-12 rounded-xl border border-border bg-surface px-3"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          value={v}
+          onChange={(e) => set(e.target.value)}
+        />
+      </>
+    )
     return (
       <div className="flex flex-col gap-4">
         <h1 className="text-2xl font-bold">Tus partidas</h1>
         <p className="text-muted">
-          Traé tus partidas de Lichess. El análisis corre en tu teléfono y tus errores tácticos se convierten en ejercicios.
+          Traé tus partidas de Chess.com o Lichess (alcanza con una). El análisis corre en tu teléfono y tus errores tácticos se convierten en ejercicios.
         </p>
         <form
           className="flex flex-col gap-2"
           onSubmit={(e) => {
             e.preventDefault()
-            const u = draft.trim()
-            if (!USERNAME_RE.test(u)) {
-              setMsg('Ese usuario no parece válido.')
+            if ((l && !USERNAME_RE.test(l)) || (c && !CHESSCOM_USERNAME_RE.test(c))) {
+              setMsg('Alguno de los usuarios no parece válido.')
               return
             }
-            void setSetting(LICHESS_USER, u).then(() => onImport(u))
+            void Promise.all([setSetting(LICHESS_USER, l || null), setSetting(CHESSCOM_USER, c || null)]).then(() => onImport({ lichess: l || null, chesscom: c || null }))
           }}
         >
-          <label className="text-sm font-medium" htmlFor="lichess-user">
-            Usuario de Lichess
-          </label>
-          <input
-            id="lichess-user"
-            className="min-h-12 rounded-xl border border-border bg-surface px-3"
-            autoCapitalize="none"
-            autoCorrect="off"
-            spellCheck={false}
-            value={draft}
-            onChange={(e) => setDraft(e.target.value)}
-          />
-          <button type="submit" className="btn-primary" disabled={busy || draft.trim() === ''}>
+          {input('chesscom-user', 'Usuario de Chess.com', draftC, setDraftC)}
+          {input('lichess-user', 'Usuario de Lichess', draftL, setDraftL)}
+          <button type="submit" className="btn-primary" disabled={busy || (l === '' && c === '')}>
             Guardar y traer partidas
           </button>
         </form>
@@ -79,6 +132,7 @@ export function Games() {
   }
 
   const summary = summarize(games)
+  const pendingCount = games.filter((g) => !g.analysis).length
   const topKinds = summary
     ? (Object.entries(summary.kinds) as [ErrorKind, number][]).sort((a, b) => b[1] - a[1])
     : []
@@ -89,13 +143,33 @@ export function Games() {
       <header className="flex items-end justify-between gap-2">
         <div>
           <h1 className="text-2xl font-bold">Tus partidas</h1>
-          <p className="text-sm text-muted">Lichess: {user}</p>
+          <p className="text-sm text-muted">{[chesscom && `Chess.com: ${chesscom}`, lichess && `Lichess: ${lichess}`].filter(Boolean).join(' · ')}</p>
         </div>
-        <button type="button" className="btn" disabled={busy} onClick={() => void onImport(user)}>
+        <button type="button" className="btn" disabled={busy || batch !== null} onClick={() => void onImport({ lichess, chesscom })}>
           {busy ? 'Trayendo…' : 'Traer nuevas'}
         </button>
       </header>
       {msg && <p aria-live="polite">{msg}</p>}
+
+      {batch ? (
+        <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
+          <p>
+            Analizando partida {batch.game} de {batch.of}… {batch.done}/{batch.total}
+          </p>
+          <div className="h-2 overflow-hidden rounded-full bg-surface-2">
+            <div className="h-full bg-accent transition-[width]" style={{ width: `${(batch.done / batch.total) * 100}%` }} />
+          </div>
+          <button type="button" className="btn" onClick={() => abort.current?.abort()}>
+            Cancelar
+          </button>
+        </section>
+      ) : (
+        pendingCount > 0 && (
+          <button type="button" className="btn flex items-center justify-center" disabled={busy} onClick={() => void onAnalyzePending()}>
+            Analizar {Math.min(BATCH, pendingCount)} {pendingCount === 1 ? 'pendiente' : 'pendientes'} (de {pendingCount})
+          </button>
+        )
+      )}
 
       {summary && (
         <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
@@ -141,7 +215,7 @@ export function Games() {
                       {rival.rating !== null && <span className="text-muted"> ({rival.rating})</span>}
                     </p>
                     <p className="text-xs text-muted">
-                      {formatDayMonth(toDateStr(new Date(g.createdAt)))} · {SPEED[g.speed] ?? g.speed} · {g.me === 'w' ? 'blancas' : 'negras'}
+                      {formatDayMonth(toDateStr(new Date(g.createdAt)))} · {SOURCE[g.source ?? 'lichess']} · {SPEED[g.speed] ?? g.speed} · {g.me === 'w' ? 'blancas' : 'negras'}
                     </p>
                   </div>
                   <div className="shrink-0 text-right text-sm">

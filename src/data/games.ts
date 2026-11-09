@@ -15,6 +15,7 @@ export async function setSetting(key: string, value: string | null, db: ChessBro
 }
 
 export const LICHESS_USER = 'lichessUser'
+export const CHESSCOM_USER = 'chesscomUser'
 
 /** Guarda partidas nuevas; las ya importadas (y su análisis) no se tocan. */
 export async function saveImported(games: readonly ImportedGame[], now = Date.now(), db: ChessBroDB = defaultDb): Promise<number> {

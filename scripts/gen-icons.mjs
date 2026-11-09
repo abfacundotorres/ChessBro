@@ -9,36 +9,33 @@ const { chromium } = require('playwright')
 const dir = fileURLToPath(new URL('../public/icons/', import.meta.url))
 
 /**
- * Un peón sonriente sobre un degradé violeta–rosa, con destellos y un toque de tablero.
+ * Un rey de ajedrez sobre un tablero verde y negro (los casilleros llenan todo el ícono).
  * @param {{ rounded: boolean, scale: number }} o  rounded: esquinas redondeadas (íconos normales);
- *   scale: tamaño del personaje (las variantes "maskable" lo achican para quedar en la zona segura).
+ *   scale: tamaño del rey (las variantes "maskable" lo achican para quedar en la zona segura).
  */
 function art({ rounded, scale }) {
-  const star = (x, y, s, o = 0.95) =>
-    `<path d="M${x} ${y - s}Q${x} ${y} ${x + s} ${y}Q${x} ${y} ${x} ${y + s}Q${x} ${y} ${x - s} ${y}Q${x} ${y} ${x} ${y - s}Z" fill="#fff" opacity="${o}"/>`
-  // Casillas de tablero, apenas insinuadas, en la franja de abajo.
-  let checker = ''
-  for (let r = 0; r < 2; r++) for (let c = 0; c < 8; c++) if ((r + c) % 2 === 0) checker += `<rect x="${c * 64}" y="${384 + r * 64}" width="64" height="64"/>`
+  // Tablero de 8×8: casilleros negros y verdes alternados.
+  let board = ''
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) board += `<rect x="${c * 64}" y="${r * 64}" width="64" height="64" fill="${(r + c) % 2 === 0 ? '#2FA84F' : '#101311'}"/>`
+  const ink = '#0B0D0C'
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7B5CFA"/><stop offset="1" stop-color="#FF7EB3"/></linearGradient>
-    <linearGradient id="pawn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#FFE3BD"/></linearGradient>
+    <linearGradient id="king" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFF4D6"/><stop offset=".55" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F1D9A0"/></linearGradient>
+    <radialGradient id="glow" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#000" stop-opacity=".0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient>
     <clipPath id="clip"><rect width="512" height="512" rx="${rounded ? 112 : 0}"/></clipPath>
   </defs>
   <g clip-path="url(#clip)">
-    <rect width="512" height="512" fill="url(#bg)"/>
-    <g fill="#fff" opacity=".16">${checker}</g>
-    ${star(96, 112, 26)}${star(420, 150, 18)}${star(408, 340, 14, 0.8)}${star(120, 330, 12, 0.7)}
-    <g transform="translate(256 256) scale(${scale}) translate(-256 -256)">
-      <ellipse cx="256" cy="426" rx="132" ry="18" fill="#3B1E8F" opacity=".28"/>
-      <rect x="148" y="368" width="216" height="50" rx="25" fill="url(#pawn)"/>
-      <path d="M198 372C212 322 224 292 230 262L282 262C288 292 300 322 314 372Z" fill="url(#pawn)"/>
-      <ellipse cx="256" cy="262" rx="72" ry="21" fill="url(#pawn)"/>
-      <circle cx="256" cy="176" r="86" fill="url(#pawn)"/>
-      <circle cx="226" cy="176" r="12" fill="#3B2A6B"/><circle cx="286" cy="176" r="12" fill="#3B2A6B"/>
-      <circle cx="230" cy="171" r="4.5" fill="#fff"/><circle cx="290" cy="171" r="4.5" fill="#fff"/>
-      <circle cx="202" cy="208" r="14" fill="#FF8FB1" opacity=".85"/><circle cx="310" cy="208" r="14" fill="#FF8FB1" opacity=".85"/>
-      <path d="M234 206Q256 234 278 206" stroke="#3B2A6B" stroke-width="9" stroke-linecap="round" fill="none"/>
+    ${board}
+    <rect width="512" height="512" fill="url(#glow)"/>
+    <g transform="translate(256 256) scale(${scale}) translate(-256 -256)" stroke="${ink}" stroke-width="10" stroke-linejoin="round" stroke-linecap="round">
+      <ellipse cx="256" cy="452" rx="150" ry="18" fill="#000" opacity=".4" stroke="none"/>
+      <rect x="132" y="408" width="248" height="46" rx="23" fill="url(#king)"/>
+      <rect x="150" y="372" width="212" height="42" rx="21" fill="url(#king)"/>
+      <path d="M204 372C196 318 214 282 214 240L298 240C298 282 316 318 308 372Z" fill="url(#king)"/>
+      <rect x="186" y="214" width="140" height="34" rx="17" fill="url(#king)"/>
+      <path d="M200 214C176 170 196 124 256 124C316 124 336 170 312 214Z" fill="url(#king)"/>
+      <path d="M256 124L256 70M232 92L280 92" stroke-width="22" fill="none"/>
+      <path d="M256 124L256 70M232 92L280 92" stroke="#FFF4D6" stroke-width="10" fill="none"/>
     </g>
   </g>
 </svg>`

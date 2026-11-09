@@ -2,18 +2,16 @@ import { useRef, useState } from 'react'
 import { exportBackup, importBackup } from '../../data/backup'
 import { toDateStr } from '../../engine/dates'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { LICHESS_USER, getSetting, setSetting } from '../../data/games'
+import { CHESSCOM_USER, LICHESS_USER, getSetting, setSetting } from '../../data/games'
 import { setStyle, useStyle, type Style } from '../../data/style'
 import { setLevel, useLevel } from '../../data/level'
 import { LEVELS } from '../../engine/level'
 import { USERNAME_RE } from '../../data/lichess'
+import { CHESSCOM_USERNAME_RE } from '../../data/chesscom'
 
 export function Settings() {
   const fileRef = useRef<HTMLInputElement>(null)
   const [msg, setMsg] = useState<string | null>(null)
-  const user = useLiveQuery(() => getSetting(LICHESS_USER), [])
-  const [draft, setDraft] = useState<string | null>(null)
-  const value = draft ?? user ?? ''
   const style = useStyle()
   const level = useLevel()
 
@@ -95,40 +93,8 @@ export function Settings() {
         {msg && <p aria-live="polite">{msg}</p>}
       </section>
 
-      <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
-        <label className="font-semibold" htmlFor="settings-lichess">
-          Usuario de Lichess
-        </label>
-        <p className="text-muted">Opcional. Solo se usa para bajar tus partidas públicas.</p>
-        <form
-          className="grid grid-cols-[1fr_auto] gap-2"
-          onSubmit={(e) => {
-            e.preventDefault()
-            const v = value.trim()
-            if (v && !USERNAME_RE.test(v)) {
-              setMsg('Ese usuario no parece válido.')
-              return
-            }
-            void setSetting(LICHESS_USER, v || null).then(() => {
-              setDraft(null)
-              setMsg(v ? 'Usuario guardado.' : 'Usuario borrado.')
-            })
-          }}
-        >
-          <input
-            id="settings-lichess"
-            className="min-h-12 min-w-0 rounded-xl border border-border bg-bg px-3"
-            autoCapitalize="none"
-            autoCorrect="off"
-            spellCheck={false}
-            value={value}
-            onChange={(e) => setDraft(e.target.value)}
-          />
-          <button type="submit" className="btn">
-            Guardar
-          </button>
-        </form>
-      </section>
+      <UserField id="lichess" label="Usuario de Lichess" settingKey={LICHESS_USER} re={USERNAME_RE} onMsg={setMsg} />
+      <UserField id="chesscom" label="Usuario de Chess.com" settingKey={CHESSCOM_USER} re={CHESSCOM_USERNAME_RE} onMsg={setMsg} />
 
       <section className="rounded-xl bg-surface p-4 text-sm text-muted">
         <p>ChessBro v{__APP_VERSION__}</p>
@@ -136,5 +102,48 @@ export function Settings() {
         <p>Puzzles: base de datos de Lichess (CC0).</p>
       </section>
     </div>
+  )
+}
+
+
+function UserField({ id, label, settingKey, re, onMsg }: { id: string; label: string; settingKey: string; re: RegExp; onMsg: (m: string) => void }) {
+  const saved = useLiveQuery(() => getSetting(settingKey), [settingKey])
+  const [draft, setDraft] = useState<string | null>(null)
+  const value = draft ?? saved ?? ''
+  return (
+    <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
+      <label className="font-semibold" htmlFor={`settings-${id}`}>
+        {label}
+      </label>
+      <p className="text-muted">Opcional. Solo se usa para bajar tus partidas públicas.</p>
+      <form
+        className="grid grid-cols-[1fr_auto] gap-2"
+        onSubmit={(e) => {
+          e.preventDefault()
+          const v = value.trim()
+          if (v && !re.test(v)) {
+            onMsg('Ese usuario no parece válido.')
+            return
+          }
+          void setSetting(settingKey, v || null).then(() => {
+            setDraft(null)
+            onMsg(v ? 'Usuario guardado.' : 'Usuario borrado.')
+          })
+        }}
+      >
+        <input
+          id={`settings-${id}`}
+          className="min-h-12 min-w-0 rounded-xl border border-border bg-bg px-3"
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          value={value}
+          onChange={(e) => setDraft(e.target.value)}
+        />
+        <button type="submit" className="btn">
+          Guardar
+        </button>
+      </form>
+    </section>
   )
 }

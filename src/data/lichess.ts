@@ -33,6 +33,8 @@ export interface GamePlayer {
 /** Partida importada y normalizada (jugadas en UCI). */
 export interface ImportedGame {
   id: string
+  /** De dónde vino (las partidas viejas no lo traen: son de Lichess). */
+  source?: 'lichess' | 'chesscom'
   createdAt: number
   speed: string
   rated: boolean
@@ -70,6 +72,7 @@ export function parseLichessGame(raw: unknown, username: string): ImportedGame |
   if (!moves) return null
   return {
     id: g.id,
+    source: 'lichess',
     createdAt: g.createdAt,
     speed: g.speed,
     rated: g.rated ?? false,
