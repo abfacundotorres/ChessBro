@@ -296,3 +296,17 @@
   "Escuchar" en comentarios de partidas, pasos de lecciones, explicaciones de desafíos y ejercicios, notas del
   repertorio, aperturas y resultado de táctica. En Ajustes: "Leer las explicaciones solo" (apagado por defecto) y
   prueba de voz. La calidad depende de las voces del teléfono; si no hay voz en español se avisa.
+
+## H9: comentarios de entrenador y elección de voz
+- **Comentarios** (`engine/commentary.ts`, `features/games/Coach.tsx`): cada error abre una conversación: arranca con
+  "¿Qué pasó?" y podés preguntar "¿Por qué fue malo?", "¿Qué debí jugar?", "¿Qué quería el rival?" y "¿Cómo lo
+  evito?", o pedir "Decímelo de otra forma" (cambia la redacción). **No es un modelo de lenguaje**: son plantillas con
+  muchas variantes, completadas con hechos calculados con chess.js sobre la posición (qué pieza quedó atacada y sin
+  defensa, si la mejor jugada captura, da jaque, enroca o pone a salvo algo, qué atacaba la última jugada del rival).
+  Es determinístico (mismo error y semilla → mismo texto). Un LLM de verdad requeriría red y una clave de API, y rompería
+  el "sin conexión"; por eso no se usa. Límite honesto: los hechos son simples (no ve clavadas, tenedores ni planes), y
+  si el error no encaja en ninguno, usa una frase genérica del tipo de error.
+- **Voces**: en Ajustes se elige la voz entre las del sistema (por defecto solo las de español; hay un check para ver
+  todas), la velocidad (lenta a muy rápida) y la lectura automática. Se guardan en la tabla de ajustes
+  (`voiceName`, `voiceRate`). Si la voz guardada desaparece, vuelve a "Automática". Las voces marcadas "necesita
+  conexión" son de red: sin internet no suenan.

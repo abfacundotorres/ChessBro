@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { speak, speechSupported, stopSpeaking } from '../lib/speech'
-import { useAutoSpeak } from '../data/speech'
+import { useAutoSpeak, useVoicePrefs } from '../data/speech'
 
 /**
  * Botón "Escuchar" para un texto. Con `auto`, y si en Ajustes está activada la lectura automática,
@@ -10,22 +10,24 @@ export function Speak({ text, auto = false, className = '' }: { text: string; au
   const [playing, setPlaying] = useState(false)
   const stop = useRef<(() => void) | null>(null)
   const autoOn = useAutoSpeak()
+  const prefs = useVoicePrefs()
 
   function start() {
     stop.current?.()
     setPlaying(true)
-    stop.current = speak(text, () => setPlaying(false))
+    stop.current = speak(text, prefs, () => setPlaying(false))
   }
 
   useEffect(() => {
     if (auto && autoOn && speechSupported()) {
       stop.current?.()
-      stop.current = speak(text, () => setPlaying(false), () => setPlaying(true))
+      stop.current = speak(text, prefs, () => setPlaying(false), () => setPlaying(true))
     }
     return () => {
       stop.current?.()
       stop.current = null
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- cambiar la voz no debe relanzar la lectura
   }, [text, auto, autoOn])
 
   if (!speechSupported()) return null

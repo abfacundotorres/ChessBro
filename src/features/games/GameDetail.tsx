@@ -7,8 +7,7 @@ import { replay, sanToFigurine } from '../../engine/game'
 import { uciToMove } from '../../engine/puzzle'
 import { KIND_LABELS, toCp, type MoveError, type Score } from '../../engine/analysis'
 import { shouldCard } from '../../engine/gameCards'
-import { explainError } from '../../engine/commentary'
-import { Speak } from '../../ui/Speak'
+import { Coach } from './Coach'
 import { runAnalysis } from './runAnalysis'
 import { resultText } from './Games'
 
@@ -105,12 +104,7 @@ export function GameDetail() {
         <button type="button" className="btn" aria-label="Final" onClick={() => go(total)}>⏭</button>
       </div>
 
-      {focus && ply === focus.ply && (
-        <div className="flex flex-col gap-2 rounded-xl border border-accent p-3 text-sm" aria-live="polite">
-          <p>{explainError(focus)}</p>
-          <Speak text={explainError(focus)} auto />
-        </div>
-      )}
+      {focus && ply === focus.ply && <Coach key={`${game.id}-${focus.ply}`} error={focus} />}
 
       {progress ? (
         <div className="flex flex-col gap-2 rounded-xl bg-surface p-4">
