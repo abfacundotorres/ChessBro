@@ -7,6 +7,8 @@ import { setStyle, useStyle, type Style } from '../../data/style'
 import { setLevel, useLevel } from '../../data/level'
 import { LEVELS } from '../../engine/level'
 import { USERNAME_RE } from '../../data/lichess'
+import { setAutoSpeak, useAutoSpeak } from '../../data/speech'
+import { speak, speechSupported, spanishVoice } from '../../lib/speech'
 import { CHESSCOM_USERNAME_RE } from '../../data/chesscom'
 
 export function Settings() {
@@ -14,6 +16,7 @@ export function Settings() {
   const [msg, setMsg] = useState<string | null>(null)
   const style = useStyle()
   const level = useLevel()
+  const autoSpeak = useAutoSpeak()
 
   async function onExport() {
     const data = await exportBackup()
@@ -91,6 +94,27 @@ export function Settings() {
           }}
         />
         {msg && <p aria-live="polite">{msg}</p>}
+      </section>
+
+      <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
+        <p className="font-semibold">Voz</p>
+        {speechSupported() ? (
+          <>
+            <p className="text-muted">
+              Las explicaciones se pueden escuchar con el botón 🔊. La voz es la de tu teléfono
+              {spanishVoice() ? '' : ' (no encontré una en español: instalá una en los ajustes de voz del sistema)'}.
+            </p>
+            <label className="flex min-h-12 items-center gap-3">
+              <input type="checkbox" className="h-5 w-5" checked={autoSpeak} onChange={(e) => void setAutoSpeak(e.target.checked)} />
+              Leer las explicaciones solo
+            </label>
+            <button type="button" className="btn" onClick={() => speak('Hola, soy tu entrenador de ajedrez. Así suena la voz. Caballo f3, jaque mate.')}>
+              Probar la voz
+            </button>
+          </>
+        ) : (
+          <p className="text-muted">Este navegador no tiene voz. Las explicaciones se leen en pantalla.</p>
+        )}
       </section>
 
       <UserField id="lichess" label="Usuario de Lichess" settingKey={LICHESS_USER} re={USERNAME_RE} onMsg={setMsg} />

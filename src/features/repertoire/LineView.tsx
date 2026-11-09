@@ -9,6 +9,7 @@ import { toDateStr } from '../../engine/dates'
 import { replay, sanToFigurine, type MoveInput } from '../../engine/game'
 import { lineSteps, type RepLine } from '../../engine/repertoire'
 import { uciToMove } from '../../engine/puzzle'
+import { Speak } from '../../ui/Speak'
 
 /** Reinicia el estado al cambiar de línea. */
 export function LineView() {
@@ -60,6 +61,7 @@ function Study({ line, onPractice }: { line: RepLine; onPractice: () => void }) 
       <div className="rounded-xl bg-surface p-4">
         <p className="font-semibold">La idea</p>
         <p className="mt-1">{line.idea}</p>
+        <Speak className="mt-2" text={line.idea} />
       </div>
       <Board fen={view.fen} orientation={line.color === 'w' ? 'white' : 'black'} lastMove={view.lastMove} checkSquare={view.checkSquare} movableColor={null} />
       <p className="min-h-6 text-center text-sm" aria-live="polite">
@@ -75,7 +77,12 @@ function Study({ line, onPractice }: { line: RepLine; onPractice: () => void }) 
           <span className="text-muted">Posición inicial</span>
         )}
       </p>
-      {note && <p className="rounded-xl border border-accent p-3 text-sm">{note}</p>}
+      {note && (
+        <div className="flex flex-col gap-2 rounded-xl border border-accent p-3 text-sm">
+          <p>{note}</p>
+          <Speak text={note} auto />
+        </div>
+      )}
       <div className="grid grid-cols-4 gap-2">
         <button type="button" className="btn" aria-label="Inicio" disabled={i === 0} onClick={() => setI(0)}>
           ⏮

@@ -3,6 +3,7 @@ import { Board } from '../../ui/Board'
 import { checkChallenge, type Challenge } from '../../engine/challenge'
 import { sanToFigurine, tryMove, type Color } from '../../engine/game'
 import { useStyle } from '../../data/style'
+import { Speak } from '../../ui/Speak'
 
 interface Props {
   challenge: Challenge
@@ -191,10 +192,13 @@ function Feedback({ serio, solved, wrongs, why, hint, onShow }: { serio: boolean
   return (
     <div aria-live="polite" className="flex flex-col gap-2">
       {solved ? (
-        <p className="rounded-xl bg-surface p-3 text-sm">
-          <span className="font-semibold text-accent">{serio ? 'Correcto. ' : wrongs === 0 ? '¡Eso! ' : '¡Ahora sí! '}</span>
-          {why}
-        </p>
+        <div className="flex flex-col gap-2 rounded-xl bg-surface p-3 text-sm">
+          <p>
+            <span className="font-semibold text-accent">{serio ? 'Correcto. ' : wrongs === 0 ? '¡Eso! ' : '¡Ahora sí! '}</span>
+            {why}
+          </p>
+          <Speak text={why} auto />
+        </div>
       ) : (
         wrongs > 0 && <p className="text-sm text-red-500">{hint ?? (serio ? 'Incorrecto. Probá de nuevo.' : 'No es esa. Probá de nuevo.')}</p>
       )}

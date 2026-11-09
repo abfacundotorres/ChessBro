@@ -277,3 +277,22 @@
   programa. "Tus aperturas" agrupa tus partidas por familia (reconocida por el nombre en inglés que ponen Chess.com y
   Lichess) y bando, con ganadas/tablas/perdidas y errores graves en las primeras 10 jugadas de las analizadas. Lo que no
   cae en ninguna familia se agrupa por el nombre original.
+
+## H8: análisis más exigente y explicaciones con voz
+- **Análisis (cambio de reglas)**: el usuario vio un solo error y precisiones de 90 % o más. Se calibró contra la
+  precisión que Chess.com informa por partida (6 lados de 3 partidas reales, Stockfish a profundidad 12): el promedio
+  simple de la precisión por jugada daba en promedio +11 puntos de más (RMSE 13,5); la media armónica queda sin
+  sesgo (+0,6; RMSE 7,8). Ahora la precisión es la media armónica, y los umbrales de error pasaron de 10/20/30 a
+  **5/10/20** puntos de probabilidad de ganar (imprecisión / error / error grave), parecidos a las bandas de Chess.com.
+  Limitación: son pocas partidas (Chess.com solo informa la precisión de las que se revisan), así que es un ajuste
+  razonable, no una réplica de su fórmula. La app no iguala el número de Chess.com.
+- **Recálculo**: las partidas ya analizadas se recalculan una vez al abrir la app con las evaluaciones guardadas
+  (`refreshAnalyses`, setting `analysisRules`), sin volver a correr Stockfish; si aparecen errores tácticos nuevos,
+  se agregan al repaso.
+- **Comentarios de errores** (`engine/commentary.ts`): plantillas en español por tipo de error con tu jugada, la que
+  prefería el motor y los puntos perdidos. No son un modelo de lenguaje: no inventan variantes.
+- **Voz** (`lib/speech.ts`, `ui/Speak.tsx`): `speechSynthesis` del navegador, sin conexión ni dependencias. `engine/speak.ts`
+  traduce la notación para que se lea bien ("Cf3" → "caballo f3", "O-O" → "enroque corto", emojis fuera). Botón
+  "Escuchar" en comentarios de partidas, pasos de lecciones, explicaciones de desafíos y ejercicios, notas del
+  repertorio, aperturas y resultado de táctica. En Ajustes: "Leer las explicaciones solo" (apagado por defecto) y
+  prueba de voz. La calidad depende de las voces del teléfono; si no hay voz en español se avisa.

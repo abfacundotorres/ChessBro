@@ -12,6 +12,7 @@ import { finishLesson, markExercise, markLessonDone, touchPractice } from '../..
 import { StreakChip } from '../../ui/StreakChip'
 import { ExerciseView } from './ExerciseView'
 import { ChallengeView } from './ChallengeView'
+import { Speak } from '../../ui/Speak'
 
 /** Si el desafío del paso ya muestra su propio tablero con la misma posición, el diagrama del paso sobra (se vería duplicado). */
 function challengeShowsSameBoard(step: LessonStep): boolean {
@@ -101,6 +102,7 @@ function LessonBody({ id }: { id: string }) {
         <div className="rounded-xl bg-surface p-4">
           {step.title && <p className="font-semibold">{step.title}</p>}
           <p className="mt-1 whitespace-pre-line">{step.text}</p>
+          <Speak className="mt-2" text={[step.title, step.text].filter(Boolean).join('. ')} auto />
         </div>
         {step.challenge && (
           <div className="rounded-xl border border-accent p-3">

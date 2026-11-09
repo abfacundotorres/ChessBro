@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Board } from '../../ui/Board'
 import { checkSquareOf, sanToFigurine, type MoveInput } from '../../engine/game'
 import { revealSolution, type PuzzleState } from '../../engine/puzzle'
+import { Speak } from '../../ui/Speak'
 import { startExercise, tryExercise, type Exercise } from '../../engine/lesson'
 
 interface Props {
@@ -86,6 +87,7 @@ export function ExerciseView({ exercise, onSolved, onNext, isLast, onMistake }: 
       {done ? (
         <div className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
           {exercise.why && <p>{exercise.why}</p>}
+          {exercise.why && <Speak text={exercise.why} auto />}
           {state.played.length > 0 && (
             <p className="font-mono text-muted">{state.played.map((m) => sanToFigurine(m.san)).join(' ')}</p>
           )}

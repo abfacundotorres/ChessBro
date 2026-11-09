@@ -47,6 +47,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/repertoire/`, `src/features/plan/` — repertorio (estudiar, practicar, repasar) y plan.
 - `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
   de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura.
+- `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
 - Español rioplatense (es-AR). Notación figurativa (♘f3) en UI; SAN inglés internamente.
@@ -77,3 +78,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H5 Currículo 1400–1800, pulido, e2e offline
 - [x] Primeros pasos (banda 400–800 y nivel de partida a elección), aperturas desde cero, ícono nuevo
 - [x] H7 Ícono verde/negro con rey, importación de Chess.com, biblioteca de aperturas y estadísticas por apertura
+- [x] H8 Análisis más exigente (umbrales 5/10/20, precisión armónica) y explicaciones con voz

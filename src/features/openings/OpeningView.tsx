@@ -9,6 +9,7 @@ import { db } from '../../data/db'
 import { replay, sanLineToUci, sanToFigurine, START_FEN } from '../../engine/game'
 import { openingStats } from '../../engine/openingStats'
 import { gameStats, StatsRows } from './Openings'
+import { Speak } from '../../ui/Speak'
 
 export function OpeningView() {
   const { id = '' } = useParams()
@@ -76,6 +77,7 @@ function Body({ o }: { o: Opening }) {
       <div className="rounded-xl bg-surface p-4">
         <p className="font-semibold">La idea</p>
         <p className="mt-1">{o.idea}</p>
+        <Speak className="mt-2" text={`${o.name}. ${o.idea} Planes: ${o.plans.join('. ')}. Errores típicos: ${o.mistakes.join('. ')}.`} />
       </div>
 
       <Stepper moves={o.moves} orientation={o.side === 'negras' ? 'black' : 'white'} />

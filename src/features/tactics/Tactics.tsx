@@ -14,6 +14,7 @@ import { loadPoolFor } from '../../data/puzzles'
 import { isGoodAlternative, type CardOrigin } from '../../engine/gameCards'
 import { KIND_LABELS, winPercent } from '../../engine/analysis'
 import { getEngine } from '../../lib/stockfish'
+import { Speak } from '../../ui/Speak'
 
 type Mode = 'new' | 'review'
 type Feedback = 'start' | 'good' | 'wrong' | 'checking' | 'done'
@@ -380,6 +381,16 @@ function PuzzleView({
           ) : themeLabels(state.puzzle.themes).length > 0 && (
             <p className="text-muted">{themeLabels(state.puzzle.themes).join(' · ')}</p>
           )}
+          <Speak
+            auto
+            text={[
+              !state.failed ? 'Bien resuelto.' : 'Esta era la solución.',
+              state.played.length > 0 ? `La línea: ${state.played.map((m) => m.san).join(', ')}.` : '',
+              current.origin ? `Tipo de error: ${KIND_LABELS[current.origin.kind]}.` : themeLabels(state.puzzle.themes).length > 0 ? `Tema: ${themeLabels(state.puzzle.themes).join(', ')}.` : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          />
           <button type="button" className="btn-primary mt-1" disabled={loading} onClick={onNext}>
             Siguiente
           </button>
