@@ -14,6 +14,8 @@ import { EndgamePlay } from './features/endgames/EndgamePlay'
 import { Games } from './features/games/Games'
 import { GameDetail } from './features/games/GameDetail'
 import { FreeBoard } from './features/board/FreeBoard'
+import { Openings } from './features/openings/Openings'
+import { OpeningView } from './features/openings/OpeningView'
 import { Settings } from './features/settings/Settings'
 import { UpdateBanner } from './ui/UpdateBanner'
 
@@ -37,6 +39,8 @@ export function App() {
         <main className="flex-1 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-24">
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/aperturas" element={<Openings />} />
+            <Route path="/aperturas/:id" element={<OpeningView />} />
             <Route path="/repertorio" element={<Repertoire />} />
             <Route path="/repertorio/repaso" element={<ReviewRepertoire />} />
             <Route path="/repertorio/:id" element={<LineView />} />

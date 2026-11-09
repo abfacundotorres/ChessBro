@@ -45,12 +45,14 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/content/repertoire.ts` — las 31 líneas del repertorio (1.e4; 1…e5 / 1…d5); `src/engine/repertoire.ts`
   deriva las tarjetas de repaso. `src/engine/plan.ts` — metas y tareas del plan semanal.
 - `src/features/repertoire/`, `src/features/plan/` — repertorio (estudiar, practicar, repasar) y plan.
+- `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
+  de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura.
 
 ## Convenciones
 - Español rioplatense (es-AR). Notación figurativa (♘f3) en UI; SAN inglés internamente.
 - Tono: corto, neutro/positivo, honesto sobre el progreso. Sin sermones.
 - Mobile first, una mano: botones ≥ 48 px, sin scroll horizontal.
-- Cero requests en runtime salvo `lichess.org` (importación de partidas).
+- Cero requests en runtime salvo `lichess.org` y `api.chess.com` (importación de partidas).
   CSP inyectada en build (`vite.config.ts`).
 - Pocas dependencias: sin librería de UI, de gráficos ni state manager.
 - Un commit por hito, tests en verde. Supuestos nuevos → `docs/DECISIONES.md`.
@@ -74,3 +76,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H4 Repertorio con repaso espaciado + plan semanal
 - [x] H5 Currículo 1400–1800, pulido, e2e offline
 - [x] Primeros pasos (banda 400–800 y nivel de partida a elección), aperturas desde cero, ícono nuevo
+- [x] H7 Ícono verde/negro con rey, importación de Chess.com, biblioteca de aperturas y estadísticas por apertura

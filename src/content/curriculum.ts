@@ -77,8 +77,9 @@ export interface Module {
 export const MODULES: Module[] = [
   { name: 'Táctica', description: 'Puzzles por tema y nivel, con repaso de los que fallás.', to: '/tactica' },
   { name: 'Tablero libre', description: 'Mové piezas, probá ideas, deshacé.', to: '/tablero' },
-  { name: 'Tus partidas', description: 'Importá de Lichess; tus errores se vuelven ejercicios.', to: '/partidas' },
+  { name: 'Tus partidas', description: 'Importá de Chess.com o Lichess; tus errores se vuelven ejercicios.', to: '/partidas' },
   { name: 'Lecciones y finales', description: 'Currículo guiado y finales jugables contra el motor.', to: '/lecciones' },
+  { name: 'Aperturas', description: 'Biblioteca para entender cada apertura, con trampas y tus estadísticas.', to: '/aperturas' },
   { name: 'Repertorio', description: 'Aperturas con repaso espaciado: 1.e4 con blancas, 1…e5 y 1…d5 con negras.', to: '/repertorio' },
   { name: 'Plan semanal', description: 'Qué estudiar hoy y cuánto llevás de la semana.', to: '/plan' },
 ]

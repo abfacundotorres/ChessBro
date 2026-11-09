@@ -258,3 +258,22 @@
   sobre un degradé violeta–rosa, con destellos y un toque de tablero. La variante "maskable" (para Android) y la de iOS
   van sin esquinas y con el personaje más chico para que el sistema las recorte sin cortarlo. El color de la barra del
   navegador y de la pantalla de carga pasó de negro a violeta (#7B5CFA) y lavanda (#F4EEFF).
+
+## H7: ícono verde, Chess.com y aperturas
+- **Ícono**: tablero verde y negro (8×8) con un rey blanco-crema al frente (`scripts/gen-icons.mjs`). La variante
+  maskable y la de iOS van sin esquinas y con el dibujo más chico. Colores de la app: verde #1F8A3F de barra y negro
+  #101311 de pantalla de carga. Los colores de la interfaz (acento violeta) no cambiaron.
+- **Chess.com** (`src/data/chesscom.ts`): API pública (`api.chess.com`, CORS abierto), sin clave. Se pide la lista de
+  meses y se baja de a un mes por vez (de atrás para adelante, hasta 4) para no pasarse del límite. Las partidas
+  vienen en PGN: se limpian comentarios, relojes y numeración y se convierten a UCI como las de Lichess. Se ignoran
+  variantes (`rules ≠ chess`), el bullet y las de menos de 4 jugadas. El id es `cc-<número de partida>` y los registros
+  nuevos llevan `source` (las anteriores, sin `source`, son de Lichess). `https://api.chess.com` se agregó al CSP.
+  Probado contra la API real (62 de 62 partidas de un mes se convirtieron) y con un fixture de partidas reales.
+  Un navegador no puede poner `User-Agent`; la API lo pide solo en ráfagas, y la app no hace ráfagas.
+- **Análisis en lote**: "Analizar pendientes" corre Stockfish sobre hasta 5 partidas sin analizar, con progreso y
+  cancelación; cada error grave sigue convirtiéndose en ejercicio de repaso.
+- **Aperturas** (`content/openings.ts`): 23 familias con idea, planes, errores típicos, trampa verificada (tests con
+  chess.js, incluido el mate de Légal) y enlace a las líneas del repertorio. Las explicaciones no las verifica ningún
+  programa. "Tus aperturas" agrupa tus partidas por familia (reconocida por el nombre en inglés que ponen Chess.com y
+  Lichess) y bando, con ganadas/tablas/perdidas y errores graves en las primeras 10 jugadas de las analizadas. Lo que no
+  cae en ninguna familia se agrupa por el nombre original.
