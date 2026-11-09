@@ -174,3 +174,20 @@
 - **Dexie v5** (`repcards`, `replines`) y backup v5, compatible con los anteriores.
 - **Navegación**: el repertorio y el plan se abren desde Inicio (tarjeta "Para hoy" y módulos); la barra
   inferior sigue con cinco pestañas.
+
+## Estilo de estudio: Juego o Serio
+- **Pedido**: elegir al inicio entre "juego" y "serio". Se pregunta en la primera apertura (pantalla de
+  bienvenida) y se puede cambiar en Ajustes. Se guarda en la tabla de ajustes y entra en el backup.
+- **Juego** es lo que ya había: historias y personajes, adivinanzas, mini-juegos, estrellas y racha.
+- **Serio** usa el mismo contenido (mismas posiciones, mismos ejercicios, mismas respuestas) con otro registro:
+  - Las siete lecciones lúdicas tienen una versión técnica (`src/content/lessonsSerias.ts`): sin personajes
+    ni metáforas, con títulos como "Estructura de peones" o "Convertir una ventaja".
+  - Los desafíos pasan a llamarse "Ejercicio" y la devolución es "Correcto." / "Incorrecto.".
+  - No se muestran estrellas, rachas ni emojis. **Se siguen registrando por debajo**: si cambiás a Juego, las
+    estrellas y la racha ya están. El plan semanal y el avance de las lecciones se muestran igual.
+- **Lo que no cambia con el estilo**: las lecciones de la banda 800–1400 anteriores a las lúdicas (mates,
+  horquilla, clavada, finales…) ya estaban escritas en un registro neutro y se muestran igual en ambos
+  estilos. Los puzzles, los finales, el repertorio y el análisis de partidas tampoco cambian.
+- **Un test** exige que cada versión seria tenga un texto por cada paso, que no queden personajes ni metáforas
+  lúdicas, y que las posiciones y respuestas sean idénticas a las de la versión juego.
+- **Regla para el contenido nuevo (H5)**: toda lección con tono lúdico debe traer también su versión seria.

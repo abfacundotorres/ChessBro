@@ -37,7 +37,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
   de autoría que imprimen lo que dice el motor de posiciones candidatas: `author.test.ts` (ejercicios),
   `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`) y `author4.test.ts` (líneas de repertorio, `REP_LINES=…`).
-- `src/content/lessonKit.ts` — helpers para escribir lecciones; `lessonsNuevas.ts` — lecciones lúdicas.
+- `src/content/lessonKit.ts` — helpers para escribir lecciones; `lessonsNuevas.ts` — lecciones lúdicas;
+  `lessonsSerias.ts` — sus versiones serias; `styled.ts` aplica el estilo elegido.
 - `src/content/repertoire.ts` — las 24 líneas del repertorio (1.e4; 1…e5 / 1…d5); `src/engine/repertoire.ts`
   deriva las tarjetas de repaso. `src/engine/plan.ts` — metas y tareas del plan semanal.
 - `src/features/repertoire/`, `src/features/plan/` — repertorio (estudiar, practicar, repasar) y plan.
@@ -57,6 +58,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - El repertorio no puede contradecirse (una jugada por posición) y Stockfish verifica cada línea; las
   explicaciones no las verifica nadie: revisarlas.
 - Lecciones lúdicas: tono cálido, personajes, frases cortas; cada desafío explica el porqué al resolver.
+- Dos estilos (`data/style.ts`): "juego" y "serio". Toda lección lúdica nueva lleva su versión seria en
+  `content/lessonsSerias.ts` (mismos ejercicios y respuestas; sin personajes, estrellas ni rachas).
 
 ## Hitos
 - [x] H0 Esqueleto PWA, tablero interactivo, CI y deploy

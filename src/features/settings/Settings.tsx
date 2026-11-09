@@ -3,6 +3,7 @@ import { exportBackup, importBackup } from '../../data/backup'
 import { toDateStr } from '../../engine/dates'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { LICHESS_USER, getSetting, setSetting } from '../../data/games'
+import { setStyle, useStyle, type Style } from '../../data/style'
 import { USERNAME_RE } from '../../data/lichess'
 
 export function Settings() {
@@ -11,6 +12,7 @@ export function Settings() {
   const user = useLiveQuery(() => getSetting(LICHESS_USER), [])
   const [draft, setDraft] = useState<string | null>(null)
   const value = draft ?? user ?? ''
+  const style = useStyle()
 
   async function onExport() {
     const data = await exportBackup()
@@ -38,6 +40,18 @@ export function Settings() {
   return (
     <div className="flex flex-col gap-4">
       <h1 className="text-2xl font-bold">Ajustes</h1>
+
+      <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
+        <p className="font-semibold">Estilo de estudio</p>
+        <p className="text-muted">Cambia el tono de las lecciones. Los ejercicios y tu progreso son los mismos.</p>
+        <div className="grid grid-cols-2 gap-2" role="radiogroup" aria-label="Estilo de estudio">
+          {(['juego', 'serio'] as Style[]).map((s) => (
+            <button key={s} type="button" role="radio" aria-checked={style === s} className={style === s ? 'btn-primary' : 'btn'} onClick={() => void setStyle(s)}>
+              {s === 'juego' ? '🎲 Juego' : '📖 Serio'}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
         <p className="font-semibold">Tus datos</p>

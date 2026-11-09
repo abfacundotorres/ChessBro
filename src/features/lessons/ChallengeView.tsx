@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Board } from '../../ui/Board'
 import { checkChallenge, type Challenge } from '../../engine/challenge'
 import { sanToFigurine, tryMove, type Color } from '../../engine/game'
+import { useStyle } from '../../data/style'
 
 interface Props {
   challenge: Challenge
@@ -19,6 +20,7 @@ export function ChallengeView({ challenge, onMistake, onSolved }: Props) {
   const [picked, setPicked] = useState<Set<string>>(new Set())
   const [badOptions, setBadOptions] = useState<Set<string>>(new Set())
   const [flash, setFlash] = useState<string | null>(null)
+  const serio = useStyle() === 'serio'
 
   function wrong() {
     setWrongs((w) => w + 1)
@@ -121,7 +123,7 @@ export function ChallengeView({ challenge, onMistake, onSolved }: Props) {
             )
           })}
         </div>
-        <Feedback solved={solved} wrongs={wrongs} why={challenge.why} onShow={showReveal ? showAnswer : undefined} />
+        <Feedback serio={serio} solved={solved} wrongs={wrongs} why={challenge.why} onShow={showReveal ? showAnswer : undefined} />
       </div>
     )
   }
@@ -157,7 +159,7 @@ export function ChallengeView({ challenge, onMistake, onSolved }: Props) {
             )
           })}
         </div>
-        <Feedback solved={solved} wrongs={wrongs} why={challenge.why} onShow={showReveal ? showAnswer : undefined} />
+        <Feedback serio={serio} solved={solved} wrongs={wrongs} why={challenge.why} onShow={showReveal ? showAnswer : undefined} />
       </div>
     )
   }
@@ -179,25 +181,25 @@ export function ChallengeView({ challenge, onMistake, onSolved }: Props) {
           Listo{picked.size > 0 ? ` (${picked.size})` : ''}
         </button>
       )}
-      <Feedback solved={solved} wrongs={wrongs} why={challenge.why} hint={flash ? 'Casi. Mirá otra vez.' : undefined} onShow={showReveal ? showAnswer : undefined} />
+      <Feedback serio={serio} solved={solved} wrongs={wrongs} why={challenge.why} hint={flash ? (serio ? 'Incorrecto. Revisá la posición.' : 'Casi. Mirá otra vez.') : undefined} onShow={showReveal ? showAnswer : undefined} />
     </div>
   )
 }
 
-function Feedback({ solved, wrongs, why, hint, onShow }: { solved: boolean; wrongs: number; why: string; hint?: string; onShow?: () => void }) {
+function Feedback({ serio, solved, wrongs, why, hint, onShow }: { serio: boolean; solved: boolean; wrongs: number; why: string; hint?: string; onShow?: () => void }) {
   return (
     <div aria-live="polite" className="flex flex-col gap-2">
       {solved ? (
         <p className="rounded-xl bg-surface p-3 text-sm">
-          <span className="font-semibold text-accent">{wrongs === 0 ? '¡Eso! ' : '¡Ahora sí! '}</span>
+          <span className="font-semibold text-accent">{serio ? 'Correcto. ' : wrongs === 0 ? '¡Eso! ' : '¡Ahora sí! '}</span>
           {why}
         </p>
       ) : (
-        wrongs > 0 && <p className="text-sm text-red-500">{hint ?? 'No es esa. Probá de nuevo.'}</p>
+        wrongs > 0 && <p className="text-sm text-red-500">{hint ?? (serio ? 'Incorrecto. Probá de nuevo.' : 'No es esa. Probá de nuevo.')}</p>
       )}
       {onShow && (
         <button type="button" className="btn" onClick={onShow}>
-          Mostrame la respuesta
+          {serio ? 'Ver la respuesta' : 'Mostrame la respuesta'}
         </button>
       )}
     </div>

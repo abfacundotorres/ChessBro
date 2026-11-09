@@ -3,6 +3,8 @@ import { Link, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Board } from '../../ui/Board'
 import { lessonById } from '../../content/lessons'
+import { styledLesson } from '../../content/styled'
+import { useStyle } from '../../data/style'
 import { endgameById } from '../../content/endgames'
 import { db } from '../../data/db'
 import { finishLesson, markExercise, markLessonDone, touchPractice } from '../../data/lessons'
@@ -18,6 +20,7 @@ export function LessonView() {
 
 function LessonBody({ id }: { id: string }) {
   const lesson = lessonById(id)
+  const style = useStyle()
   const progress = useLiveQuery(() => db.lessons.get(id), [id], undefined)
   const [phase, setPhase] = useState<{ kind: 'read'; i: number } | { kind: 'practice'; i: number } | { kind: 'end' }>({ kind: 'read', i: 0 })
   const [cleared, setCleared] = useState<ReadonlySet<number>>(new Set())
@@ -31,7 +34,8 @@ function LessonBody({ id }: { id: string }) {
       </p>
     )
   }
-  const l = lesson
+  const l = styledLesson(lesson, style)
+  const serio = style === 'serio'
 
   const challenges = l.steps.filter((st) => st.challenge).length
   const items = challenges + l.exercises.length
@@ -91,7 +95,7 @@ function LessonBody({ id }: { id: string }) {
         </div>
         {step.challenge && (
           <div className="rounded-xl border border-accent p-3">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-accent">Adiviná</p>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-accent">{serio ? 'Ejercicio' : 'Adiviná'}</p>
             <ChallengeView
               key={`${l.id}-${phase.i}`}
               challenge={step.challenge}
@@ -150,20 +154,21 @@ function LessonBody({ id }: { id: string }) {
     <div className="flex flex-col gap-3">
       {header}
       <div className="flex flex-col items-center gap-2 rounded-xl bg-surface p-5 text-center">
-        {items > 0 && (
+        {items > 0 && !serio && (
           <p className="text-4xl tracking-widest text-accent" aria-label={`${result?.stars ?? 0} de 3 estrellas`}>
             {'★'.repeat(result?.stars ?? 0)}
             <span className="text-border">{'★'.repeat(3 - (result?.stars ?? 0))}</span>
           </p>
         )}
         <p className="text-lg font-semibold">
-          {items === 0 ? '¡Lección terminada!' : result?.stars === 3 ? '¡Perfecta!' : result?.stars === 2 ? '¡Muy bien!' : '¡Lección completada!'}
+          {serio ? 'Lección completada' : items === 0 ? '¡Lección terminada!' : result?.stars === 3 ? '¡Perfecta!' : result?.stars === 2 ? '¡Muy bien!' : '¡Lección completada!'}
         </p>
         {items > 0 && (
           <p className="text-sm text-muted">
             {mistakes === 0 ? 'Sin ningún error.' : mistakes === 1 ? 'Con un error.' : `Con ${mistakes} errores.`}
-            {result && result.best > result.stars && ` Tu mejor marca: ${result.best} ★.`}
-            {result && result.stars !== 3 && ' Podés repasarla para conseguir las 3 estrellas.'}
+            {!serio && result && result.best > result.stars && ` Tu mejor marca: ${result.best} ★.`}
+            {!serio && result && result.stars !== 3 && ' Podés repasarla para conseguir las 3 estrellas.'}
+            {serio && mistakes > 0 && ' Conviene repasar los conceptos con errores.'}
           </p>
         )}
         {l.exercises.length > 0 && (

@@ -8,6 +8,7 @@ import type { RepCard } from '../../data/db'
 import { toDateStr } from '../../engine/dates'
 import { sanToFigurine, tryMove, type MoveInput } from '../../engine/game'
 import { StreakChip } from '../../ui/StreakChip'
+import { useStyle } from '../../data/style'
 
 export function ReviewRepertoire() {
   const [cards, setCards] = useState<RepCard[] | null>(null)
@@ -55,6 +56,7 @@ function Session({ cards }: { cards: RepCard[] }) {
   const [ready, setReady] = useState<{ right: number } | null>(null)
   // El resultado de cada tarjeta se registra una sola vez: en el primer intento (acierto o error) o al pedir la respuesta.
   const recorded = useRef(false)
+  const style = useStyle()
 
   const card = cards[i]
   const spec = useMemo(() => (card ? REP_CARDS.find((c) => c.id === card.id) : undefined), [card])
@@ -65,9 +67,11 @@ function Session({ cards }: { cards: RepCard[] }) {
     const total = cards.length
     return (
       <div className="flex flex-col items-center gap-3 rounded-xl bg-surface p-5 text-center">
-        <p className="text-4xl" aria-hidden="true">
-          {ready.right === total ? '🏆' : '💪'}
-        </p>
+        {style === 'juego' && (
+          <p className="text-4xl" aria-hidden="true">
+            {ready.right === total ? '🏆' : '💪'}
+          </p>
+        )}
         <p className="text-lg font-semibold">Repaso terminado</p>
         <p className="text-sm text-muted">
           {ready.right} de {total} bien a la primera.
