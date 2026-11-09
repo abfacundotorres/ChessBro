@@ -63,3 +63,14 @@ describe('biblioteca de aperturas', () => {
     expect(openingFamily(null)).toBeNull()
   })
 })
+
+describe('ejercicios de trampa', () => {
+  it.each(OPENINGS.filter((o) => o.trap?.punishAt !== undefined).map((o) => [o.id, o] as const))('%s: la jugada que castiga es legal y de la posición correcta', (_id, o) => {
+    const t = o.trap!
+    const at = t.punishAt!
+    expect(at).toBeGreaterThan(0)
+    expect(at).toBeLessThan(t.moves.length)
+    const c = play(t.moves.slice(0, at))
+    expect(() => c.move(t.moves[at]!)).not.toThrow()
+  })
+})

@@ -38,7 +38,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
 - `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
   de autoría que imprimen lo que dice el motor de posiciones candidatas: `author.test.ts` (ejercicios),
-  `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`) y `author4.test.ts` (líneas de repertorio, `REP_LINES=…`).
+  `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`) y `author4.test.ts` (líneas de repertorio, `REP_LINES=…`) y `author5.test.ts` (líneas de la biblioteca de aperturas, `DEEP=1`).
 - `src/content/lessonKit.ts` — helpers para escribir lecciones; `lessonsPrincipiantes.ts` — banda 400–800 y aperturas;
   `lessonsNuevas.ts` — lecciones lúdicas;
   `lessonsSerias.ts` — sus versiones serias; `styled.ts` aplica el estilo elegido.
@@ -47,6 +47,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/repertoire/`, `src/features/plan/` — repertorio (estudiar, practicar, repasar) y plan.
 - `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
   de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura.
+  `src/content/deep/` + `openingLines.ts` — 30 líneas con una nota por jugada (se reusan en la pantalla del repertorio).
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
@@ -81,3 +82,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H8 Análisis más exigente (umbrales 5/10/20, precisión armónica) y explicaciones con voz
 - [x] H9 Comentarios de entrenador por error (preguntas y variantes) y elección de voz/velocidad
 - [x] H10 Plan semanal según tus errores (punto débil, lección y puzzles del tema)
+- [x] H11 Aperturas a fondo: 30 líneas con una explicación por jugada, ejercicios y repaso

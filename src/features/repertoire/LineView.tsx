@@ -2,19 +2,20 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Board } from '../../ui/Board'
 import { MoveList } from '../../ui/MoveList'
-import { repLineById } from '../../content/repertoire'
-import { REP_CARDS } from '../../content/repertoireCards'
+import { ALL_CARDS, anyLineById } from '../../content/repertoireCards'
 import { markLinePracticed } from '../../data/repertoire'
 import { toDateStr } from '../../engine/dates'
 import { replay, sanToFigurine, type MoveInput } from '../../engine/game'
 import { lineSteps, type RepLine } from '../../engine/repertoire'
 import { uciToMove } from '../../engine/puzzle'
 import { Speak } from '../../ui/Speak'
+import { QuizView } from '../openings/QuizView'
+import { openingById } from '../../content/openings'
 
 /** Reinicia el estado al cambiar de línea. */
 export function LineView() {
   const { id = '' } = useParams()
-  const line = repLineById(id)
+  const line = anyLineById(id)
   if (!line) {
     return (
       <p>
@@ -30,8 +31,8 @@ function Body({ line }: { line: RepLine }) {
   return (
     <div className="flex flex-col gap-3">
       <header>
-        <Link to="/repertorio" className="text-sm text-muted">
-          ← Repertorio
+        <Link to={line.opening ? `/aperturas/${line.opening}` : '/repertorio'} className="text-sm text-muted">
+          ← {line.opening ? (openingById(line.opening)?.name ?? 'Aperturas') : 'Repertorio'}
         </Link>
         <h1 className="text-xl font-bold">{line.name}</h1>
         <p className="text-sm text-muted">{line.group}</p>
@@ -106,6 +107,12 @@ function Study({ line, onPractice }: { line: RepLine; onPractice: () => void }) 
           ))}
         </ul>
       </div>
+      {line.quiz && line.quiz.length > 0 && (
+        <section className="flex flex-col gap-2">
+          <h2 className="font-semibold">Preguntas</h2>
+          <QuizView items={line.quiz} />
+        </section>
+      )}
       <button type="button" className="btn-primary" onClick={onPractice}>
         Practicarla
       </button>
@@ -139,7 +146,7 @@ function Practice({ line }: { line: RepLine }) {
   useEffect(() => {
     if (!done || saved.current) return
     saved.current = true
-    void markLinePracticed(line, REP_CARDS, toDateStr(new Date())).then(setResult)
+    void markLinePracticed(line, ALL_CARDS, toDateStr(new Date())).then(setResult)
   }, [done, line])
 
   const onMove = useCallback(
@@ -204,8 +211,8 @@ function Practice({ line }: { line: RepLine }) {
             <button type="button" className="btn" onClick={restart}>
               Otra vez
             </button>
-            <Link to="/repertorio" className="btn-primary flex items-center justify-center">
-              Repertorio
+            <Link to={line.opening ? `/aperturas/${line.opening}` : '/repertorio'} className="btn-primary flex items-center justify-center">
+              {line.opening ? 'Volver a la apertura' : 'Repertorio'}
             </Link>
           </div>
         </div>

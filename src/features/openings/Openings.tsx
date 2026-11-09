@@ -5,6 +5,7 @@ import { GROUP_LABELS, OPENINGS, openingFamily, type OpeningGroup } from '../../
 import { db, type GameRecord } from '../../data/db'
 import { openingStats, OPENING_PLIES, type OpeningStat, type StatGame } from '../../engine/openingStats'
 import { REPERTOIRE } from '../../content/repertoire'
+import { deepLinesOf } from '../../content/openingLines'
 
 const GROUPS: OpeningGroup[] = ['e4-e5', 'e4-otras', 'd4', 'flanco']
 
@@ -52,7 +53,11 @@ function Library() {
             <Link key={o.id} to={`/aperturas/${o.id}`} className="rounded-xl bg-surface p-3 active:scale-[0.99]">
               <div className="flex items-center justify-between gap-2">
                 <p className="font-medium">{o.name}</p>
-                {o.repLines.length > 0 && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-muted">en el repertorio</span>}
+                {deepLinesOf(o.id).length > 0 ? (
+                  <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-accent">{deepLinesOf(o.id).length} líneas a fondo</span>
+                ) : (
+                  o.repLines.length > 0 && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-muted">en el repertorio</span>
+                )}
               </div>
               <p className="text-xs text-muted">{o.side === 'blancas' ? 'Con blancas' : 'Con negras'}{o.trap ? ' · con trampa' : ''}</p>
             </Link>

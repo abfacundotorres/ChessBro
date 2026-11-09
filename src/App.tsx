@@ -43,7 +43,7 @@ export function App() {
     <HashRouter>
       <div className="mx-auto flex min-h-dvh max-w-lg flex-col">
         <UpdateBanner />
-        <main className="flex-1 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-24">
+        <main className="flex-1 px-4 pt-[max(1rem,env(safe-area-inset-top))] pb-[calc(6.5rem+env(safe-area-inset-bottom))]">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/aperturas" element={<Openings />} />

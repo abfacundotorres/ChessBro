@@ -20,6 +20,18 @@ export interface RepLine {
   notes?: Record<number, string>
   /** Línea "para empezar": simple, útil desde el primer día. Se estudia primero. */
   starter?: boolean
+  /** Si la línea pertenece a la biblioteca de aperturas: id de la apertura (ver content/openings.ts). */
+  opening?: string
+  /** Preguntas de concepto sobre la línea (opción múltiple). */
+  quiz?: QuizItem[]
+}
+
+export interface QuizItem {
+  q: string
+  options: string[]
+  /** Índice de la opción correcta. */
+  answer: number
+  why: string
 }
 
 export interface RepCardSpec {
@@ -55,7 +67,7 @@ export function cardId(color: Color, fen: string): string {
 }
 
 /** Tarjetas de repaso de un conjunto de líneas, más los conflictos (misma posición, dos jugadas distintas). */
-export function buildCards(lines: readonly RepLine[]): { cards: RepCardSpec[]; conflicts: RepConflict[] } {
+export function buildCards(lines: readonly RepLine[], prefix = ''): { cards: RepCardSpec[]; conflicts: RepConflict[] } {
   const byId = new Map<string, RepCardSpec>()
   const seen = new Map<string, { lineId: string; san: string; uci: string }[]>()
   for (const line of lines) {
@@ -68,7 +80,7 @@ export function buildCards(lines: readonly RepLine[]): { cards: RepCardSpec[]; c
       const m = chess.move(san)
       const uci = `${m.from}${m.to}${m.promotion ?? ''}`
       if (mine) {
-        const id = cardId(line.color, fen)
+        const id = prefix + cardId(line.color, fen)
         const list = seen.get(id) ?? []
         list.push({ lineId: line.id, san: m.san, uci })
         seen.set(id, list)
@@ -120,5 +132,49 @@ export function lineSteps(line: RepLine): LineStep[] {
     const m = chess.move(san)
     out.push({ ply, san: m.san, uci: `${m.from}${m.to}${m.promotion ?? ''}`, mine, fenBefore, fenAfter: chess.fen(), from: m.from, to: m.to })
   })
+  return out
+}
+
+export interface DrillItem {
+  /** Id de la tarjeta de repaso de esta posición. */
+  cardId: string
+  lineId: string
+  color: Color
+  fen: string
+  uci: string
+  san: string
+  /** Última jugada del rival, para mostrarla. */
+  prev: { from: string; to: string; san: string } | null
+  /** Jugadas hasta acá. */
+  history: string[]
+  /** Por qué es esa la jugada (la nota de la línea). */
+  why: string
+}
+
+/** Posiciones de ejercicio de un conjunto de líneas: una por cada posición propia, sin repetir las que se comparten. */
+export function drillItems(lines: readonly RepLine[], prefix = ''): DrillItem[] {
+  const seen = new Set<string>()
+  const out: DrillItem[] = []
+  for (const line of lines) {
+    const steps = lineSteps(line)
+    steps.forEach((s, i) => {
+      if (!s.mine) return
+      const id = prefix + cardId(line.color, s.fenBefore)
+      if (seen.has(id)) return
+      seen.add(id)
+      const p = i > 0 ? steps[i - 1]! : null
+      out.push({
+        cardId: id,
+        lineId: line.id,
+        color: line.color,
+        fen: s.fenBefore,
+        uci: s.uci,
+        san: s.san,
+        prev: p ? { from: p.from, to: p.to, san: p.san } : null,
+        history: steps.slice(0, i).map((x) => x.san),
+        why: line.notes?.[i] ?? '',
+      })
+    })
+  }
   return out
 }

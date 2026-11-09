@@ -15,6 +15,8 @@ export interface OpeningTrap {
   text: string
   /** La última jugada da jaque mate (lo comprueba un test). */
   mate?: boolean
+  /** Índice de la jugada que castiga la trampa: el ejercicio muestra la posición anterior y pide encontrarla. */
+  punishAt?: number
 }
 
 export interface Opening {
@@ -97,6 +99,7 @@ export const OPENINGS: Opening[] = [
       name: 'El arca de Noé',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'd6', 'd4', 'b5', 'Bb3', 'Nxd4', 'Nxd4', 'exd4', 'Qxd4', 'c5', 'Qd5', 'Be6', 'Qc6+', 'Bd7', 'Qd5', 'c4'],
       text: 'Si las blancas se llevan peones en el centro, las negras atrapan al alfil de b3 con …c5 y …c4. Cuidado si jugás Ruy López con blancas.',
+      punishAt: 15,
     },
     repLines: ['b-ruy'],
     match: ['ruy lopez', 'spanish'],
@@ -162,6 +165,7 @@ export const OPENINGS: Opening[] = [
       name: 'La dama en la columna e',
       moves: ['e4', 'e5', 'Nf3', 'Nf6', 'Nxe5', 'Nxe4', 'Qe2', 'Nf6', 'Nc6+'],
       text: 'Si tras 3.Cxe5 las negras toman en e4 y después de 4.De2 retroceden con …Cf6??, 5.Cc6+ es jaque descubierto y a la vez ataca la dama negra.',
+      punishAt: 8,
     },
     repLines: ['w-petroff'],
     match: ['petrov', 'russian'],
@@ -180,6 +184,7 @@ export const OPENINGS: Opening[] = [
       moves: ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6', 'Nxe5', 'Bxd1', 'Bxf7+', 'Ke7', 'Nd5#'],
       text: 'Si las negras clavan el caballo con …Ag4 y toman la dama, las blancas la regalan para dar un mate con dos caballos y un alfil.',
       mate: true,
+      punishAt: 8,
     },
     repLines: ['w-philidor-nf6', 'w-philidor-exd4'],
     match: ['philidor'],
@@ -269,6 +274,7 @@ export const OPENINGS: Opening[] = [
       name: 'La trampa del elefante',
       moves: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Nbd7', 'cxd5', 'exd5', 'Nxd5', 'Nxd5', 'Bxd8', 'Bb4+', 'Qd2', 'Bxd2+', 'Kxd2', 'Kxd8'],
       text: 'Si las blancas toman el peón de d5 con el caballo, tras los cambios las negras ganan una pieza a cambio de un peón: …Cxd5, Axd8 y …Ab4+ recupera la dama.',
+      punishAt: 11,
     },
     repLines: ['b-qgd', 'b-qgd-nf3'],
     match: ['queens gambit'],

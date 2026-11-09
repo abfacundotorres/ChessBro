@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Board } from '../../ui/Board'
-import { REPERTOIRE, repLineById } from '../../content/repertoire'
-import { REP_CARDS } from '../../content/repertoireCards'
+import { REPERTOIRE } from '../../content/repertoire'
+import { ALL_CARDS, anyLineById } from '../../content/repertoireCards'
 import { dueRepCards, reviewRepCard } from '../../data/repertoire'
 import type { RepCard } from '../../data/db'
 import { toDateStr } from '../../engine/dates'
@@ -59,8 +59,8 @@ function Session({ cards }: { cards: RepCard[] }) {
   const style = useStyle()
 
   const card = cards[i]
-  const spec = useMemo(() => (card ? REP_CARDS.find((c) => c.id === card.id) : undefined), [card])
-  const line = spec ? repLineById(spec.lineIds[0]!) : undefined
+  const spec = useMemo(() => (card ? ALL_CARDS.find((c) => c.id === card.id) : undefined), [card])
+  const line = spec ? anyLineById(spec.lineIds[0]!) : undefined
   const today = toDateStr(new Date())
 
   if (ready) {

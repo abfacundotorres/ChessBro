@@ -325,3 +325,25 @@
   las lecciones y temas existen.
 - **Límite**: la clasificación "Final" cuenta posiciones con poco material (≤ 26 de piezas no peón entre los dos), que
   incluye medios juegos simplificados; con pocas partidas, un tipo puede salir primero por azar.
+
+## H11: aperturas a fondo
+- **Alcance** (a pedido): las 10 aperturas principales (Italiana, Ruy López, Escocesa, Siciliana, Francesa, Caro-Kann,
+  Escandinava, Gambito de Dama, Londres e India de Rey) con **3 líneas cada una**, 30 en total, y **una explicación
+  por cada jugada** (también las del rival). El resto de la biblioteca queda como estaba (resumen, planes, errores,
+  trampa). Las líneas son de 12 a 20 jugadas, hasta donde la teoría es estable para un nivel de 500–1200.
+- **Estructura**: `content/deep/*.ts` (definiciones con notas por jugada y preguntas) → `content/openingLines.ts`. Cada
+  línea es un `RepLine`, así que se estudia y se practica con la misma pantalla del repertorio y entra en el mismo
+  **repaso espaciado**. Dentro de una apertura las líneas solo se separan por jugadas del rival (las del usuario no se
+  contradicen); las tarjetas llevan el id de la apertura como prefijo para no chocar con las del repertorio. Un test
+  comprueba legalidad, una nota por jugada, bando, ausencia de conflictos y que las tarjetas existan.
+- **Verificación**: `DEEP=1 npx vitest run src/test/author5.test.ts` evalúa con Stockfish (profundidad 14) todas las
+  líneas: ninguna jugada propia pierde ≥ 8 puntos de probabilidad de ganar ni ninguna del rival ≥ 15. Las 30 pasan.
+  Antes de escribir las notas se probaron candidatas y se descartó una línea de la Escandinava (…Dd7 perdía 14).
+  **Las explicaciones no las verifica ningún programa**; al releerlas encontré y corregí varias afirmaciones
+  imprecisas (qué atacaba cada pieza, para qué servía c3 en la Italiana). Conviene que las lea alguien que sepa.
+- **Ejercicios** por apertura (pestaña Ejercicios): "¿Qué jugás acá?" (10 posiciones al azar de tus líneas; lo que
+  fallás vuelve al repaso si esa posición ya estaba), preguntas de concepto (opción múltiple, 1–2 por línea, con
+  explicación) y ejercicios de trampa (Petroff, Légal, Noé y el Elefante: encontrá el golpe).
+- **Pantalla**: la apertura se organiza en pestañas (Resumen, Líneas, Ejercicios) para que entre bien en el celular, y se
+  reforzó el margen inferior (`env(safe-area-inset-bottom)`) por un corte que se vio en el teléfono. No pude reproducirlo
+  en pantallas simuladas de 360 y 393 px, así que ese arreglo es preventivo.
