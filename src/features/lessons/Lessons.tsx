@@ -23,11 +23,12 @@ export function Lessons() {
         </div>
       </header>
 
-      {(['b1', 'b2'] as const).map((bid) => {
-        const band = BANDS.find((b) => b.id === bid)
+      {BANDS.map((band) => {
+        const bid = band.id
+        if (!LESSONS.some((l) => l.band === bid)) return null
         return (
           <section key={bid} className="flex flex-col gap-2">
-            <h2 className="text-lg font-semibold">Elo {band?.range}</h2>
+            <h2 className="text-lg font-semibold">Elo {band.range}</h2>
             {LESSONS.filter((l) => l.band === bid).map((base) => {
               const l = styledLesson(base, style)
               const p = progress?.get(l.id)
@@ -73,7 +74,7 @@ export function Lessons() {
               </div>
               <span className="shrink-0 text-right text-xs text-muted">
                 {s ? `${s.wins}/${s.attempts}` : ''}
-                {e.goal === 'mate' && s?.bestClean != null && <span className="block">mejor {s.bestClean}</span>}
+                {e.goal !== 'hold' && s?.bestClean != null && <span className="block">mejor {s.bestClean}</span>}
               </span>
             </Link>
           )

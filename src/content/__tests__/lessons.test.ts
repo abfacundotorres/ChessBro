@@ -144,7 +144,7 @@ describe('finales jugables', () => {
     const turn = def.fen.split(' ')[1]
     const cpMover = toCp(ev.score)
     const cpUser = turn === def.user ? cpMover : -cpMover
-    if (def.goal === 'mate') expect(winPercent(cpUser)).toBeGreaterThan(80)
+    if (def.goal !== 'hold') expect(winPercent(cpUser)).toBeGreaterThan(80)
     else expect(cpUser).toBeGreaterThanOrEqual(-80)
   }, 120_000)
 
@@ -158,7 +158,7 @@ describe('finales jugables', () => {
       const view = replay(def.fen, moves)
       // El usuario (aquí también el motor) juega a fondo; el rival, con la profundidad de la app.
       const userSide = view.turn === def.user
-      const ev = await sf.evaluate(view.fen, userSide ? (def.goal === 'mate' ? 18 : 12) : 10)
+      const ev = await sf.evaluate(view.fen, userSide ? (def.goal === 'hold' ? 12 : 18) : 10)
       if (!ev.best) break
       moves.push(uciToMove(ev.best))
       const nowUser = (userTurnFirst ? ply % 2 === 0 : ply % 2 === 1)

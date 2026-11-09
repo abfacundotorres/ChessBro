@@ -2,6 +2,7 @@ import type { Challenge } from '../engine/challenge'
 import type { Exercise } from '../engine/lesson'
 import { lichess, mate1, pos } from './lessonKit'
 import { NEW_LESSONS } from './lessonsNuevas'
+import { ADVANCED_LESSONS } from './lessonsAvanzadas'
 
 /**
  * Lecciones del currículo (bandas 800–1400). Cada lección tiene pasos de lectura con un
@@ -35,7 +36,7 @@ export interface Source {
 
 export interface Lesson {
   id: string
-  band: 'b1' | 'b2'
+  band: 'b1' | 'b2' | 'b3' | 'b4'
   title: string
   summary: string
   steps: LessonStep[]
@@ -443,9 +444,10 @@ const BASE_LESSONS: Lesson[] = [
 const ORDER = [
   'seguridad', 'balanza', 'mate1', 'mate2', 'horquilla', 'clavada', 'ensartada', 'apertura', 'carrera', 'mate-dama', 'mate-torre',
   'peones', 'piezas', 'torre', 'refugio', 'descubierta', 'desviacion', 'defensor', 'atrapada', 'cuadrado', 'oposicion', 'cerrar',
+  'lucena', 'philidor', 'torre-final', 'calculo', 'profilaxis', 'transicion',
 ]
 
-export const LESSONS: Lesson[] = [...BASE_LESSONS, ...NEW_LESSONS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
+export const LESSONS: Lesson[] = [...BASE_LESSONS, ...NEW_LESSONS, ...ADVANCED_LESSONS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
 
 export function lessonById(id: string): Lesson | undefined {
   return LESSONS.find((l) => l.id === id)

@@ -18,6 +18,11 @@ export default tseslint.config(
     languageOptions: { globals: globals.node },
   },
   {
+    // El script e2e ejecuta funciones dentro de la página (page.evaluate).
+    files: ['scripts/e2e-offline.mjs'],
+    languageOptions: { globals: { ...globals.node, ...globals.browser } },
+  },
+  {
     // El motor es lógica pura: solo imports relativos y chess.js (reglas del juego).
     files: ['src/engine/**/*.ts'],
     ignores: ['src/engine/__tests__/**'],

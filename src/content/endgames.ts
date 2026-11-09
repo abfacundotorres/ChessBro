@@ -58,6 +58,34 @@ export const ENDGAMES: EndgameDef[] = [
       'Mantené la oposición: cuando los reyes quedan enfrentados, el que mueve cede.',
     ],
   },
+  {
+    id: 'lucena',
+    title: 'Torres: la posición de Lucena',
+    summary: 'Coronar con el puente.',
+    fen: '3K4/3P1k2/8/8/8/8/r7/4R3 w - - 0 1',
+    user: 'w',
+    goal: 'promote',
+    maxMoves: 25,
+    tips: [
+      'Tu peón está en la séptima y tu rey delante de él, pero tu propio rey tapa la casilla de coronación: hay que sacarlo de ahí.',
+      'Tu torre corta al rey rival en la columna e; la torre negra te va a dar jaques desde lejos.',
+      'La técnica clásica es el "puente": llevar tu torre a la cuarta fila para poder interponerla ante los jaques.',
+    ],
+  },
+  {
+    id: 'philidor',
+    title: 'Torres: la defensa Philidor',
+    summary: 'Salvar las tablas con la torre en la sexta.',
+    fen: '4k3/8/r7/3KP3/8/8/8/3R4 b - - 0 1',
+    user: 'b',
+    goal: 'hold',
+    maxMoves: 30,
+    tips: [
+      'Mantené la torre en la sexta fila (la tercera desde el peón) para impedir que el rey blanco avance.',
+      'Cuando el peón avance a la sexta, pasá la torre a la columna de abajo y dá jaques desde atrás.',
+      'El rey blanco no tiene dónde esconderse de los jaques: las tablas están aseguradas.',
+    ],
+  },
 ]
 
 export function endgameById(id: string): EndgameDef | undefined {

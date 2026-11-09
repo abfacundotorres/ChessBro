@@ -20,6 +20,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `BASE=/ChessBro/ npm run build && npx vite preview --base /ChessBro/` — probar como en Pages
 - `node scripts/gen-icons.mjs` — regenerar PNG desde `public/icons/icon.svg`
 - `node scripts/build-lesson-puzzles.mjs` — regenerar `src/content/lessonPuzzles.json` (ejercicios tácticos de las lecciones)
+- `node scripts/e2e-offline.mjs [url] [carpeta]` — prueba de punta a punta sin conexión (necesita Playwright y la app
+  servida con `vite preview`; ver la cabecera del script)
 - `node scripts/build-puzzles.mjs` — regenerar `public/puzzles/` desde `data-raw/lichess_db_puzzle.csv`
   (ver cabecera del script para la descarga y descompresión)
 
@@ -39,7 +41,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`) y `author4.test.ts` (líneas de repertorio, `REP_LINES=…`).
 - `src/content/lessonKit.ts` — helpers para escribir lecciones; `lessonsNuevas.ts` — lecciones lúdicas;
   `lessonsSerias.ts` — sus versiones serias; `styled.ts` aplica el estilo elegido.
-- `src/content/repertoire.ts` — las 24 líneas del repertorio (1.e4; 1…e5 / 1…d5); `src/engine/repertoire.ts`
+- `src/content/repertoire.ts` — las 31 líneas del repertorio (1.e4; 1…e5 / 1…d5); `src/engine/repertoire.ts`
   deriva las tarjetas de repaso. `src/engine/plan.ts` — metas y tareas del plan semanal.
 - `src/features/repertoire/`, `src/features/plan/` — repertorio (estudiar, practicar, repasar) y plan.
 
@@ -58,6 +60,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - El repertorio no puede contradecirse (una jugada por posición) y Stockfish verifica cada línea; las
   explicaciones no las verifica nadie: revisarlas.
 - Lecciones lúdicas: tono cálido, personajes, frases cortas; cada desafío explica el porqué al resolver.
+- Cada lección nueva se verifica antes de afirmarla: posiciones y respuestas con Stockfish o funciones con tests; las
+  explicaciones de cada jugada se comparan con la línea real (un error mío salió así).
 - Dos estilos (`data/style.ts`): "juego" y "serio". Toda lección lúdica nueva lleva su versión seria en
   `content/lessonsSerias.ts` (mismos ejercicios y respuestas; sin personajes, estrellas ni rachas).
 
@@ -67,4 +71,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H2 Importar partidas de Lichess + análisis Stockfish + tarjetas de error + diagnóstico
 - [x] H3 Currículo 800–1400: lecciones y finales jugables
 - [x] H4 Repertorio con repaso espaciado + plan semanal
-- [ ] H5 Currículo 1400–1800, pulido, e2e offline
+- [x] H5 Currículo 1400–1800, pulido, e2e offline

@@ -208,4 +208,161 @@ export const SERIO: Record<string, SerioLesson> = {
       },
     },
   },
+  // ───────────── Bandas 1400–1600 y 1600–1800 ─────────────
+  lucena: {
+    title: 'Posición de Lucena',
+    summary: 'Técnica del puente para coronar en finales de torre.',
+    steps: {
+      0: {
+        title: 'Planteo',
+        text: 'Peón en la séptima fila con el rey propio delante, y el rey rival cortado por la torre. A pesar de la ventaja, el peón no puede coronar: el propio rey ocupa la casilla de coronación y la torre rival molesta con jaques laterales.',
+        prompt: '¿Qué le impide avanzar al peón de d7?',
+      },
+      1: {
+        title: 'El puente',
+        text: 'Se lleva la torre a la cuarta fila. Más adelante, cuando el rey salga de la columna del peón, esa torre se interpone ante los jaques de la torre rival.',
+        prompt: '¿En qué fila conviene ubicar la torre para armar el puente?',
+      },
+      2: {
+        title: 'Salida del rey',
+        text: 'Con la torre en la cuarta fila, el rey sale de la columna del peón por el lado opuesto al rey rival. Cada jaque de la torre rival se bloquea interponiendo la torre de la cuarta fila, y el rey sigue avanzando hasta quedar a salvo. Entonces el peón corona.',
+        prompt: 'La torre rival da jaque a distancia y tu rey ya está fuera de la columna. ¿Qué hacés?',
+      },
+      3: {
+        title: 'Práctica',
+        text: 'Contra el motor, desde esta posición y con blancas: coroná el peón en 25 jugadas como máximo y conservá la dama. Hay pista disponible, pero no cuenta para el progreso.',
+      },
+    },
+  },
+  philidor: {
+    title: 'Defensa Philidor',
+    summary: 'Defensa de la sexta fila y jaques desde atrás.',
+    steps: {
+      0: {
+        title: 'Defensa de la tercera fila',
+        text: 'Torre y rey contra torre, rey y peón: si el rey rival se acerca al peón, la posición se pierde. La defensa Philidor consiste en ubicar la torre en la sexta fila (la tercera, contando desde el bando que defiende), de modo que el rey rival no pueda avanzar.',
+        prompt: '¿Dónde ubica la torre el bando que defiende?',
+      },
+      1: {
+        title: 'Cuando el peón avanza',
+        text: 'Cuando el peón rival avanza a la sexta fila, la torre defensora pasa a la primera fila y da jaques desde atrás y a distancia. Sin refugio frente a los jaques, el rey no puede apoyar al peón y la posición es de tablas.',
+        prompt: 'El peón rival llegó a la sexta fila. ¿Qué hace la defensa?',
+      },
+      2: {
+        title: 'Mientras tanto',
+        text: 'Mientras el peón no pase de la quinta fila, la torre permanece en la sexta fila y el rey cerca de la casilla de coronación. No conviene mover la torre sin motivo.',
+      },
+      3: {
+        title: 'Práctica',
+        text: 'Contra el motor, desde esta posición y con negras: aguantá 30 jugadas o lográ tablas antes. Si el rival da mate o corona, la defensa fracasó.',
+      },
+    },
+  },
+  'torre-final': {
+    title: 'Finales de torres: actividad',
+    summary: 'Regla de Tarrasch y actividad de la torre.',
+    steps: {
+      0: {
+        title: 'Regla de Tarrasch',
+        text: 'Los finales de torres son los más frecuentes. La regla de Tarrasch indica que las torres deben ubicarse detrás de los peones pasados, tanto propios (para empujarlos) como rivales (para detenerlos). Es una guía con excepciones.',
+        prompt: 'Tenés un peón pasado. ¿Dónde conviene la torre?',
+      },
+      1: {
+        title: 'Actividad',
+        text: 'Una torre pasiva, atada a la defensa de peones, rinde poco. En los finales de torres la actividad suele pesar más que un peón de diferencia: una torre activa ataca y limita al rey rival.',
+        prompt: 'En un final de torres, ¿qué principio suele ayudar?',
+      },
+      2: {
+        title: 'Corte del rey',
+        text: 'Una torre ubicada en una fila o columna que el rey rival no puede cruzar lo "corta". Es la base de la posición de Lucena.',
+      },
+      3: {
+        title: 'Práctica',
+        text: 'Ejercicios con posiciones reales: buscá cómo se activa la torre y qué jugada la deja detrás del peón o cortando al rey.',
+      },
+    },
+  },
+  calculo: {
+    title: 'Método de cálculo',
+    summary: 'Jugadas candidatas, líneas forzadas y revisión final.',
+    steps: {
+      0: {
+        title: 'Método',
+        text: '1) Determiná qué quiere hacer el rival.\n2) Elaborá una lista de jugadas candidatas, empezando por las forzadas (jaques, capturas y amenazas).\n3) Calculá cada línea forzada hasta el final.\n4) Evaluá la posición resultante.',
+        prompt: '¿Con qué jugadas conviene empezar a calcular?',
+      },
+      1: {
+        title: 'Variantes, no una línea',
+        text: 'El error más común es calcular una sola línea (la favorable) y omitir otras respuestas del rival. En cada paso, buscá la mejor respuesta rival.',
+        prompt: '¿Qué error es habitual al calcular?',
+      },
+      2: {
+        title: 'Más allá de la primera captura',
+        text: 'Muchas jugadas ganan material en el primer paso y lo pierden en el tercero. Hay que calcular al menos un paso más: ¿qué ocurre después de la recaptura?',
+        prompt: 'Jugás con blancas y buscás mate. Hay varios jaques y capturas atractivos. ¿Cuál es la jugada correcta?',
+        why: '♕e3+, después ♕xc5+ y ♕b6#: mate en tres jugadas. Los otros jaques y capturas con el alfil deshacen la ventaja.',
+      },
+      3: {
+        title: 'Otro ejemplo',
+        text: 'Una captura con jaque que decide la partida, frente a otras capturas que parecen válidas pero no lo son.',
+        prompt: 'Jugás con blancas. ¿Qué captura lleva a mate en tres?',
+        why: '♕xc8+ ♖xc8 ♖xc8+ ♕d8 ♖xd8#: mate en tres jugadas. Las otras capturas pierden el ataque.',
+      },
+      4: {
+        title: 'Revisión final',
+        text: 'Antes de ejecutar la jugada elegida, revisá qué deja sin defensa y qué amenaza nueva le concede al rival.',
+      },
+    },
+  },
+  profilaxis: {
+    title: 'Profilaxis',
+    summary: 'Prevenir el plan del rival antes de que sea peligroso.',
+    steps: {
+      0: {
+        title: 'Concepto',
+        text: 'Antes de ejecutar el propio plan, hay que preguntarse qué quiere hacer el rival y cuál sería su mejor jugada si pudiera mover. La profilaxis (término de Nimzowitsch) consiste en impedir esa idea antes de que se vuelva peligrosa. No es pasividad: es jugar contra el plan rival.',
+      },
+      1: {
+        title: 'Costo de la jugada',
+        text: 'Una jugada profiláctica cuesta un tiempo que no se usa para el propio plan. Conviene cuando el rival tiene una idea fuerte y se la puede impedir sin perjudicar la posición, preferentemente con una jugada que además mejore el juego propio.',
+        prompt: '¿Cuándo es conveniente una jugada profiláctica?',
+      },
+      2: {
+        title: 'Jugadas tranquilas',
+        text: 'A veces la mejor jugada es una tranquila que elimina el contrajuego. En esta posición, coronar con jaque es una trampa; la jugada correcta no da jaque.',
+        prompt: 'Jugás con blancas. El peón de d7 está por coronar. ¿Cuál es la jugada correcta?',
+        why: '♗d5 es un desvío: si la torre captura el alfil, exd5 y nadie frena al peón de d7. Coronar de inmediato con jaque pierde el peón por ...♖xd8.',
+      },
+      3: {
+        title: 'Jugadas defensivas',
+        text: 'Cuando el rival ya tiene una amenaza concreta, la jugada defensiva correcta la anula con precisión. Antes de mover, determiná con exactitud qué quiere hacer.',
+      },
+    },
+  },
+  transicion: {
+    title: 'Transición al final',
+    summary: 'Actividad del rey, peón pasado exterior y cuándo simplificar.',
+    steps: {
+      0: {
+        title: 'Cambio de fase',
+        text: 'Al cambiarse las damas y varias piezas, la partida entra en el final. El rey, que en el medio juego debía ponerse a salvo, pasa a ser una pieza activa. Antes de simplificar, evaluá si el rey y los peones propios están mejor en el final resultante.',
+        prompt: '¿Qué cambia en el final respecto del medio juego?',
+      },
+      1: {
+        title: 'Peón pasado exterior',
+        text: 'Un peón pasado alejado de los demás peones (exterior) obliga al rey rival a alejarse para detenerlo; al hacerlo, deja sin defensa el resto de sus peones.',
+        prompt: '¿Cuál de los peones blancos es el pasado exterior?',
+        why: 'El peón de a4 no tiene peones negros en las columnas a ni b y está lejos del resto: distrae al rey rival.',
+      },
+      2: {
+        title: 'Aplicación',
+        text: 'La maniobra típica es avanzar el peón exterior: el rey rival debe ir a detenerlo y el propio rey entra por el otro flanco a capturar peones.',
+        prompt: '¿Para qué sirve un peón pasado exterior?',
+      },
+      3: {
+        title: 'Cálculo y oposición',
+        text: 'En los finales de peones se calcula: se cuentan las jugadas de cada peón y de cada rey. La oposición y la regla del cuadrado indican si un rey llega a tiempo.',
+      },
+    },
+  },
 }

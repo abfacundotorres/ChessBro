@@ -10,7 +10,7 @@ import { Chess } from 'chess.js'
 const SRC = process.argv[2] ?? 'data-raw/lichess_db_puzzle.csv'
 const OUT = new URL('../src/content/lessonPuzzles.json', import.meta.url)
 
-// tema de Lichess → [rating mínimo, máximo, cantidad]
+// tema de Lichess → [rating mínimo, máximo, cantidad, largo máximo de la solución (jugadas de ambos bandos; por defecto 4)]
 const WANT = {
   hangingPiece: [500, 900, 8],
   fork: [500, 900, 4],
@@ -24,6 +24,11 @@ const WANT = {
   mateIn2: [500, 900, 4],
   doubleCheck: [900, 1300, 2],
   advancedPawn: [500, 1100, 3],
+  mateIn3: [1100, 1700, 4, 6],
+  quietMove: [1300, 1800, 3, 4],
+  defensiveMove: [1300, 1800, 3, 4],
+  pawnEndgame: [1300, 1800, 3, 6],
+  rookEndgame: [1300, 1800, 3, 6],
 }
 
 const best = Object.fromEntries(Object.keys(WANT).map((k) => [k, []]))
@@ -38,13 +43,14 @@ for await (const line of rl) {
   const plays = Number(c[6])
   if (rd > 80 || pop < 85 || plays < 1000) continue
   const moves = c[2].split(' ')
-  if (moves.length !== 2 && moves.length !== 4) continue
+  if (moves.length < 2 || moves.length > 6 || moves.length % 2 !== 0) continue
   const themes = c[7].split(' ')
-  for (const [t, [lo, hi]] of Object.entries(WANT)) {
-    if (!themes.includes(t) || rating < lo || rating > hi) continue
+  for (const [t, [lo, hi, , maxLen = 4]] of Object.entries(WANT)) {
+    if (!themes.includes(t) || rating < lo || rating > hi || moves.length > maxLen) continue
     // Un solo motivo por puzzle: evita ejemplos mezclados que confunden la lección.
-    const motifs = themes.filter((x) => Object.hasOwn(WANT, x) && x !== 'mateIn2')
-    if (motifs.length > 1 && t !== 'mateIn2') continue
+    const isMate = (x) => x === 'mateIn2' || x === 'mateIn3'
+    const motifs = themes.filter((x) => Object.hasOwn(WANT, x) && !isMate(x))
+    if (motifs.length > 1 && !isMate(t)) continue
     best[t].push({ id: c[0], fen: c[1], moves, rating, pop, plays })
   }
 }

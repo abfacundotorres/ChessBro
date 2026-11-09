@@ -191,3 +191,39 @@
 - **Un test** exige que cada versión seria tenga un texto por cada paso, que no queden personajes ni metáforas
   lúdicas, y que las posiciones y respuestas sean idénticas a las de la versión juego.
 - **Regla para el contenido nuevo (H5)**: toda lección con tono lúdico debe traer también su versión seria.
+
+## H5
+- **Contenido de las bandas 1400–1600 y 1600–1800**: seis lecciones nuevas, cada una en estilo Juego y Serio.
+  1400–1600: la posición de Lucena, la defensa Philidor y torres activas (regla de Tarrasch).
+  1600–1800: calcular con método, profilaxis y transición del medio juego al final.
+  Los conceptos se contrastaron con fuentes (Wikipedia, Chess.com, ChessBase, Chess Programming y artículos sobre
+  cálculo y profilaxis), que figuran en "Para seguir leyendo". El texto es propio; **la explicación de cada
+  lección no la verifica ningún test**, solo las posiciones, los ejercicios y las adivinanzas de jugadas.
+- **Lucena y Philidor son finales jugables, no ejercicios de una jugada.** Probé posiciones con el motor y en las dos
+  hay muchas jugadas que mantienen el resultado, así que no existe "la jugada clave" única que enseñan estas
+  técnicas (son varias jugadas de técnica). Para practicarlas hay finales contra Stockfish y las lecciones explican
+  el método (el puente; la muralla en la sexta y los jaques desde atrás).
+- **Objetivo nuevo "coronar"** (`promote`): se gana al coronar y conservar la dama después de la respuesta del rival,
+  en 25 jugadas como máximo; se pierde si capturan el peón o se acaban las jugadas. No exige usar el "puente": el
+  motor, jugando de blancas, corona por otro camino (cambio de torres). Lo que se verifica es la coronación, no la
+  técnica; la técnica la explica la lección.
+- **Error propio con el motor como juez**: mi primera posición de Lucena tenía el rey negro en d8, demasiado cerca;
+  no es la de Lucena y el motor no la ganaba con 18 de profundidad. La posición canónica (rey negro en f7, cortado
+  por la torre de e1) sí se gana. La prueba de motor contra motor lo detectó.
+- **Explicaciones de las adivinanzas de cálculo, comprobadas contra la línea real**: escribí las explicaciones antes
+  de mirar las variantes; al verificarlas corregí la de ♗d5 (no ataca la torre: es un desvío, ♗d5 ♖xd5 exd5).
+- **Diagnóstico**: los criterios de la banda 1400–1600 ("ganar y defender Lucena/Philidor contra el motor") ya se miden:
+  hace falta una victoria sin pistas en cada final. Dejan de ser "pendientes".
+- **Repertorio ampliado a 31 líneas** (16 con blancas, 15 con negras): Pirc, Alapin contra …e6 y …Cc6, Gambito de Rey
+  rehusado, Gambito Evans, Londres con 2.Af4 y Gambito de Dama con 2.Cf3. **Se descartó Dos Caballos (3…Cf6)**:
+  contradecía la decisión del repertorio de responder 3.Ac4 con …Ac5, y el test de consistencia lo detectó. Esto es
+  una decisión de repertorio, no un error del motor: si querés jugar Dos Caballos, hay que cambiar las líneas del
+  Giuoco, no sumar otra.
+- **Prueba de punta a punta sin conexión** (`scripts/e2e-offline.mjs`, con Playwright): abre la app con red, espera
+  al service worker, corta la red y recorre 15 pantallas a 360 px sin desborde horizontal, juega contra Stockfish
+  desconectado, resuelve un puzzle, un mini-juego, practica una línea del repertorio, exporta un backup y verifica el
+  modo oscuro y la ausencia de errores de consola. **No corre en el CI** (necesita Chromium); se corre a mano.
+- **Pulido**: título agregado al tablero libre (era la única pantalla sin encabezado); el plan semanal ya no usa
+  palabras del estilo Juego en el estilo Serio; el diagnóstico ya no muestra paréntesis anidados.
+- **Lo que no se probó**: la importación real desde Lichess (el entorno de desarrollo no puede llegar a la exportación
+  de partidas), el rendimiento del análisis en un teléfono real y la instalación como app en iOS/Android.

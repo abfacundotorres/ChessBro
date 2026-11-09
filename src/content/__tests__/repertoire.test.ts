@@ -6,12 +6,12 @@ import { buildCards, lineSteps } from '../../engine/repertoire'
 import { nodeEngine } from '../../test/stockfishNode'
 
 describe('repertorio: estructura', () => {
-  it('ids únicos y cantidad razonable por color (10 a 15 líneas)', () => {
+  it('ids únicos y cantidad razonable por color (10 a 20 líneas)', () => {
     expect(new Set(REPERTOIRE.map((l) => l.id)).size).toBe(REPERTOIRE.length)
     for (const c of ['w', 'b'] as const) {
       const n = REPERTOIRE.filter((l) => l.color === c).length
       expect(n, c).toBeGreaterThanOrEqual(10)
-      expect(n, c).toBeLessThanOrEqual(15)
+      expect(n, c).toBeLessThanOrEqual(20)
     }
   })
 
@@ -36,7 +36,7 @@ describe('repertorio: estructura', () => {
     for (const color of ['w', 'b'] as const) {
       const { conflicts, cards } = buildCards(REPERTOIRE.filter((l) => l.color === color))
       expect(conflicts, JSON.stringify(conflicts)).toEqual([])
-      expect(cards.length).toBeGreaterThan(40)
+      expect(cards.length).toBeGreaterThan(50)
     }
   })
 

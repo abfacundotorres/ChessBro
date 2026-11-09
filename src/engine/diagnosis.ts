@@ -6,7 +6,7 @@
 export type Criterion =
   | { kind: 'puzzle'; min: number }
   | { kind: 'blunders'; max: number }
-  | { kind: 'endgame'; id: string; max: number; label: string }
+  | { kind: 'endgame'; id: string; max: number; label: string; /** Basta con haberlo logrado una vez, sin pistas. */ binary?: boolean }
   | { kind: 'pending'; label: string; milestone: string }
 
 export interface DiagnosisInput {
@@ -41,7 +41,7 @@ export function checkCriterion(c: Criterion, x: DiagnosisInput): Check {
     case 'blunders': {
       const label = `Errores graves por partida < ${String(c.max).replace('.', ',')}`
       if (x.blundersPerGame === null || x.analyzedGames < MIN_GAMES)
-        return { label, state: 'nodata', detail: `analizá al menos ${MIN_GAMES} partidas (van ${x.analyzedGames})` }
+        return { label, state: 'nodata', detail: `analizá al menos ${MIN_GAMES} partidas; van ${x.analyzedGames}` }
       return {
         label,
         state: x.blundersPerGame < c.max ? 'ok' : 'todo',
@@ -51,7 +51,7 @@ export function checkCriterion(c: Criterion, x: DiagnosisInput): Check {
     case 'endgame': {
       const best = x.endgameBest[c.id] ?? null
       if (best === null) return { label: c.label, state: 'todo', detail: 'jugalo en Lecciones, sin pistas' }
-      return { label: c.label, state: best <= c.max ? 'ok' : 'todo', detail: `tu mejor: ${best} jugadas` }
+      return { label: c.label, state: best <= c.max ? 'ok' : 'todo', detail: c.binary ? 'logrado sin pistas' : `tu mejor: ${best} jugadas` }
     }
     case 'pending':
       return { label: c.label, state: 'pending', detail: `se mide desde ${c.milestone}` }

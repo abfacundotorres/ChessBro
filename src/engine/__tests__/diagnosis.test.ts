@@ -27,6 +27,14 @@ describe('diagnóstico', () => {
     expect(currentBand(bands, { ...base, puzzleRating: 1500, endgameBest: { krk: 22 } }).index).toBe(2)
   })
 
+  it('un final de tipo "una vez alcanza" se cumple con cualquier victoria sin pistas', () => {
+    const b = [{ criteria: [{ kind: 'endgame' as const, id: 'lucena', max: Infinity, label: 'Lucena', binary: true }] }, { criteria: [] }]
+    expect(currentBand(b, { ...base, endgameBest: {} }).index).toBe(0)
+    const r = currentBand(b, { ...base, endgameBest: { lucena: 23 } })
+    expect(r.index).toBe(1)
+    expect(currentBand([b[0]!], { ...base, endgameBest: { lucena: 23 } }).checks[0]).toMatchObject({ state: 'ok', detail: 'logrado sin pistas' })
+  })
+
   it('muchos errores graves frenan aunque el rating alcance', () => {
     const r = currentBand(bands, { ...base, blundersPerGame: 1.4 })
     expect(r.index).toBe(0)

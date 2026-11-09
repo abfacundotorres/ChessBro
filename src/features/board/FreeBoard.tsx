@@ -35,6 +35,10 @@ export function FreeBoard() {
 
   return (
     <div className="flex flex-col gap-3">
+      <header>
+        <h1 className="text-2xl font-bold">Tablero libre</h1>
+        <p className="text-sm text-muted">Mové las piezas de los dos bandos y probá ideas.</p>
+      </header>
       <Board
         fen={game.fen}
         orientation={flipped ? 'black' : 'white'}

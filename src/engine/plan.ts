@@ -85,6 +85,8 @@ export interface TaskInput {
   puzzlesToday: number
   gamesPending: number
   nextLesson: { id: string; title: string } | null
+  /** Estilo serio: sin giros del estilo juego en los textos. */
+  serio?: boolean
   nextLine: { id: string; name: string } | null
 }
 
@@ -130,7 +132,7 @@ export function todayTasks(i: TaskInput): Task[] {
     out.push({ id: 'puzzles', label: 'Táctica', detail: plural(left, 'puzzle', 'puzzles'), to: '/tactica', minutes: left * 2 })
   }
   if (i.counts.lessons < i.goals.lessons && i.nextLesson) {
-    out.push({ id: 'lesson', label: `Lección: ${i.nextLesson.title}`, detail: 'Leé, adiviná y practicá', to: `/lecciones/${i.nextLesson.id}`, minutes: 15 })
+    out.push({ id: 'lesson', label: `Lección: ${i.nextLesson.title}`, detail: i.serio ? 'Leé y practicá' : 'Leé, adiviná y practicá', to: `/lecciones/${i.nextLesson.id}`, minutes: 15 })
   }
   if (i.counts.newLines < i.goals.newLines && i.nextLine) {
     out.push({ id: 'line', label: `Aprender: ${i.nextLine.name}`, detail: 'Estudiala y practicala una vez', to: `/repertorio/${i.nextLine.id}`, minutes: 10 })

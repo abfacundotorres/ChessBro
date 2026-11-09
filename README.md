@@ -8,6 +8,7 @@ npm install
 npm run dev     # desarrollo
 npm test        # tests
 npm run build   # build de producción con service worker
+node scripts/e2e-offline.mjs   # prueba sin conexión (necesita Playwright; ver el script)
 ```
 
 Licencia: GPL-3.0-or-later.

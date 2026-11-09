@@ -121,7 +121,12 @@ function Game({ def }: { def: EndgameDef }) {
         </Link>
         <h1 className="text-xl font-bold">{def.title}</h1>
         <p className="text-sm text-muted">
-          {def.goal === 'mate' ? `Dá mate en ${def.maxMoves} jugadas o menos` : `Salvá las tablas (${def.maxMoves} jugadas)`} · te quedan {remaining}
+          {def.goal === 'mate'
+            ? `Dá mate en ${def.maxMoves} jugadas o menos`
+            : def.goal === 'promote'
+              ? `Coroná el peón en ${def.maxMoves} jugadas o menos`
+              : `Salvá las tablas (${def.maxMoves} jugadas)`}{' '}
+          · te quedan {remaining}
         </p>
       </header>
 

@@ -1,8 +1,10 @@
 import { LESSONS } from '../content/lessons'
+import { styledLesson } from '../content/styled'
 import { REPERTOIRE } from '../content/repertoire'
 import { goalsFor, weekStart, type Goals, type TaskInput, DEFAULT_HOURS, clampHours } from '../engine/plan'
 import { db as defaultDb, type ChessBroDB } from './db'
 import { getSetting } from './games'
+import { getStyle } from './style'
 
 export const WEEKLY_HOURS = 'weeklyHours'
 
@@ -22,6 +24,7 @@ export async function planSnapshot(today: string, db: ChessBroDB = defaultDb): P
   const ws = weekStart(today)
   const wsTs = new Date(`${ws}T00:00:00`).getTime()
   const goals = goalsFor(await getWeeklyHours(db))
+  const style = (await getStyle(db)) ?? 'juego'
   const [attempts, lessons, replines, repcards, games, reviews] = await Promise.all([
     db.attempts.where('date').aboveOrEqual(ws).toArray(),
     db.lessons.toArray(),
@@ -51,7 +54,8 @@ export async function planSnapshot(today: string, db: ChessBroDB = defaultDb): P
     duePuzzles: reviews,
     puzzlesToday: attempts.filter((a) => a.date === today).length,
     gamesPending: games.filter((g) => g.analysis === undefined).length,
-    nextLesson: nextLesson ? { id: nextLesson.id, title: nextLesson.title } : null,
+    nextLesson: nextLesson ? { id: nextLesson.id, title: styledLesson(nextLesson, style).title } : null,
+    serio: style === 'serio',
     nextLine: nextLine ? { id: nextLine.id, name: nextLine.name } : null,
   }
   return { goals, weekStart: ws, input }

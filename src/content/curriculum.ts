@@ -39,7 +39,8 @@ export const BANDS: Band[] = [
     criteria: [
       { kind: 'puzzle', min: 1650 },
       { kind: 'blunders', max: 0.5 },
-      { kind: 'pending', label: 'Lucena y Philidor contra el motor', milestone: 'H5' },
+      { kind: 'endgame', id: 'lucena', max: Infinity, label: 'Coronar la posición de Lucena contra el motor', binary: true },
+      { kind: 'endgame', id: 'philidor', max: Infinity, label: 'Defender la posición Philidor contra el motor', binary: true },
     ],
   },
   {

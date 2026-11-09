@@ -83,6 +83,12 @@ describe('tareas de hoy', () => {
     expect(t.find((x) => x.id === 'puzzles')?.detail).toBe('12 puzzles')
   })
 
+  it('en estilo serio, los textos no usan giros del estilo juego', () => {
+    const t = todayTasks({ ...base, serio: true }).find((x) => x.id === 'lesson')
+    expect(t?.detail).toBe('Leé y practicá')
+    expect(todayTasks(base).find((x) => x.id === 'lesson')?.detail).toBe('Leé, adiviná y practicá')
+  })
+
   it('no sugiere lo que ya cumpliste ni lo que no tiene con qué hacerse', () => {
     const t = todayTasks({
       ...base,
