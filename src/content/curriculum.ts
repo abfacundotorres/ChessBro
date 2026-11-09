@@ -11,6 +11,17 @@ export interface Band {
 
 export const BANDS: Band[] = [
   {
+    id: 'b0',
+    range: '400–800',
+    focus: ['Cómo se mueven las piezas y jugadas especiales', 'Jaque, mate y tablas', 'No regalar piezas (chequeo de seguridad)', 'Mate en 1 y mate de dama', 'Tu primera apertura y las trampas típicas'],
+    exit: 'Puzzles ≥ 950, menos de 2,5 errores graves por partida y mate de dama y rey',
+    criteria: [
+      { kind: 'puzzle', min: 950 },
+      { kind: 'blunders', max: 2.5 },
+      { kind: 'endgame', id: 'kqk', max: 25, label: 'Mate de dama y rey en 25 jugadas' },
+    ],
+  },
+  {
     id: 'b1',
     range: '800–1100',
     focus: ['No colgar piezas (chequeo de seguridad)', 'Mate en 1 y en 2', 'Horquilla, clavada, ataque doble', 'Principios de apertura', 'Mates básicos: D+R, T+R'],

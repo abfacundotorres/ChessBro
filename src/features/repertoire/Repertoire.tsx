@@ -38,12 +38,20 @@ export function Repertoire() {
         </span>
       </Link>
 
+      <section className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold">Para empezar</h2>
+        <p className="text-sm text-muted">Ocho líneas simples, cuatro con cada color. Con estas ya tenés qué jugar en casi cualquier partida.</p>
+        {REPERTOIRE.filter((l) => l.starter).map((l) => (
+          <LineRow key={l.id} line={l} stats={stats?.get(l.id)} tag={l.color === 'w' ? 'Blancas' : 'Negras'} />
+        ))}
+      </section>
+
       {(['w', 'b'] as const).map((color) => {
-        const lines = REPERTOIRE.filter((l) => l.color === color)
+        const lines = REPERTOIRE.filter((l) => l.color === color && !l.starter)
         const groups = [...new Set(lines.map((l) => l.group))]
         return (
           <section key={color} className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold">{COLOR_TITLE[color]}</h2>
+            <h2 className="text-lg font-semibold">{COLOR_TITLE[color]} · más líneas</h2>
             {groups.map((g) => (
               <div key={g} className="flex flex-col gap-2">
                 <h3 className="text-sm font-medium text-muted">{g}</h3>
@@ -61,12 +69,15 @@ export function Repertoire() {
   )
 }
 
-function LineRow({ line, stats }: { line: RepLine; stats: { practiced: boolean; cards: number; due: number; solid: number } | undefined }) {
+function LineRow({ line, stats, tag }: { line: RepLine; stats: { practiced: boolean; cards: number; due: number; solid: number } | undefined; tag?: string }) {
   const total = REP_CARDS.filter((c) => c.lineIds.includes(line.id)).length
   return (
     <Link to={`/repertorio/${line.id}`} className="flex items-center justify-between gap-3 rounded-xl bg-surface p-3 active:scale-[0.99]">
       <div className="min-w-0">
-        <p className="truncate font-semibold">{line.name}</p>
+        <p className="truncate font-semibold">
+          {tag && <span className="mr-2 rounded bg-surface-2 px-1.5 py-0.5 text-xs font-medium text-muted">{tag}</span>}
+          {line.name}
+        </p>
         <p className="truncate font-mono text-xs text-muted">{previewMoves(line)}</p>
       </div>
       <div className="shrink-0 text-right text-xs">

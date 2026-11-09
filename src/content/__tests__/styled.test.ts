@@ -4,13 +4,13 @@ import { SERIO } from '../lessonsSerias'
 import { styledLesson } from '../styled'
 
 // Palabras del estilo lúdico que no deben aparecer en el estilo serio.
-const PLAYFUL = ['puerta de tu casa', 'muralla', 'detective', 'explorador', 'Solitario', 'Gemelos', 'Corredor', 'Rezagado', 'mercado', 'relevos', 'Miedoso', 'balcón', 'cazador', 'Bienvenido', 'duermen', 'dormid', 'Pegajosos', 'pesadilla']
+const PLAYFUL = ['elenco', 'corredora', 'saltarín', 'valiente', 'reina del tablero', 'puerta de tu casa', 'muralla', 'detective', 'explorador', 'Solitario', 'Gemelos', 'Corredor', 'Rezagado', 'mercado', 'relevos', 'Miedoso', 'balcón', 'cazador', 'Bienvenido', 'duermen', 'dormid', 'Pegajosos', 'pesadilla']
 
 describe('estilo serio', () => {
   const ids = Object.keys(SERIO)
 
   it('cada lección lúdica tiene su versión seria, con un texto por paso', () => {
-    expect(ids.sort()).toEqual(['balanza', 'calculo', 'carrera', 'cerrar', 'lucena', 'peones', 'philidor', 'piezas', 'profilaxis', 'refugio', 'torre', 'torre-final', 'transicion'])
+    expect(ids.sort()).toEqual(['aperturas-negras', 'balanza', 'calculo', 'carrera', 'cerrar', 'jaque-mate', 'lucena', 'mi-primera-apertura', 'peones', 'philidor', 'piezas', 'piezas-mov', 'profilaxis', 'refugio', 'reglas-esp', 'torre', 'torre-final', 'trampas', 'transicion'])
     for (const id of ids) {
       const lesson = LESSONS.find((l) => l.id === id)!
       expect(Object.keys(SERIO[id]!.steps).map(Number).sort(), id).toEqual(lesson.steps.map((_, i) => i))

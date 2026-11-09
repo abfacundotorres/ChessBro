@@ -227,3 +227,34 @@
   palabras del estilo Juego en el estilo Serio; el diagnóstico ya no muestra paréntesis anidados.
 - **Lo que no se probó**: la importación real desde Lichess (el entorno de desarrollo no puede llegar a la exportación
   de partidas), el rendimiento del análisis en un teléfono real y la instalación como app en iOS/Android.
+
+## Primeros pasos, aperturas desde cero e ícono nuevo
+- **Pedido**: (1) empezar desde más atrás (500–600 de Elo en Chess.com), (2) enseñar aperturas, (3) un ícono menos
+  negro, más divertido y lindo.
+- **Punto de partida a elegir** (segundo paso de la bienvenida, cambiable en Ajustes): *Recién empiezo*, *Hasta 800*,
+  *800–1200*, *Más de 1200*. Define el rating inicial de puzzles (600, 800, 1100, 1400), desde qué banda se evalúa
+  el diagnóstico y con qué lección arranca el plan. **Los Elo son orientativos**: Chess.com, Lichess y los puzzles
+  miden en escalas distintas; el rating de puzzles se ajusta solo con los primeros 20–30 resultados.
+  Quien ya conoce las reglas ("Hasta 800") arranca en "No regalar piezas"; las lecciones de reglas siguen en la lista.
+- **Banda nueva 400–800** (primeros pasos), con criterios de salida: puzzles ≥ 950, menos de 2,5 errores graves por
+  partida y mate de dama y rey en 25 jugadas. Se reubicaron en ella las lecciones que más suben a ese nivel:
+  chequeo de seguridad, la balanza de las piezas, mate en 1, desarrollo, principios de apertura y mate de dama.
+- **Seis lecciones nuevas**, cada una en Juego y Serio: el movimiento de cada pieza, jugadas especiales (enroque, al
+  paso, coronación), jaque / mate / tablas, tu primera apertura (la Italiana, paso a paso con el porqué de cada
+  jugada), aperturas con negras y trampas frecuentes (mate del loco, mate del pastor y su defensa, trampa de Légal).
+- **Todo lo verificable se verifica por código**: las casillas de "a dónde puede ir esta pieza" salen de las jugadas
+  legales de chess.js (incluidos el enroque y la captura al paso); un test comprueba con chess.js que una posición es
+  de jaque, mate o ahogado cuando una pregunta lo afirma; las adivinanzas de jugadas (mate del loco, del pastor,
+  Légal y el mate del pasillo) las verifica Stockfish. Las dos variantes de la trampa de Légal que cité en la
+  explicación se comprobaron una por una con chess.js (la mía decía otra cosa sobre una de ellas).
+- **Repertorio "para empezar"**: 8 líneas marcadas (4 por color: Italiana ×2, Escandinava y Moderna con blancas;
+  Giuoco ×2, Colle y Londres con negras). Aparecen primero y el plan las sugiere antes que el resto.
+- **Bug mío, atrapado por un test**: al hacer que el rating inicial dependa del nivel, `recordAttempt` pasó a leer la
+  tabla de ajustes dentro de su transacción sin incluirla, y el primer puzzle de un usuario nuevo habría fallado.
+  Quedó arreglado y con un test.
+- **Otro defecto real, atrapado por la prueba sin conexión**: varias lecciones nuevas mostraban dos tableros iguales
+  (el diagrama del paso y el del desafío). Ahora solo se ve el del desafío cuando comparten posición.
+- **Ícono nuevo** (`scripts/gen-icons.mjs`, que dibuja el SVG y genera los PNG): un peón sonriente con mejillas rosas
+  sobre un degradé violeta–rosa, con destellos y un toque de tablero. La variante "maskable" (para Android) y la de iOS
+  van sin esquinas y con el personaje más chico para que el sistema las recorte sin cortarlo. El color de la barra del
+  navegador y de la pantalla de carga pasó de negro a violeta (#7B5CFA) y lavanda (#F4EEFF).

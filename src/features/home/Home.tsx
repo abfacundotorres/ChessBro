@@ -9,7 +9,7 @@ export function Home() {
     <div className="flex flex-col gap-6">
       <header>
         <h1 className="text-2xl font-bold">ChessBro</h1>
-        <p className="text-muted">De lo básico a 1800, a tu ritmo.</p>
+        <p className="text-muted">De 400 a 1800, a tu ritmo.</p>
         <div className="mt-2">
           <StreakChip />
         </div>

@@ -14,7 +14,7 @@ export const NEW_LESSONS: Lesson[] = [
   // ───────────── Banda 800–1100 ─────────────
   {
     id: 'balanza',
-    band: 'b1',
+    band: 'b0',
     title: 'La balanza de las piezas',
     summary: 'El mercado del tablero: cuánto vale cada pieza y cómo no salir perdiendo.',
     practice: 'hangingPiece',
@@ -71,7 +71,7 @@ export const NEW_LESSONS: Lesson[] = [
   },
   {
     id: 'carrera',
-    band: 'b1',
+    band: 'b0',
     title: 'La carrera del desarrollo',
     summary: 'Cada jugada es un paso: ganá el que llega con más piezas.',
     sources: [

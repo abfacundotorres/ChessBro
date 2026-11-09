@@ -51,14 +51,14 @@ export default defineConfig({
       manifest: {
         name: 'ChessBro',
         short_name: 'ChessBro',
-        description: 'Aprendé ajedrez de 0 a 1800, offline.',
+        description: 'Aprendé ajedrez desde los primeros pasos hasta 1800, sin conexión.',
         lang: 'es-AR',
         start_url: '.',
         scope: '.',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#0f1115',
-        theme_color: '#0f1115',
+        background_color: '#F4EEFF',
+        theme_color: '#7B5CFA',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },

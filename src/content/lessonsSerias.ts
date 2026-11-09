@@ -365,4 +365,218 @@ export const SERIO: Record<string, SerioLesson> = {
       },
     },
   },
+  // ───────────── Banda 400–800: primeros pasos y aperturas ─────────────
+  'piezas-mov': {
+    title: 'Movimiento de las piezas',
+    summary: 'Cómo se mueve cada pieza y cómo se nombran las casillas.',
+    steps: {
+      0: {
+        title: 'Tablero y notación',
+        text: 'El tablero tiene 64 casillas. Las columnas se nombran con letras (a–h) y las filas con números (1–8); cada casilla se designa con una letra y un número. Las blancas ocupan las filas 1 y 2 y mueven primero.',
+        prompt: 'Tocá la casilla e4.',
+        why: 'e4: columna e, fila 4.',
+      },
+      1: {
+        title: 'Torre',
+        text: 'La torre se mueve en línea recta por filas y columnas, tantas casillas como quiera, sin saltar piezas. Si encuentra una pieza propia se detiene antes; si es rival, puede capturarla.',
+        prompt: 'Tocá una casilla a la que pueda ir la torre.',
+        why: 'La torre llega a cualquier casilla de su fila y de su columna mientras no haya piezas en el camino.',
+      },
+      2: {
+        title: 'Alfil',
+        text: 'El alfil se mueve por diagonales, tantas casillas como quiera. Como solo recorre diagonales, permanece siempre en casillas del color de su casilla inicial.',
+        prompt: 'Tocá una casilla a la que pueda ir el alfil.',
+        why: 'El alfil recorre las dos diagonales que pasan por su casilla.',
+      },
+      3: {
+        title: 'Dama',
+        text: 'La dama combina los movimientos de la torre y del alfil: línea recta o diagonal, tantas casillas como quiera. Es la pieza de mayor valor material.',
+        prompt: 'Tocá una casilla a la que pueda ir la dama.',
+        why: 'La dama suma las jugadas de la torre y del alfil.',
+      },
+      4: {
+        title: 'Caballo',
+        text: 'El caballo es la única pieza que salta sobre las demás. Se mueve en L: dos casillas en una dirección y una perpendicular. Desde el centro dispone de 8 destinos.',
+        prompt: 'Marcá las 8 casillas a las que puede ir el caballo y confirmá.',
+        why: 'Dos casillas en una dirección y una perpendicular; siempre llega a una casilla de otro color.',
+      },
+      5: {
+        title: 'Rey',
+        text: 'El rey se mueve una casilla en cualquier dirección. No puede ir a una casilla atacada por el rival. Si se lo ataca y no puede evitarlo, la partida termina.',
+        prompt: 'Marcá las 8 casillas a las que puede ir el rey y confirmá.',
+        why: 'Una casilla en cualquiera de las ocho direcciones.',
+      },
+      6: {
+        title: 'Peón',
+        text: 'El peón avanza una casilla (una o dos desde su posición inicial) y nunca retrocede. Captura en diagonal, una casilla hacia adelante.',
+        prompt: 'El peón de e4 puede avanzar o capturar. Marcá las 3 casillas a las que puede ir y confirmá.',
+        why: 'Avanza a e5 y captura en diagonal en d5 y f5.',
+      },
+    },
+  },
+  'reglas-esp': {
+    title: 'Jugadas especiales',
+    summary: 'Enroque, captura al paso y coronación.',
+    steps: {
+      0: {
+        title: 'Enroque',
+        text: 'El enroque mueve rey y torre en una sola jugada: el rey avanza dos casillas hacia una torre y esta pasa al otro lado del rey. Pone al rey a salvo y activa la torre. Puede ser corto (hacia la torre h) o largo (hacia la torre a).',
+        prompt: 'Marcá las 4 casillas a las que puede ir el rey blanco (incluidas las del enroque) y confirmá.',
+        why: 'El rey puede ir a d1 y f1 (un paso) y, con el enroque, a g1 (corto) y a c1 (largo).',
+      },
+      1: {
+        title: 'Condiciones',
+        text: 'No se puede enrocar si el rey o esa torre ya se movieron, si hay piezas entre ambos, si el rey está en jaque o si debe cruzar o llegar a una casilla atacada.',
+        prompt: '¿Cuándo no se puede enrocar?',
+      },
+      2: {
+        title: 'Captura al paso',
+        text: 'Si un peón avanza dos casillas y queda junto a un peón rival, este puede capturarlo como si hubiera avanzado una sola casilla. Solo es posible en la jugada inmediatamente siguiente.',
+        prompt: 'Las negras acaban de jugar …d5 (dos casillas). Marcá las 2 casillas a las que puede ir el peón blanco de e5 y confirmá.',
+        why: 'Puede avanzar a e6 o capturar al paso en d6; el peón negro de d5 se retira del tablero.',
+      },
+      3: {
+        title: 'Coronación',
+        text: 'Al llegar a la última fila, el peón se convierte en dama, torre, alfil o caballo, a elección (habitualmente dama). Por eso un peón avanzado tiene gran valor.',
+        prompt: 'El peón de a7 está a un paso de coronar. Marcá las 2 casillas a las que puede ir y confirmá.',
+        why: 'Puede avanzar a a8 o capturar la torre de b8; en ambos casos corona.',
+      },
+    },
+  },
+  'jaque-mate': {
+    title: 'Jaque, mate y tablas',
+    summary: 'Cómo se gana y las formas de empatar.',
+    steps: {
+      0: {
+        title: 'Jaque',
+        text: 'Hay jaque cuando el rey es atacado. Debe resolverse de inmediato: mover el rey a una casilla segura, capturar la pieza atacante o interponer una pieza.',
+        prompt: 'Es el turno de las negras. ¿Qué ocurre con su rey?',
+        why: 'La torre de e2 ataca al rey por la columna e. El rey puede escapar a otra columna: es jaque, no mate.',
+      },
+      1: {
+        title: 'Jaque mate',
+        text: 'Hay jaque mate cuando el rey está en jaque y no existe ninguna forma de evitarlo. La partida termina y gana quien dio el mate.',
+        prompt: 'Es el turno de las negras. ¿Qué ocurre?',
+        why: 'El rey no puede moverse (sus propios peones lo encierran) y nadie puede capturar la torre ni interponerse.',
+      },
+      2: {
+        title: 'Detección del mate',
+        text: 'Hay que dar jaque mate en una jugada: con cualquier otra jugada, las negras dan mate.',
+        prompt: 'Jugás con blancas. ¿Cuál es el jaque mate?',
+        why: '♖xd8 es mate. Cualquier otra jugada permite ...♖xd1#, el mismo mate.',
+      },
+      3: {
+        title: 'Ahogado',
+        text: 'Si el jugador al que le toca mover no está en jaque pero no tiene ninguna jugada legal, hay ahogado y la partida es tablas, aun con enorme ventaja material. Es un error frecuente al convertir una ventaja.',
+        prompt: 'Mueven las negras. ¿Qué resultado tiene esta posición?',
+        why: 'El rey negro no está en jaque, pero todas las casillas a las que podría ir están atacadas: ahogado y tablas.',
+      },
+      4: {
+        title: 'Otras tablas',
+        text: 'También hay tablas por material insuficiente (por ejemplo, rey contra rey o rey y alfil contra rey), por triple repetición de la misma posición, por 50 jugadas sin captura ni movimiento de peón y por acuerdo.',
+        prompt: '¿Cuál de estas NO es una forma de empatar?',
+      },
+    },
+  },
+  'mi-primera-apertura': {
+    title: 'Primera apertura: la Italiana',
+    summary: 'Las primeras jugadas, con su justificación.',
+    steps: {
+      0: {
+        title: 'Objetivos',
+        text: 'Las primeras jugadas (aproximadamente diez) tienen tres objetivos: ocupar el centro con peones, desarrollar caballos y alfiles, y enrocar. Se ven con una apertura simple: la Italiana.',
+        prompt: '¿Cuál es el objetivo de las primeras jugadas?',
+      },
+      1: {
+        title: '1.e4',
+        text: 'Con 1.e4 el peón ocupa el centro y abre el camino al alfil de f1 y a la dama.',
+        prompt: '¿Por qué es buena la jugada 1.e4?',
+      },
+      2: {
+        title: '2.♘f3',
+        text: 'Tras 1…e5, 2.♘f3 desarrolla un caballo y ataca el peón de e5.',
+        prompt: '¿Qué logra 2.♘f3?',
+      },
+      3: {
+        title: '3.♗c4',
+        text: 'Tras 2…♘c6, 3.♗c4 desarrolla el alfil y apunta a f7, el punto más débil del campo negro al comienzo (solo lo protege el rey).',
+        prompt: 'Marcá todas las piezas blancas que todavía no se desarrollaron (caballos y alfiles en su casilla inicial) y confirmá.',
+        why: 'Faltan el caballo de b1 y el alfil de c1.',
+      },
+      4: {
+        title: 'Centro y enroque',
+        text: 'Tras …♗c5, el plan es c3 y d3 para consolidar el centro, desarrollar el caballo restante y enrocar.',
+        prompt: 'Marcá las piezas blancas que faltan por desarrollar y confirmá.',
+        why: 'Faltan el caballo de b1 y el alfil de c1.',
+      },
+      5: {
+        title: 'Práctica',
+        text: 'Conviene jugar la línea. En el repertorio se puede estudiar y practicar; las posiciones se repiten con repaso espaciado hasta que quedan fijas.',
+      },
+    },
+  },
+  'aperturas-negras': {
+    title: 'Aperturas con negras',
+    summary: 'Respuestas a 1.e4 y a 1.d4.',
+    steps: {
+      0: {
+        title: 'Planteo',
+        text: 'Las blancas mueven primero, pero las negras pueden responder con la misma idea: ocupar el centro. La regla práctica es contestar con el peón central equivalente.',
+      },
+      1: {
+        title: 'Contra 1.e4',
+        text: 'Ante 1.e4, 1…e5. Ocupa el centro, abre líneas para el alfil de f8 y la dama y permite desarrollos naturales como …♘c6 y …♗c5.',
+        prompt: 'Las blancas juegan 1.e4. ¿Qué respondés?',
+      },
+      2: {
+        title: 'Contra 1.d4',
+        text: 'Ante 1.d4, 1…d5, con el mismo criterio. Después se desarrolla con …♘f6 y …e6 y se enroca.',
+        prompt: 'Las blancas juegan 1.d4. ¿Qué respondés?',
+      },
+      3: {
+        title: 'Desarrollo',
+        text: 'En cualquier apertura el plan es el mismo: desarrollar caballos y alfiles, enrocar y revisar las amenazas rivales antes de cada jugada.',
+        prompt: 'Tocá la pieza negra que todavía falta por desarrollar.',
+        why: 'Falta el alfil de c8. El caballo de g8 ya salió a f6, el de b8 a c6 y el alfil de f8 a c5.',
+      },
+    },
+  },
+  trampas: {
+    title: 'Trampas frecuentes',
+    summary: 'Mate del loco, mate del pastor y trampa de Légal.',
+    steps: {
+      0: {
+        title: 'Importancia',
+        text: 'En los niveles iniciales muchas partidas se deciden en las primeras jugadas por una trampa: un movimiento aparentemente natural que pierde. Conviene conocer las más comunes, tanto para aprovecharlas como para evitarlas.',
+      },
+      1: {
+        title: 'Mate del loco',
+        text: 'Es el mate más rápido: dos jugadas. Ocurre cuando las blancas abren la diagonal hacia su propio rey con 1.f3 y 2.g4 y las negras tienen la dama en d8.',
+        prompt: 'Jugás con negras. ¿Cuál es la jugada?',
+        why: '♕h4# es mate: el rey blanco no tiene salida por la diagonal abierta. No se debe abrir la diagonal del propio rey con f3 y g4.',
+      },
+      2: {
+        title: 'Mate del pastor',
+        text: 'Las blancas sacan la dama a h5 y el alfil a c4: ambas apuntan a f7, que solo defiende el rey. Si las negras no lo detectan, ♕xf7 es mate.',
+        prompt: 'Jugás con blancas. Las negras no vieron la amenaza. ¿Cuál es la jugada?',
+        why: '♕xf7# es mate: la dama está protegida por el alfil y el rey no puede capturarla.',
+      },
+      3: {
+        title: 'Defensa del pastor',
+        text: 'La defensa es sencilla: proteger f7 con la dama o echar a la dama con …g6. Desarrollar el caballo a f6 parece natural, pero no defiende f7.',
+        prompt: 'Jugás con negras. Las blancas amenazan ♕xf7 mate. ¿Cómo lo evitás?',
+        why: 'La dama en e7 protege f7. ...♘f6 no protege nada y ♕xf7 sigue siendo mate.',
+      },
+      4: {
+        title: 'Trampa de Légal',
+        text: 'Las negras clavan el caballo con …♗g4 creyendo ganar material. Las blancas responden con una jugada sorprendente.',
+        prompt: 'Jugás con blancas. ¿Cuál es la jugada?',
+        why: '♘xe5 deja la dama en el aire a propósito. Si las negras la capturan (...♗xd1), siguen ♗xf7+ y ♘d5 y es mate. Si capturan el caballo con el peón, ♕xg4 gana el alfil. ♗xf7+ de inmediato pierde.',
+      },
+      5: {
+        title: 'Conclusión',
+        text: 'Antes de capturar o de mover una pieza con una jugada "natural", revisá qué deja sin defensa y qué amenazas ya existen sobre el propio rey.',
+      },
+    },
+  },
 }

@@ -14,7 +14,8 @@ beforeEach(() => {
 
 describe('táctica: datos', () => {
   it('perfil inicial por defecto', async () => {
-    expect((await getProfile(db)).rating).toBe(1300)
+    // Sin elegir nivel se usa el de "hasta 800" (ver engine/level.ts).
+    expect((await getProfile(db)).rating).toBe(800)
   })
 
   it('acertar un puzzle nuevo sube el rating y no crea repaso', async () => {

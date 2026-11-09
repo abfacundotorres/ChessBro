@@ -6,12 +6,15 @@ import { isProvisional } from '../../engine/glicko2'
 import { db } from '../../data/db'
 import { getProfile } from '../../data/tactics'
 import { summarize } from '../../data/games'
+import { useLevel } from '../../data/level'
+import { levelInfo } from '../../engine/level'
 import { endgameStats } from '../../data/lessons'
 
 const ICON: Record<CheckState, string> = { ok: '✓', todo: '○', nodata: '…', pending: '·' }
 const TONE: Record<CheckState, string> = { ok: 'text-accent', todo: '', nodata: 'text-muted', pending: 'text-muted' }
 
 export function Diagnosis() {
+  const level = useLevel()
   const data = useLiveQuery(async () => {
     const [profile, games, eg] = await Promise.all([getProfile(), db.games.toArray(), endgameStats()])
     return { profile, summary: summarize(games), endgameBest: Object.fromEntries([...eg].map(([k, v]) => [k, v.bestClean])) }
@@ -24,7 +27,7 @@ export function Diagnosis() {
     blundersPerGame: summary?.blundersPerGame ?? null,
     analyzedGames: summary?.analyzed ?? 0,
     endgameBest,
-  })
+  }, levelInfo(level).startBand)
   const band = BANDS[index]!
 
   return (

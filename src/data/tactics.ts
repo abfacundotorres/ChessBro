@@ -1,15 +1,18 @@
-import { INITIAL_RATING, ratePuzzle } from '../engine/glicko2'
+import { INITIAL_RATING, initialRating, ratePuzzle } from '../engine/glicko2'
+import { levelInfo } from '../engine/level'
 import { isDue, newCard, review } from '../engine/srs'
 import type { Puzzle } from '../engine/puzzle'
 import { db as defaultDb, type Attempt, type ChessBroDB, type Profile, type ReviewRecord } from './db'
 import { touchActivity } from './activity'
+import { getLevel } from './level'
 
-export function initialProfile(): Profile {
-  return { id: 'me', ...INITIAL_RATING, ratedCount: 0, updatedAt: 0 }
+export function initialProfile(rating: number = INITIAL_RATING.rating): Profile {
+  return { id: 'me', ...initialRating(rating), ratedCount: 0, updatedAt: 0 }
 }
 
+/** El perfil guardado; si todavía no hay (ningún puzzle puntuado), uno con el rating inicial del nivel elegido. */
 export async function getProfile(db: ChessBroDB = defaultDb): Promise<Profile> {
-  return (await db.profile.get('me')) ?? initialProfile()
+  return (await db.profile.get('me')) ?? initialProfile(levelInfo(await getLevel(db)).rating)
 }
 
 export async function seenPuzzleIds(db: ChessBroDB = defaultDb): Promise<Set<string>> {
@@ -43,7 +46,8 @@ export interface AttemptOutcome {
 export async function recordAttempt(input: AttemptInput, db: ChessBroDB = defaultDb): Promise<AttemptOutcome> {
   const { puzzle, solved, mode, today } = input
   const now = input.now ?? Date.now()
-  return db.transaction('rw', db.profile, db.attempts, db.reviews, db.activity, async () => {
+  // Incluye `settings`: sin perfil guardado, getProfile lee el nivel elegido (que define el rating inicial).
+  return db.transaction('rw', db.profile, db.attempts, db.reviews, db.activity, db.settings, async () => {
     await touchActivity(today, db)
     const profile = await getProfile(db)
     const base: Attempt = { puzzleId: puzzle.id, date: today, ts: now, mode, solved, puzzleRating: puzzle.rating, themes: puzzle.themes }

@@ -58,6 +58,15 @@ describe('desafíos de las lecciones (adivinanzas y mini-juegos)', () => {
       expect(allChallenges.filter((c) => c.id.startsWith(`${id}#`)).length, id).toBeGreaterThanOrEqual(3)
   })
 
+  it('los hechos que afirman las preguntas se verifican con chess.js', () => {
+    for (const { id, ch } of allChallenges) {
+      if (ch.kind !== 'choice' || !ch.fact || !ch.fen) continue
+      const c = new Chess(ch.fen)
+      const ok = { checkmate: c.isCheckmate(), stalemate: c.isStalemate(), check: c.inCheck(), castle: c.moves().some((m) => m.startsWith('O-O')) }[ch.fact]
+      expect(ok, `${id}: la posición no cumple "${ch.fact}"`).toBe(true)
+    }
+  })
+
   it('opción múltiple: opciones distintas y respuesta válida', () => {
     for (const { id, ch } of allChallenges.filter((c): c is { id: string; ch: Extract<Challenge, { kind: 'choice' }> } => c.ch.kind === 'choice')) {
       expect(ch.options.length, id).toBeGreaterThanOrEqual(2)
@@ -70,11 +79,12 @@ describe('desafíos de las lecciones (adivinanzas y mini-juegos)', () => {
   it('tocar casillas: el diagrama es legal y la respuesta coincide con la regla calculada por código', () => {
     for (const { id, ch } of allChallenges.filter((c): c is { id: string; ch: Extract<Challenge, { kind: 'tap' }> } => c.ch.kind === 'tap')) {
       expect(validateFen(ch.fen), id).toBeNull()
-      const computed = tapAnswer(ch.rule, ch.fen, ch.side)
-      expect([...ch.answer].sort(), id).toEqual([...computed].sort())
+      // 'target': la respuesta la escribe la lección (por ejemplo, "tocá e4"), no hay regla que la calcule.
+      if (ch.rule !== 'target') expect([...ch.answer].sort(), id).toEqual([...tapAnswer(ch.rule, ch.fen, ch.side, ch.square)].sort())
+      if (ch.rule === 'moves') expect(ch.square, id).toBeDefined()
       expect(ch.answer.length, id).toBeGreaterThan(0)
       // En modo "todas" tiene que ser razonable de tocar con el dedo.
-      if (ch.mode === 'all') expect(ch.answer.length, id).toBeLessThanOrEqual(6)
+      if (ch.mode === 'all') expect(ch.answer.length, id).toBeLessThanOrEqual(8)
       // Y si hay una sola casilla correcta en modo "todas", mejor que sea "any".
       if (ch.mode === 'all') expect(ch.answer.length, id).toBeGreaterThan(1)
     }

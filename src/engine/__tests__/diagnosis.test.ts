@@ -21,6 +21,13 @@ describe('diagnóstico', () => {
     expect(r.checks.map((c) => c.state)).toEqual(['todo', 'pending', 'todo'])
   })
 
+  it('la banda de partida salta las anteriores', () => {
+    // Sin datos, empezando en la banda 1 nunca se cae a la 0.
+    const r = currentBand(bands, { ...base, puzzleProvisional: true, blundersPerGame: null, analyzedGames: 0 }, 1)
+    expect(r.index).toBe(1)
+    expect(currentBand(bands, base, 99).index).toBe(2)
+  })
+
   it('los criterios pendientes no bloquean, pero un final sin hacer sí', () => {
     expect(currentBand(bands, { ...base, puzzleRating: 1500 }).index).toBe(1)
     expect(currentBand(bands, { ...base, puzzleRating: 1500, endgameBest: { krk: 31 } }).index).toBe(1)

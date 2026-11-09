@@ -3,6 +3,7 @@ import type { Exercise } from '../engine/lesson'
 import { lichess, mate1, pos } from './lessonKit'
 import { NEW_LESSONS } from './lessonsNuevas'
 import { ADVANCED_LESSONS } from './lessonsAvanzadas'
+import { BEGINNER_LESSONS } from './lessonsPrincipiantes'
 
 /**
  * Lecciones del currículo (bandas 800–1400). Cada lección tiene pasos de lectura con un
@@ -36,7 +37,7 @@ export interface Source {
 
 export interface Lesson {
   id: string
-  band: 'b1' | 'b2' | 'b3' | 'b4'
+  band: 'b0' | 'b1' | 'b2' | 'b3' | 'b4'
   title: string
   summary: string
   steps: LessonStep[]
@@ -45,6 +46,8 @@ export interface Lesson {
   practice?: string
   /** Final jugable asociado (id de content/endgames.ts). */
   endgame?: string
+  /** Línea de repertorio para practicar al terminar (id de content/repertoire.ts). */
+  repLine?: string
   /** Lecturas relacionadas (de donde salieron las ideas; el texto es propio). */
   sources?: Source[]
 }
@@ -53,7 +56,7 @@ const BASE_LESSONS: Lesson[] = [
   // ───────────── Banda 800–1100 ─────────────
   {
     id: 'seguridad',
-    band: 'b1',
+    band: 'b0',
     title: 'Chequeo de seguridad',
     summary: 'El hábito que más puntos te da: mirar antes de mover.',
     practice: 'hangingPiece',
@@ -85,7 +88,7 @@ const BASE_LESSONS: Lesson[] = [
   },
   {
     id: 'mate1',
-    band: 'b1',
+    band: 'b0',
     title: 'Mate en 1: cinco patrones',
     summary: 'Reconocerlos al instante es la base de todo ataque.',
     steps: [
@@ -216,7 +219,7 @@ const BASE_LESSONS: Lesson[] = [
   },
   {
     id: 'apertura',
-    band: 'b1',
+    band: 'b0',
     title: 'Principios de apertura',
     summary: 'Qué hacer en las primeras 10 jugadas sin memorizar teoría.',
     steps: [
@@ -248,7 +251,7 @@ const BASE_LESSONS: Lesson[] = [
   },
   {
     id: 'mate-dama',
-    band: 'b1',
+    band: 'b0',
     title: 'Mate de dama y rey',
     summary: 'El primer final que hay que dominar: cuidado con el ahogado.',
     endgame: 'kqk',
@@ -442,12 +445,13 @@ const BASE_LESSONS: Lesson[] = [
 
 /** Orden de las lecciones en pantalla (dentro de cada banda). */
 const ORDER = [
-  'seguridad', 'balanza', 'mate1', 'mate2', 'horquilla', 'clavada', 'ensartada', 'apertura', 'carrera', 'mate-dama', 'mate-torre',
+  'piezas-mov', 'reglas-esp', 'jaque-mate', 'seguridad', 'balanza', 'mate1', 'mate-dama', 'apertura', 'carrera', 'mi-primera-apertura', 'aperturas-negras', 'trampas',
+  'mate2', 'horquilla', 'clavada', 'ensartada', 'mate-torre',
   'peones', 'piezas', 'torre', 'refugio', 'descubierta', 'desviacion', 'defensor', 'atrapada', 'cuadrado', 'oposicion', 'cerrar',
   'lucena', 'philidor', 'torre-final', 'calculo', 'profilaxis', 'transicion',
 ]
 
-export const LESSONS: Lesson[] = [...BASE_LESSONS, ...NEW_LESSONS, ...ADVANCED_LESSONS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
+export const LESSONS: Lesson[] = [...BEGINNER_LESSONS, ...BASE_LESSONS, ...NEW_LESSONS, ...ADVANCED_LESSONS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
 
 export function lessonById(id: string): Lesson | undefined {
   return LESSONS.find((l) => l.id === id)

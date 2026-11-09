@@ -14,6 +14,7 @@ export const REPERTOIRE: RepLine[] = [
   // ───────────── Con blancas: 1.e4 ─────────────
   {
     id: 'w-italiana-c3',
+    starter: true,
     color: 'w',
     group: 'Contra 1…e5',
     name: 'Italiana: 3…Ac5',
@@ -29,6 +30,7 @@ export const REPERTOIRE: RepLine[] = [
   },
   {
     id: 'w-italiana-nf6',
+    starter: true,
     color: 'w',
     group: 'Contra 1…e5',
     name: 'Italiana: 3…Cf6',
@@ -119,6 +121,7 @@ export const REPERTOIRE: RepLine[] = [
   },
   {
     id: 'w-escandinava',
+    starter: true,
     color: 'w',
     group: 'Contra otras defensas',
     name: 'Escandinava',
@@ -138,6 +141,7 @@ export const REPERTOIRE: RepLine[] = [
   },
   {
     id: 'w-moderna',
+    starter: true,
     color: 'w',
     group: 'Contra otras defensas',
     name: 'Defensa Moderna (…g6)',
@@ -178,6 +182,7 @@ export const REPERTOIRE: RepLine[] = [
   // ───────────── Con negras ─────────────
   {
     id: 'b-giuoco-c3',
+    starter: true,
     color: 'b',
     group: 'Contra 1.e4',
     name: 'Giuoco Piano: 4.c3',
@@ -188,6 +193,7 @@ export const REPERTOIRE: RepLine[] = [
   },
   {
     id: 'b-giuoco-d3',
+    starter: true,
     color: 'b',
     group: 'Contra 1.e4',
     name: 'Giuoco Pianissimo: 4.d3',
@@ -254,6 +260,7 @@ export const REPERTOIRE: RepLine[] = [
   },
   {
     id: 'b-london',
+    starter: true,
     color: 'b',
     group: 'Contra 1.d4',
     name: 'Sistema Londres',
@@ -263,6 +270,7 @@ export const REPERTOIRE: RepLine[] = [
   },
   {
     id: 'b-colle',
+    starter: true,
     color: 'b',
     group: 'Contra 1.d4',
     name: 'Sistema Colle',

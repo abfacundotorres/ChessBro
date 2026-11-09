@@ -16,6 +16,7 @@ finales ganados contra el motor). Contenido en `src/content/curriculum.ts`.
 
 | Banda | Foco | Para avanzar |
 |---|---|---|
+| 400–800 | Cómo se mueven las piezas y jugadas especiales, jaque/mate/tablas, no regalar piezas, mate en 1 y mate de dama, tu primera apertura y las trampas típicas | Puzzles ≥ 950, < 2,5 errores graves por partida, mate de dama y rey |
 | 800–1100 | No colgar piezas, mate en 1-2, horquilla/clavada/doble, principios de apertura, mates D+R y T+R | Puzzles ≥ 1200, < 1 error grave por partida |
 | 1100–1400 | Descubierta, desviación, sobrecarga, eliminación del defensor; oposición, regla del cuadrado; repertorio mínimo | Puzzles ≥ 1450, mate T+R en < 30 jugadas |
 | 1400–1600 | Estructuras de peones, piezas buenas/malas, planes, conversión; finales de torre (Lucena, Philidor) | Ganar/defender esos finales vs. motor |
@@ -54,3 +55,5 @@ más 2–3 partidas lentas analizadas.
 - **H3** Currículo 800–1400: lecciones y finales jugables.
 - **H4** Repertorio con repaso espaciado y plan semanal.
 - **H5** Currículo 1400–1800, pulido y e2e offline.
+
+> Actualización: se agregó la banda 400–800 y el punto de partida a elección (ver `docs/DECISIONES.md`, sección "Primeros pasos").

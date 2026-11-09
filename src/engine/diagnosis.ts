@@ -59,8 +59,13 @@ export function checkCriterion(c: Criterion, x: DiagnosisInput): Check {
 }
 
 /** Índice de la banda actual y el estado de sus criterios. */
-export function currentBand(bands: readonly { criteria: readonly Criterion[] }[], x: DiagnosisInput): { index: number; checks: Check[] } {
-  for (let i = 0; i < bands.length; i++) {
+export function currentBand(
+  bands: readonly { criteria: readonly Criterion[] }[],
+  x: DiagnosisInput,
+  /** Banda desde la que se empieza a evaluar (según el nivel elegido). */
+  start = 0,
+): { index: number; checks: Check[] } {
+  for (let i = Math.min(start, bands.length - 1); i < bands.length; i++) {
     const checks = bands[i]!.criteria.map((c) => checkCriterion(c, x))
     // Un criterio todavía no medible por la app (pendiente) no bloquea; la falta de datos sí.
     const passed = checks.every((ch) => ch.state === 'ok' || ch.state === 'pending')

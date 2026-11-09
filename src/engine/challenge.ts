@@ -19,6 +19,11 @@ export interface ChoiceChallenge {
   answer: number
   why: string
   fen?: string
+  /**
+   * Hecho sobre la posición `fen` que un test verifica con chess.js (por ejemplo, que es ahogado), para que la
+   * respuesta no dependa solo de lo que escribí.
+   */
+  fact?: 'checkmate' | 'stalemate' | 'check' | 'castle'
 }
 
 export interface TapChallenge {
@@ -27,6 +32,8 @@ export interface TapChallenge {
   fen: string
   rule: TapRule
   side: Color | 'both'
+  /** Casilla de la pieza, para la regla 'moves'. */
+  square?: string
   /** 'all': hay que tocar exactamente esas casillas y confirmar. 'any': basta tocar una de ellas. */
   mode: 'all' | 'any'
   answer: string[]

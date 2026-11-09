@@ -111,6 +111,11 @@ export function ratePuzzle(player: Rating, puzzle: { rating: number; rd: number 
 /** Rating inicial: por debajo de 1200 online, el rating de puzzles suele rondar 1100–1400. */
 export const INITIAL_RATING: Rating = { rating: 1300, rd: 300, vol: 0.06 }
 
+/** Rating inicial según el nivel elegido (ver engine/level.ts). */
+export function initialRating(rating: number): Rating {
+  return { ...INITIAL_RATING, rating }
+}
+
 /** Con RD alto el rating todavía es poco confiable ("provisional"). */
 export function isProvisional(r: Rating): boolean {
   return r.rd > 110

@@ -32,6 +32,10 @@ describe('repertorio: estructura', () => {
     for (const l of REPERTOIRE.filter((x) => x.color === 'b' && x.moves[0] === 'd4')) expect(firstReply(l), l.id).toBe('d4 d5')
   })
 
+  it('hay un repertorio inicial de 4 líneas por color, de las más simples', () => {
+    for (const c of ['w', 'b'] as const) expect(REPERTOIRE.filter((l) => l.color === c && l.starter).length, c).toBe(4)
+  })
+
   it('el repertorio es consistente: una sola jugada propia por posición', () => {
     for (const color of ['w', 'b'] as const) {
       const { conflicts, cards } = buildCards(REPERTOIRE.filter((l) => l.color === color))

@@ -4,6 +4,8 @@ import { toDateStr } from '../../engine/dates'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { LICHESS_USER, getSetting, setSetting } from '../../data/games'
 import { setStyle, useStyle, type Style } from '../../data/style'
+import { setLevel, useLevel } from '../../data/level'
+import { LEVELS } from '../../engine/level'
 import { USERNAME_RE } from '../../data/lichess'
 
 export function Settings() {
@@ -13,6 +15,7 @@ export function Settings() {
   const [draft, setDraft] = useState<string | null>(null)
   const value = draft ?? user ?? ''
   const style = useStyle()
+  const level = useLevel()
 
   async function onExport() {
     const data = await exportBackup()
@@ -48,6 +51,18 @@ export function Settings() {
           {(['juego', 'serio'] as Style[]).map((s) => (
             <button key={s} type="button" role="radio" aria-checked={style === s} className={style === s ? 'btn-primary' : 'btn'} onClick={() => void setStyle(s)}>
               {s === 'juego' ? '🎲 Juego' : '📖 Serio'}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
+        <p className="font-semibold">Tu nivel de partida</p>
+        <p className="text-muted">Define con qué rating empezás en los puzzles y desde qué banda se evalúa tu avance.</p>
+        <div className="flex flex-col gap-2" role="radiogroup" aria-label="Nivel de partida">
+          {LEVELS.map((l) => (
+            <button key={l.id} type="button" role="radio" aria-checked={level === l.id} className={`${level === l.id ? 'btn-primary' : 'btn'} text-left`} onClick={() => void setLevel(l.id)}>
+              {l.label}
             </button>
           ))}
         </div>

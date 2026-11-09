@@ -29,7 +29,7 @@ const check = (ok, what) => {
 }
 
 const ROUTES = [
-  '/', '/lecciones', '/lecciones/peones', '/lecciones/lucena', '/lecciones/calculo', '/tactica', '/partidas', '/ajustes',
+  '/', '/lecciones', '/lecciones/peones', '/lecciones/piezas-mov', '/lecciones/trampas', '/lecciones/lucena', '/lecciones/calculo', '/tactica', '/partidas', '/ajustes',
   '/repertorio', '/repertorio/w-italiana-c3', '/repertorio/repaso', '/plan', '/finales/lucena', '/finales/philidor', '/tablero',
 ]
 
@@ -46,8 +46,11 @@ const go = (route) => page.goto(`${BASE}#${route}`)
 
 // 1) Con red: elegir estilo y esperar a que el service worker lo deje todo en caché.
 await page.goto(BASE)
-await page.waitForSelector('text=¿cómo preferís estudiar?')
+await page.waitForSelector('text=¿Cómo preferís estudiar?')
 await page.click('[role=radio]:has-text("Juego")')
+await page.waitForSelector('text=¿Desde dónde empezamos?')
+await page.screenshot({ path: `${OUT}/e2e-welcome-nivel.png` })
+await page.click('[role=radio]:has-text("Hasta 800 de Elo")')
 await page.waitForSelector('text=Para hoy')
 await page.waitForFunction(async () => (await navigator.serviceWorker.getRegistration())?.active?.state === 'activated', null, { timeout: 30000 })
 await page.waitForSelector('text=Lista para usar sin conexión', { timeout: 30000 })
@@ -97,6 +100,25 @@ await page.click('text=Listo (2)')
 await page.waitForSelector('text=¡Eso!')
 check(true, 'lección: mini-juego de tocar el tablero sin conexión')
 
+// 5b) Primeros pasos: el caballo (tocar sus 8 casillas) y la torre (cualquier casilla válida).
+await go('/lecciones/piezas-mov')
+await sq('e4').click() // coordenadas
+await page.waitForSelector('text=¡Eso!')
+await page.click('text=Siguiente')
+await sq('d8').click() // torre
+await page.waitForSelector('text=¡Eso!')
+await page.click('text=Siguiente')
+await sq('e5').click() // alfil
+await page.waitForSelector('text=¡Eso!')
+await page.click('text=Siguiente')
+await sq('d5').click() // dama
+await page.waitForSelector('text=¡Eso!')
+await page.click('text=Siguiente')
+for (const s of ['b3', 'b5', 'c2', 'c6', 'e2', 'e6', 'f3', 'f5']) await sq(s).click() // caballo: sus 8 casillas
+await page.click('text=Listo (8)')
+await page.waitForSelector('text=¡Eso!')
+check(true, 'primeros pasos: el caballo y sus 8 casillas')
+
 // 6) Repertorio: practicar las dos primeras jugadas.
 await go('/repertorio/w-italiana-c3')
 await page.click('[role=tab]:has-text("Practicar")')
@@ -120,9 +142,10 @@ const dark = await browser.newContext({ ...devices['Pixel 7'], viewport: { width
 const dpage = await dark.newPage()
 await dpage.goto(BASE)
 await dpage.click('[role=radio]:has-text("Serio")')
+await dpage.click('[role=radio]:has-text("Recién empiezo")')
 await dpage.waitForSelector('text=Para hoy')
 await dpage.screenshot({ path: `${OUT}/e2e-dark-home.png` })
-await dpage.goto(`${BASE}#/lecciones/lucena`)
+await dpage.goto(`${BASE}#/lecciones/piezas-mov`)
 await dpage.waitForSelector('h1')
 await dpage.screenshot({ path: `${OUT}/e2e-dark-lesson.png` })
 const bg = await dpage.evaluate(() => getComputedStyle(document.body).backgroundColor)

@@ -174,6 +174,7 @@ export function ChallengeView({ challenge, onMistake, onSolved }: Props) {
         movableColor={null}
         onSquareTap={tap}
         marks={marks}
+        highlights={challenge.square ? [challenge.square] : []}
       />
       <p className="font-semibold">{challenge.prompt}</p>
       {challenge.mode === 'all' && !solved && (

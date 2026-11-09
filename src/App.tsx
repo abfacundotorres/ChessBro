@@ -3,6 +3,7 @@ import { Home } from './features/home/Home'
 import { Tactics } from './features/tactics/Tactics'
 import { Welcome } from './features/welcome/Welcome'
 import { useStyleChoice } from './data/style'
+import { useLevelChoice } from './data/level'
 import { Repertoire } from './features/repertoire/Repertoire'
 import { LineView } from './features/repertoire/LineView'
 import { ReviewRepertoire } from './features/repertoire/Review'
@@ -25,9 +26,10 @@ const NAV = [
 ]
 
 export function App() {
-  const choice = useStyleChoice()
-  if (choice === undefined) return null // cargando
-  if (choice === null) return <Welcome />
+  const style = useStyleChoice()
+  const level = useLevelChoice()
+  if (style === undefined || level === undefined) return null // cargando
+  if (style === null || level === null) return <Welcome />
   return (
     <HashRouter>
       <div className="mx-auto flex min-h-dvh max-w-lg flex-col">

@@ -7,7 +7,19 @@ import type { Color } from './game'
  * no depende de lo que yo escriba, y un test la contrasta con la que declara cada lección.
  */
 
-export type TapRule = 'isolated' | 'doubled' | 'passed' | 'hanging' | 'outpost' | 'openFile' | 'badBishop' | 'undeveloped'
+export type TapRule =
+  | 'isolated'
+  | 'doubled'
+  | 'passed'
+  | 'hanging'
+  | 'outpost'
+  | 'openFile'
+  | 'badBishop'
+  | 'undeveloped'
+  /** Casillas a las que puede ir la pieza de la casilla `square` (jugadas legales, con enroque y al paso). */
+  | 'moves'
+  /** La respuesta la escribe la lección (por ejemplo, "tocá la casilla e4"); no se calcula. */
+  | 'target'
 
 const FILES = 'abcdefgh'
 const VALUE: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 }
@@ -154,8 +166,18 @@ export function undevelopedPieces(fen: string, side: Color | 'both'): string[] {
     .map((p) => p.square)
 }
 
-/** Respuesta correcta de un mini-juego de tocar el tablero, según la regla. */
-export function tapAnswer(rule: TapRule, fen: string, side: Color | 'both'): string[] {
+/** Casillas de destino de las jugadas legales de la pieza en `square`. */
+export function legalDestinations(fen: string, square: string): string[] {
+  const out = new Set<string>()
+  for (const m of new Chess(fen).moves({ square: square as Square, verbose: true })) out.add(m.to)
+  return [...out]
+}
+
+/**
+ * Respuesta correcta de un mini-juego de tocar el tablero, según la regla. La regla 'target' no se calcula
+ * (devuelve vacío: la respuesta la escribe la lección).
+ */
+export function tapAnswer(rule: TapRule, fen: string, side: Color | 'both', square?: string): string[] {
   switch (rule) {
     case 'isolated':
       return isolatedPawns(fen, side)
@@ -173,5 +195,9 @@ export function tapAnswer(rule: TapRule, fen: string, side: Color | 'both'): str
       return badBishops(fen, side)
     case 'undeveloped':
       return undevelopedPieces(fen, side)
+    case 'moves':
+      return square ? legalDestinations(fen, square) : []
+    case 'target':
+      return []
   }
 }

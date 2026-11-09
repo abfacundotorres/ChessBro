@@ -2,15 +2,24 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Board } from '../../ui/Board'
-import { lessonById } from '../../content/lessons'
+import { lessonById, type LessonStep } from '../../content/lessons'
 import { styledLesson } from '../../content/styled'
 import { useStyle } from '../../data/style'
 import { endgameById } from '../../content/endgames'
+import { repLineById } from '../../content/repertoire'
 import { db } from '../../data/db'
 import { finishLesson, markExercise, markLessonDone, touchPractice } from '../../data/lessons'
 import { StreakChip } from '../../ui/StreakChip'
 import { ExerciseView } from './ExerciseView'
 import { ChallengeView } from './ChallengeView'
+
+/** Si el desafío del paso ya muestra su propio tablero con la misma posición, el diagrama del paso sobra (se vería duplicado). */
+function challengeShowsSameBoard(step: LessonStep): boolean {
+  const ch = step.challenge
+  if (!ch || !step.fen) return false
+  if (ch.kind === 'choice') return ch.fen === step.fen
+  return ch.fen === step.fen
+}
 
 /** Reinicia el estado al cambiar de lección (por ejemplo, con atrás/adelante del navegador). */
 export function LessonView() {
@@ -74,7 +83,7 @@ function LessonBody({ id }: { id: string }) {
     return (
       <div className="flex flex-col gap-3">
         {header}
-        {step.fen && (
+        {step.fen && !challengeShowsSameBoard(step) && (
           <Board
             fen={step.fen}
             orientation={step.orientation ?? 'white'}
@@ -150,6 +159,7 @@ function LessonBody({ id }: { id: string }) {
 
   const solved = progress?.exercises.length ?? 0
   const eg = l.endgame ? endgameById(l.endgame) : undefined
+  const rep = l.repLine ? repLineById(l.repLine) : undefined
   return (
     <div className="flex flex-col gap-3">
       {header}
@@ -181,6 +191,11 @@ function LessonBody({ id }: { id: string }) {
       {l.practice && (
         <Link to={`/tactica?tema=${l.practice}`} className="btn-primary flex items-center justify-center">
           Practicar más puzzles de este tema
+        </Link>
+      )}
+      {rep && (
+        <Link to={`/repertorio/${rep.id}`} className="btn-primary flex items-center justify-center">
+          Practicar la línea: {rep.name}
         </Link>
       )}
       {eg && (

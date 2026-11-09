@@ -18,6 +18,8 @@ export interface RepLine {
   plan: string[]
   /** Notas sobre jugadas concretas: índice en `moves` → texto. */
   notes?: Record<number, string>
+  /** Línea "para empezar": simple, útil desde el primer día. Se estudia primero. */
+  starter?: boolean
 }
 
 export interface RepCardSpec {
