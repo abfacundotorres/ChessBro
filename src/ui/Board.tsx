@@ -1,5 +1,5 @@
 import { useMemo, useState, type CSSProperties } from 'react'
-import { Chessboard, defaultPieces } from 'react-chessboard'
+import { Chessboard, defaultPieces, type Arrow } from 'react-chessboard'
 import {
   legalTargets,
   needsPromotion,
@@ -20,6 +20,8 @@ interface BoardProps {
   onMove?: (move: MoveInput) => boolean
   /** Casillas a resaltar (pistas). */
   highlights?: readonly string[]
+  /** Flechas fijas (análisis): jugada hecha, mejor jugada. */
+  arrows?: Arrow[]
 }
 
 const LIGHT = '#dee3e6'
@@ -44,7 +46,7 @@ function turnOf(fen: string): Color {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w'
 }
 
-export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights }: BoardProps) {
+export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights, arrows }: BoardProps) {
   const [selected, setSelected] = useState<{ fen: string; square: string } | null>(null)
   const [promo, setPromo] = useState<{ fen: string; from: string; to: string } | null>(null)
 
@@ -109,6 +111,7 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
           lightSquareStyle: { backgroundColor: LIGHT },
           darkSquareStyle: { backgroundColor: DARK },
           squareStyles,
+          ...(arrows ? { arrows, allowDrawingArrows: false } : {}),
           allowDragging: canMove && !pendingPromo,
           canDragPiece: ({ piece }) => canMove && piece.pieceType[0] === turn,
           animationDurationInMs: 150,

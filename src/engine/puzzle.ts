@@ -106,3 +106,13 @@ export function revealSolution(s: PuzzleState): PuzzleState {
   const view = replay(currentFen(s), rest)
   return { ...s, played: [...s.played, ...view.moves], ply: s.puzzle.moves.length, solved: true, failed: true }
 }
+
+/**
+ * Acepta como solución una jugada distinta de la esperada (validada afuera, p. ej. con el
+ * motor). Termina el puzzle sin marcarlo como fallado.
+ */
+export function acceptAlternative(s: PuzzleState, move: MoveInput): PuzzleState {
+  const played = tryMove(currentFen(s), move)
+  if (!played || s.solved) return s
+  return { ...s, played: [...s.played, played], ply: s.puzzle.moves.length, solved: true }
+}

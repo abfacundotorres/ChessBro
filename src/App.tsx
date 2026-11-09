@@ -1,6 +1,8 @@
 import { HashRouter, NavLink, Route, Routes } from 'react-router-dom'
 import { Home } from './features/home/Home'
 import { Tactics } from './features/tactics/Tactics'
+import { Games } from './features/games/Games'
+import { GameDetail } from './features/games/GameDetail'
 import { FreeBoard } from './features/board/FreeBoard'
 import { Settings } from './features/settings/Settings'
 import { UpdateBanner } from './ui/UpdateBanner'
@@ -8,6 +10,7 @@ import { UpdateBanner } from './ui/UpdateBanner'
 const NAV = [
   { to: '/', label: 'Inicio', end: true },
   { to: '/tactica', label: 'Táctica', end: false },
+  { to: '/partidas', label: 'Partidas', end: false },
   { to: '/tablero', label: 'Tablero', end: false },
   { to: '/ajustes', label: 'Ajustes', end: false },
 ]
@@ -21,20 +24,22 @@ export function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/tactica" element={<Tactics />} />
+            <Route path="/partidas" element={<Games />} />
+            <Route path="/partidas/:id" element={<GameDetail />} />
             <Route path="/tablero" element={<FreeBoard />} />
             <Route path="/ajustes" element={<Settings />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
         <nav className="fixed inset-x-0 bottom-0 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]">
-          <ul className="mx-auto grid max-w-lg grid-cols-4">
+          <ul className="mx-auto grid max-w-lg grid-cols-5">
             {NAV.map((n) => (
               <li key={n.to}>
                 <NavLink
                   to={n.to}
                   end={n.end}
                   className={({ isActive }) =>
-                    `flex min-h-14 items-center justify-center text-sm font-medium ${isActive ? 'text-accent' : 'text-muted'}`
+                    `flex min-h-14 items-center justify-center text-[13px] font-medium ${isActive ? 'text-accent' : 'text-muted'}`
                   }
                 >
                   {n.label}

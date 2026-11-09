@@ -1,18 +1,22 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
+import { useSearchParams } from 'react-router-dom'
 import { Board } from '../../ui/Board'
-import { checkSquareOf, type MoveInput } from '../../engine/game'
+import { checkSquareOf, sanToFigurine, tryMove, type MoveInput } from '../../engine/game'
 import { isProvisional } from '../../engine/glicko2'
-import { hint, playMove, revealSolution, startPuzzle, type Puzzle, type PuzzleState } from '../../engine/puzzle'
+import { acceptAlternative, currentFen, hint, uciToMove, playMove, revealSolution, startPuzzle, type Puzzle, type PuzzleState } from '../../engine/puzzle'
 import { pickPuzzle } from '../../engine/selection'
 import { addDays, toDateStr } from '../../engine/dates'
 import { THEME_GROUPS, THEME_LIST, themeByKey, themeLabels } from '../../content/themes'
 import { db } from '../../data/db'
 import { dueReviews, getProfile, initialProfile, recordAttempt, seenPuzzleIds, tacticsStats } from '../../data/tactics'
 import { loadPoolFor } from '../../data/puzzles'
+import { isGoodAlternative, type CardOrigin } from '../../engine/gameCards'
+import { KIND_LABELS, winPercent } from '../../engine/analysis'
+import { getEngine } from '../../lib/stockfish'
 
 type Mode = 'new' | 'review'
-type Feedback = 'start' | 'good' | 'wrong' | 'done'
+type Feedback = 'start' | 'good' | 'wrong' | 'checking' | 'done'
 
 interface Current {
   mode: Mode
@@ -22,6 +26,10 @@ interface Current {
   feedback: Feedback
   hintSquare: string | null
   delta: number | null
+  /** Si el ejercicio sale de una partida propia. */
+  origin: CardOrigin | null
+  /** Se aceptó una jugada distinta de la del motor. */
+  alternative: boolean
 }
 
 const THEME_KEY = 'chessbro.tactics.theme'
@@ -43,6 +51,14 @@ function writeTheme(v: string) {
   }
 }
 
+/** SAN de la jugada esperada, en la posición anterior a la última jugada aplicada. */
+function engineChoice(state: PuzzleState): string {
+  const uci = state.puzzle.moves.at(-1)
+  if (!uci) return ''
+  const fen = state.played.at(-2)?.fen ?? state.puzzle.fen
+  return tryMove(fen, uciToMove(uci))?.san ?? uci
+}
+
 function today() {
   return toDateStr(new Date())
 }
@@ -52,7 +68,11 @@ export function Tactics() {
   const dueCount = useLiveQuery(() => db.reviews.where('due').belowOrEqual(today()).count(), [], 0)
   const stats = useLiveQuery(() => tacticsStats(today(), addDays(today(), -6)), [])
 
-  const [theme, setTheme] = useState(readTheme)
+  const [params, setParams] = useSearchParams()
+  const [theme, setTheme] = useState(() => {
+    const t = params.get('tema')
+    return t && themeByKey(t) ? t : readTheme()
+  })
   const [mode, setMode] = useState<Mode>('new')
   const [current, setCurrent] = useState<Current | null>(null)
   const [status, setStatus] = useState<'idle' | 'loading' | 'empty' | 'error'>('idle')
@@ -63,9 +83,12 @@ export function Tactics() {
       setStatus('loading')
       try {
         let puzzle: Puzzle | null = null
+        let origin: CardOrigin | null = null
         let m: Mode = wanted
         if (wanted === 'review') {
-          puzzle = (await dueReviews(today()))[0]?.puzzle ?? null
+          const card = (await dueReviews(today()))[0]
+          puzzle = card?.puzzle ?? null
+          origin = card?.origin ?? null
           if (!puzzle) m = 'new'
         }
         if (!puzzle) {
@@ -86,7 +109,7 @@ export function Tactics() {
         }
         recorded.current = null
         setMode(m)
-        setCurrent({ mode: m, state: startPuzzle(puzzle), shown: 0, feedback: 'start', hintSquare: null, delta: null })
+        setCurrent({ mode: m, state: startPuzzle(puzzle), shown: 0, feedback: 'start', hintSquare: null, delta: null, origin, alternative: false })
         setStatus('idle')
       } catch (e) {
         console.error(e)
@@ -101,8 +124,13 @@ export function Tactics() {
   useEffect(() => {
     if (started.current) return
     started.current = true
-    void next('new', readTheme())
-  }, [next])
+    const t = params.get('tema')
+    if (t) {
+      writeTheme(t)
+      setParams({}, { replace: true })
+    }
+    void next('new', t && themeByKey(t) ? t : readTheme())
+  }, [next, params, setParams])
 
   // Animación: mostrar las jugadas pendientes de a una.
   useEffect(() => {
@@ -125,9 +153,40 @@ export function Tactics() {
     }
   }
 
+  /** En ejercicios de partidas propias, una jugada distinta puede ser igual de buena: lo decide el motor. */
+  async function checkAlternative(c: Current, m: MoveInput) {
+    const origin = c.origin
+    const after = tryMove(currentFen(c.state), m)
+    if (!origin || !after) return
+    let good = false
+    try {
+      if (after.san.endsWith('#')) good = true
+      else good = isGoodAlternative(origin.bestCp, (await getEngine().evaluate(after.fen, 12)).score, winPercent)
+    } catch (e) {
+      console.error(e)
+    }
+    const id = c.state.puzzle.id
+    if (good) {
+      const state = acceptAlternative(c.state, m)
+      const done: Current = { ...c, state, shown: state.played.length, feedback: 'done', alternative: true }
+      setCurrent((cur) => (cur?.state.puzzle.id === id ? done : cur))
+      void record(done, true)
+    } else {
+      const failed: Current = { ...c, state: { ...c.state, failed: true }, feedback: 'wrong' }
+      setCurrent((cur) => (cur?.state.puzzle.id === id ? failed : cur))
+      void record(failed, false)
+    }
+  }
+
   function onMove(m: MoveInput): boolean {
-    if (!current || current.state.solved || current.shown < current.state.played.length) return false
+    if (!current || current.state.solved || current.feedback === 'checking' || current.shown < current.state.played.length) return false
     const { state, result } = playMove(current.state, m)
+    if (result.kind === 'wrong' && current.origin && !current.state.failed) {
+      const c: Current = { ...current, feedback: 'checking' }
+      setCurrent(c)
+      void checkAlternative(c, m)
+      return false
+    }
     if (result.kind === 'wrong') {
       const c = { ...current, state, feedback: 'wrong' as const }
       setCurrent(c)
@@ -165,7 +224,7 @@ export function Tactics() {
   function changeTheme(v: string) {
     setTheme(v)
     writeTheme(v)
-    if (!current || current.state.solved) void next('new', v)
+    void next(mode === 'review' ? 'review' : 'new', v)
   }
 
   const rating = Math.round(profile.rating)
@@ -214,7 +273,7 @@ export function Tactics() {
           onClick={() => {
             const m = mode === 'review' ? 'new' : 'review'
             setMode(m)
-            if (!current || current.state.solved) void next(m, theme)
+            void next(m, theme)
           }}
         >
           {mode === 'review' ? 'Repasando' : `Repaso (${dueCount})`}
@@ -262,7 +321,15 @@ function PuzzleView({
   const done = state.solved && !animating
 
   let message: string
-  if (done) message = state.failed ? (current.mode === 'review' ? 'Para repasar de nuevo mañana.' : 'Va al repaso.') : '¡Resuelto!'
+  if (done)
+    message = state.failed
+      ? current.mode === 'review'
+        ? 'Para repasar de nuevo mañana.'
+        : 'Va al repaso.'
+      : current.alternative
+        ? '¡También sirve!'
+        : '¡Resuelto!'
+  else if (feedback === 'checking') message = 'Consultando al motor…'
   else if (feedback === 'wrong') message = 'No es esa. Probá otra.'
   else if (feedback === 'good') message = '¡Bien! Seguí.'
   else message = `Juegan ${side}: encontrá la mejor jugada.`
@@ -284,11 +351,21 @@ function PuzzleView({
       >
         {message}
       </p>
+      {current.origin && (
+        <p className="text-center text-sm text-muted">
+          De tu partida: jugaste {sanToFigurine(current.origin.played)} ({KIND_LABELS[current.origin.kind].toLowerCase()}).
+        </p>
+      )}
 
       {done ? (
         <div className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
+          {current.alternative && (
+            <p>
+              El motor prefería {sanToFigurine(engineChoice(state))}, pero lo tuyo también está bien.
+            </p>
+          )}
           <div className="flex justify-between">
-            <span className="text-muted">Puzzle</span>
+            <span className="text-muted">{current.origin ? 'Ejercicio' : 'Puzzle'}</span>
             <span className="tabular-nums">
               {state.puzzle.rating}
               {current.delta !== null && (
@@ -298,7 +375,9 @@ function PuzzleView({
               )}
             </span>
           </div>
-          {themeLabels(state.puzzle.themes).length > 0 && (
+          {current.origin ? (
+            <p className="text-muted">{KIND_LABELS[current.origin.kind]}</p>
+          ) : themeLabels(state.puzzle.themes).length > 0 && (
             <p className="text-muted">{themeLabels(state.puzzle.themes).join(' · ')}</p>
           )}
           <button type="button" className="btn-primary mt-1" disabled={loading} onClick={onNext}>

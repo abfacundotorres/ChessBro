@@ -8,7 +8,8 @@ Diseño aprobado: `docs/DISEÑO.md`. Decisiones y supuestos: `docs/DECISIONES.md
 ## Stack
 Vite 8 + React 19 + TypeScript (strict) + Tailwind 4 + vite-plugin-pwa (Workbox)
 + react-router (HashRouter) + Vitest + chess.js (reglas) + react-chessboard (tablero).
-Dexie + dexie-react-hooks + zod (datos). Próximo: Stockfish WASM lite single-thread (H2).
+Dexie + dexie-react-hooks + zod (datos). Stockfish 19 lite single-thread WASM en Web Worker
+(`public/engine/`, versionado; `src/lib/stockfish.ts`).
 Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages por Actions.
 
 ## Comandos
@@ -29,13 +30,14 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/content/` — contenido estático (currículo, temas, lecciones). Toda posición/solución
   se valida en tests con chess.js (y con Stockfish desde H2).
 - `src/features/<pantalla>/` — pantallas. `src/ui/` — componentes reutilizables (Board, MoveList).
-- `src/lib/` — integración con el navegador (PWA).
+- `src/lib/` — integración con el navegador (PWA, motor).
+- `src/features/games/` — importación de Lichess, análisis y detalle de partida.
 
 ## Convenciones
 - Español rioplatense (es-AR). Notación figurativa (♘f3) en UI; SAN inglés internamente.
 - Tono: corto, neutro/positivo, honesto sobre el progreso. Sin sermones.
 - Mobile first, una mano: botones ≥ 48 px, sin scroll horizontal.
-- Cero requests en runtime salvo `lichess.org` (cuando exista la importación).
+- Cero requests en runtime salvo `lichess.org` (importación de partidas).
   CSP inyectada en build (`vite.config.ts`).
 - Pocas dependencias: sin librería de UI, de gráficos ni state manager.
 - Un commit por hito, tests en verde. Supuestos nuevos → `docs/DECISIONES.md`.
@@ -43,7 +45,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 ## Hitos
 - [x] H0 Esqueleto PWA, tablero interactivo, CI y deploy
 - [x] H1 Táctica: subset de puzzles Lichess, Glicko-2, repaso espaciado (Dexie)
-- [ ] H2 Importar partidas de Lichess + análisis Stockfish + tarjetas de error + diagnóstico
+- [x] H2 Importar partidas de Lichess + análisis Stockfish + tarjetas de error + diagnóstico
 - [ ] H3 Currículo 800–1400: lecciones y finales jugables
 - [ ] H4 Repertorio con repaso espaciado + plan semanal
 - [ ] H5 Currículo 1400–1800, pulido, e2e offline

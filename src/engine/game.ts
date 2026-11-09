@@ -166,6 +166,21 @@ export function pairMoves(startFen: string, moves: readonly PlayedMove[]): MoveP
   return pairs
 }
 
+/** Convierte una línea en SAN a UCI. Devuelve null si alguna jugada es ilegal. */
+export function sanLineToUci(startFen: string, sans: readonly string[]): string[] | null {
+  const chess = load(startFen)
+  const out: string[] = []
+  for (const san of sans) {
+    try {
+      const m = chess.move(san)
+      out.push(`${m.from}${m.to}${m.promotion ?? ''}`)
+    } catch {
+      return null
+    }
+  }
+  return out
+}
+
 /** Valida un FEN; devuelve null si es válido o el mensaje de error. */
 export function validateFen(fen: string): string | null {
   try {

@@ -53,7 +53,7 @@ describe('backup', () => {
     await recordAttempt({ puzzle: P, solved: false, mode: 'new', today: '2026-11-08' }, db)
     const backup = JSON.parse(JSON.stringify(await exportBackup(db)))
     const other = new ChessBroDB(`test-${n++}`)
-    expect(await importBackup(backup, other)).toEqual({ attempts: 1, reviews: 1 })
+    expect(await importBackup(backup, other)).toEqual({ attempts: 1, reviews: 1, games: 0 })
     expect(await getProfile(other)).toEqual(await getProfile(db))
     expect(await other.reviews.toArray()).toEqual(await db.reviews.toArray())
   })

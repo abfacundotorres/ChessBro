@@ -40,3 +40,35 @@
 - **Backup JSON** (export/import con validación zod) en Ajustes: los datos viven solo en
   IndexedDB y el navegador puede borrarlos.
 - **Entorno de Claude Code "ChessBro"** con acceso a `database.lichess.org` y `lichess.org`.
+
+## H2
+- **Stockfish 19 lite single-thread** (1,8 MB, GPL-3) versionado en `public/engine/` con su
+  licencia, en vez de depender del paquete npm (205 MB por todas las variantes). Corre en un
+  Web Worker; la CSP suma `'wasm-unsafe-eval'`. Se precachea: funciona offline.
+- **Profundidad 14** por posición (~0,1–0,2 s en desktop; estimado ~1 s en un celular medio,
+  ~30–90 s por partida). Se puede cancelar. Las evaluaciones se guardan para no recalcular.
+- **Importación desde Lichess**: `GET /api/games/user/{usuario}` en ndjson, últimas 20
+  partidas blitz/rápidas/clásicas/correspondencia (sin bullet: demasiado rápido para aprender).
+  No necesita token. La CSP suma `connect-src https://lichess.org`.
+  **No se pudo probar contra Lichess real desde el entorno de desarrollo** (la exportación
+  de partidas responde 404 a ese servidor aunque el resto de la API funciona); se probó con
+  respuestas simuladas con el formato de la especificación OpenAPI oficial.
+- **Clasificación de errores**: umbrales de Lichess sobre probabilidad de ganar (10/20/30
+  puntos = imprecisión/error/error grave). Tipo, en orden de prioridad: permitiste mate,
+  se te pasó un mate, pieza colgada (el rival gana ≥ 2 puntos de material en 3 jugadas,
+  empezando con una captura), táctica no vista (la mejor jugada era jaque o captura y ganaba
+  material o ≥ +3), apertura (jugada ≤ 12), final (material sin peones ≤ 26), posicional.
+  Son heurísticas: aciertan en lo grueso, no en cada caso.
+- **Solo los errores tácticos graves (error y error grave) se vuelven ejercicios**: tienen una
+  respuesta clara. Los de apertura/posicionales/finales se muestran en la partida pero no
+  entran al repaso. Los ejercicios vencen el mismo día, para practicarlos en caliente.
+- **En los ejercicios de partidas propias se aceptan alternativas**: si la jugada no es la del
+  motor, se evalúa con Stockfish (profundidad 12) y vale si pierde < 10 puntos de probabilidad
+  de ganar respecto de la mejor.
+- **Diagnóstico sin test aparte**: la fase provisional del rating de puzzles (RD > 110, ~20–30
+  puzzles) cumple la función del test de ubicación. La banda actual es la más baja cuyos
+  criterios medibles no se cumplen; hacen falta ≥ 5 partidas analizadas para el criterio de
+  errores graves. Los criterios que la app todavía no mide (finales contra el motor) se
+  muestran como pendientes y no bloquean.
+- **Backup v2** incluye partidas, análisis y ajustes; sigue importando backups v1.
+- Cambiar de modo (nuevos/repaso) o de tema carga otro puzzle al instante.

@@ -93,3 +93,13 @@ describe('selección', () => {
     expect(chunksFor(chunks, 5000).map((c) => c.min)).toEqual([1600])
   })
 })
+
+describe('alternativas', () => {
+  it('acceptAlternative resuelve sin marcar fallado', async () => {
+    const { acceptAlternative } = await import('../puzzle')
+    const s = acceptAlternative(startPuzzle(P), uciToMove('b6b3'))
+    expect(s.solved).toBe(true)
+    expect(s.failed).toBe(false)
+    expect(s.played.at(-1)?.san).toBe('Qxb3')
+  })
+})

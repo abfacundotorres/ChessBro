@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { BANDS, MODULES } from '../../content/curriculum'
+import { Diagnosis } from './Diagnosis'
 
 export function Home() {
   return (
@@ -8,6 +9,8 @@ export function Home() {
         <h1 className="text-2xl font-bold">ChessBro</h1>
         <p className="text-muted">De lo básico a 1800, a tu ritmo.</p>
       </header>
+
+      <Diagnosis />
 
       <section className="flex flex-col gap-2">
         <h2 className="text-lg font-semibold">Módulos</h2>

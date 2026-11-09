@@ -9,15 +9,14 @@ import pkg from './package.json' with { type: 'json' }
 const base = process.env.BASE ?? '/'
 
 // CSP solo en build: el dev server de Vite necesita inline scripts y websockets.
-// 'wasm-unsafe-eval' queda reservado para Stockfish (H2); connect-src se amplía a
-// lichess.org recién cuando exista la importación de partidas.
+// 'wasm-unsafe-eval': compilar Stockfish (WASM). lichess.org: importar partidas.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self'",
+  "script-src 'self' 'wasm-unsafe-eval'",
   "style-src 'self'",
   "img-src 'self' data:",
   "font-src 'self'",
-  "connect-src 'self'",
+  "connect-src 'self' https://lichess.org",
   "worker-src 'self'",
   "manifest-src 'self'",
   "object-src 'none'",
@@ -69,6 +68,8 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,wasm,json}'],
         navigateFallback: 'index.html',
+        // Stockfish WASM pesa ~1,8 MB; margen para versiones futuras.
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
       },
     }),
   ],
