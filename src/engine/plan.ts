@@ -77,6 +77,15 @@ export function weekProgress(goals: Goals, counts: WeekCounts): Progress[] {
   ]
 }
 
+/** Punto débil detectado en tus partidas (ver engine/patterns.ts). */
+export interface WeaknessInput {
+  label: string
+  perGame: number
+  theme: string | null
+  /** Ruta propia cuando no hay tema de táctica (por ejemplo, /aperturas). */
+  to: string | null
+}
+
 export interface TaskInput {
   goals: Goals
   counts: WeekCounts
@@ -84,7 +93,8 @@ export interface TaskInput {
   duePuzzles: number
   puzzlesToday: number
   gamesPending: number
-  nextLesson: { id: string; title: string } | null
+  nextLesson: { id: string; title: string; /** La eligió el punto débil, no el orden del currículo. */ forWeakness?: boolean } | null
+  weakness?: WeaknessInput | null
   /** Estilo serio: sin giros del estilo juego en los textos. */
   serio?: boolean
   nextLine: { id: string; name: string } | null
@@ -126,13 +136,25 @@ export function todayTasks(i: TaskInput): Task[] {
   if (i.duePuzzles > 0) {
     out.push({ id: 'review', label: 'Repaso de puzzles fallados', detail: plural(i.duePuzzles, 'puzzle', 'puzzles'), to: '/tactica', minutes: Math.max(3, i.duePuzzles * 2) })
   }
+  const w = i.weakness
+  if (w) {
+    const to = w.theme ? `/tactica?tema=${w.theme}` : (w.to ?? '/partidas')
+    out.push({
+      id: 'focus',
+      label: `Tu punto débil: ${w.label.toLowerCase()}`,
+      detail: `${w.perGame.toFixed(1).replace('.', ',')} por partida en las últimas${w.theme ? ' · puzzles de ese tema' : ''}`,
+      to,
+      minutes: 10,
+    })
+  }
   const perSession = Math.ceil(i.goals.puzzles / i.goals.sessions)
-  const left = Math.min(perSession - i.puzzlesToday, i.goals.puzzles - i.counts.puzzles)
+  // Si ya se sugirió práctica del punto débil con puzzles, se descuenta del resto de la táctica.
+  const left = Math.min(perSession - i.puzzlesToday, i.goals.puzzles - i.counts.puzzles) - (w?.theme ? 5 : 0)
   if (left > 0) {
     out.push({ id: 'puzzles', label: 'Táctica', detail: plural(left, 'puzzle', 'puzzles'), to: '/tactica', minutes: left * 2 })
   }
   if (i.counts.lessons < i.goals.lessons && i.nextLesson) {
-    out.push({ id: 'lesson', label: `Lección: ${i.nextLesson.title}`, detail: i.serio ? 'Leé y practicá' : 'Leé, adiviná y practicá', to: `/lecciones/${i.nextLesson.id}`, minutes: 15 })
+    out.push({ id: 'lesson', label: `Lección: ${i.nextLesson.title}`, detail: i.nextLesson.forWeakness ? 'Para tu punto débil' : i.serio ? 'Leé y practicá' : 'Leé, adiviná y practicá', to: `/lecciones/${i.nextLesson.id}`, minutes: 15 })
   }
   if (i.counts.newLines < i.goals.newLines && i.nextLine) {
     out.push({ id: 'line', label: `Aprender: ${i.nextLine.name}`, detail: 'Estudiala y practicala una vez', to: `/repertorio/${i.nextLine.id}`, minutes: 10 })

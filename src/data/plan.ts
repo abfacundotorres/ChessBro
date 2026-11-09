@@ -8,6 +8,7 @@ import { getSetting } from './games'
 import { getStyle } from './style'
 import { getLevel } from './level'
 import { levelInfo } from '../engine/level'
+import { FOCUS, RECENT_GAMES, patterns, type Patterns } from '../engine/patterns'
 
 export const WEEKLY_HOURS = 'weeklyHours'
 
@@ -20,6 +21,7 @@ export interface PlanSnapshot {
   goals: Goals
   weekStart: string
   input: TaskInput
+  patterns: Patterns
 }
 
 /** Todo lo que el plan necesita saber del estado actual, en una sola lectura. */
@@ -51,7 +53,16 @@ export async function planSnapshot(today: string, db: ChessBroDB = defaultDb): P
   const bandIndex = (id: string) => BANDS.findIndex((b) => b.id === id)
   const from = Math.max(0, LESSONS.findIndex((l) => l.id === level.startLesson))
   const todo = (l: (typeof LESSONS)[number]) => !doneLessons.has(l.id)
+  const analyzed = games
+    .filter((g) => g.analysis !== undefined)
+    .sort((a, b) => b.createdAt - a.createdAt)
+    .slice(0, RECENT_GAMES)
+  const pat = patterns(analyzed.map((g) => g.analysis!.summary))
+  const focus = pat.weakness ? FOCUS[pat.weakness.kind] : null
+  // No se propone una lección más de una banda por encima del nivel de partida (la de oposición no es para quien arranca).
+  const focusLesson = focus?.lessonId ? LESSONS.find((l) => l.id === focus.lessonId && todo(l) && bandIndex(l.band) <= startBand + 1) : undefined
   const nextLesson =
+    focusLesson ??
     LESSONS.slice(from).find((l) => todo(l) && bandIndex(l.band) >= startBand) ??
     LESSONS.find((l) => todo(l) && bandIndex(l.band) >= startBand) ??
     LESSONS.find(todo) ??
@@ -70,9 +81,10 @@ export async function planSnapshot(today: string, db: ChessBroDB = defaultDb): P
     duePuzzles: reviews,
     puzzlesToday: attempts.filter((a) => a.date === today).length,
     gamesPending: games.filter((g) => g.analysis === undefined).length,
-    nextLesson: nextLesson ? { id: nextLesson.id, title: styledLesson(nextLesson, style).title } : null,
+    nextLesson: nextLesson ? { id: nextLesson.id, title: styledLesson(nextLesson, style).title, forWeakness: nextLesson === focusLesson } : null,
+    weakness: pat.weakness && focus ? { label: pat.weakness.label, perGame: pat.weakness.perGame, theme: focus.theme, to: focus.to } : null,
     serio: style === 'serio',
     nextLine: nextLine ? { id: nextLine.id, name: nextLine.name } : null,
   }
-  return { goals, weekStart: ws, input }
+  return { goals, weekStart: ws, input, patterns: pat }
 }

@@ -109,4 +109,23 @@ describe('tareas de hoy', () => {
     expect(t.at(-1)).toMatchObject({ id: 'analyze', detail: '2 partidas sin analizar' })
     expect(t.some((x) => x.id === 'play')).toBe(false)
   })
+
+  it('suma una tarea del punto débil y descuenta puzzles de la táctica común', () => {
+    const w = { label: 'Pieza colgada', perGame: 1.3, theme: 'hangingPiece', to: null }
+    const t = todayTasks({ ...base, weakness: w })
+    const f = t.find((x) => x.id === 'focus')!
+    expect(f.label).toBe('Tu punto débil: pieza colgada')
+    expect(f.to).toBe('/tactica?tema=hangingPiece')
+    expect(f.detail).toContain('1,3 por partida')
+    const plain = todayTasks(base).find((x) => x.id === 'puzzles')!
+    expect(Number.parseInt(t.find((x) => x.id === 'puzzles')!.detail)).toBe(Number.parseInt(plain.detail) - 5)
+  })
+  it('sin tema de táctica, el punto débil va a su propia pantalla', () => {
+    const t = todayTasks({ ...base, weakness: { label: 'Apertura', perGame: 0.8, theme: null, to: '/aperturas' } })
+    expect(t.find((x) => x.id === 'focus')!.to).toBe('/aperturas')
+  })
+  it('la lección elegida por el punto débil lo dice', () => {
+    const t = todayTasks({ ...base, nextLesson: { id: 'seguridad', title: 'Chequeo de seguridad', forWeakness: true } }).find((x) => x.id === 'lesson')
+    expect(t?.detail).toBe('Para tu punto débil')
+  })
 })

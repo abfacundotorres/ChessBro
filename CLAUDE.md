@@ -80,3 +80,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H7 Ícono verde/negro con rey, importación de Chess.com, biblioteca de aperturas y estadísticas por apertura
 - [x] H8 Análisis más exigente (umbrales 5/10/20, precisión armónica) y explicaciones con voz
 - [x] H9 Comentarios de entrenador por error (preguntas y variantes) y elección de voz/velocidad
+- [x] H10 Plan semanal según tus errores (punto débil, lección y puzzles del tema)

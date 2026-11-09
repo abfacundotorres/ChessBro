@@ -310,3 +310,18 @@
   todas), la velocidad (lenta a muy rápida) y la lectura automática. Se guardan en la tabla de ajustes
   (`voiceName`, `voiceRate`). Si la voz guardada desaparece, vuelve a "Automática". Las voces marcadas "necesita
   conexión" son de red: sin internet no suenan.
+
+## H10: plan según tus errores
+- **Patrones** (`engine/patterns.ts`): se agrupan por tipo los errores y errores graves (no las imprecisiones) de las
+  últimas 10 partidas analizadas. Con menos de 3 partidas no se recomienda nada. El "punto débil" es el tipo más
+  frecuente con al menos 0,3 por partida; lo posicional se muestra pero no se elige (no hay ejercicio que lo entrene).
+- **Qué cambia en el plan**: aparece la tarea "Tu punto débil: …" (puzzles del tema que corresponde, o Aperturas para
+  los errores de apertura) y se le descuentan 5 puzzles a la táctica común. Si hay una lección que lo trabaja y no está
+  hecha, pasa a ser la lección sugerida ("Para tu punto débil"), salvo que sea de una banda más de una por encima del
+  nivel de partida (por ejemplo, Oposición para quien arranca). En Plan hay una sección "Tus errores" con el reparto.
+- **Correspondencia tipo de error → entrenamiento** (`FOCUS`): colgada → hangingPiece + Chequeo de seguridad; mate
+  permitido → mateIn2 + Refugio del rey; mate no visto → mateIn2 + Mate en 2; táctica no vista → fork + Horquilla;
+  apertura → principios + Aperturas; final → endgame + Oposición; posicional → Profilaxis. Un test comprueba que todas
+  las lecciones y temas existen.
+- **Límite**: la clasificación "Final" cuenta posiciones con poco material (≤ 26 de piezas no peón entre los dos), que
+  incluye medios juegos simplificados; con pocas partidas, un tipo puede salir primero por azar.

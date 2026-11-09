@@ -5,6 +5,8 @@ import { setSetting } from '../../data/games'
 import { toDateStr } from '../../engine/dates'
 import { MAX_HOURS, MIN_HOURS, fitToSession, goalsFor, todayTasks, weekProgress, type Task } from '../../engine/plan'
 import { StreakChip } from '../../ui/StreakChip'
+import { FOCUS, MIN_GAMES } from '../../engine/patterns'
+import { lessonById } from '../../content/lessons'
 
 const HOURS = Array.from({ length: MAX_HOURS - MIN_HOURS + 1 }, (_, i) => MIN_HOURS + i)
 
@@ -12,7 +14,7 @@ export function Plan() {
   const today = toDateStr(new Date())
   const snap = useLiveQuery(() => planSnapshot(today), [today])
   if (!snap) return null
-  const { goals, input } = snap
+  const { goals, input, patterns: pat } = snap
   const { today: tasks, more } = fitToSession(todayTasks(input), goals.minutesPerSession)
   const progress = weekProgress(goals, input.counts)
   const minutes = tasks.reduce((a, t) => a + t.minutes, 0)
@@ -52,6 +54,8 @@ export function Plan() {
           </>
         )}
       </section>
+
+      <Patterns pat={pat} />
 
       <section className="flex flex-col gap-3 rounded-xl bg-surface p-4">
         <h2 className="text-lg font-semibold">Esta semana</h2>
@@ -101,6 +105,72 @@ export function Plan() {
         </ul>
       </section>
     </div>
+  )
+}
+
+function Patterns({ pat }: { pat: import('../../engine/patterns').Patterns }) {
+  if (pat.games < MIN_GAMES) {
+    return (
+      <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
+        <h2 className="text-lg font-semibold">Tus errores</h2>
+        <p className="text-muted">
+          Analizá al menos {MIN_GAMES} partidas (tenés {pat.games}) y el plan se adapta a lo que más te cuesta.
+        </p>
+        <Link to="/partidas" className="btn flex items-center justify-center">
+          Ir a mis partidas
+        </Link>
+      </section>
+    )
+  }
+  const focus = pat.weakness ? FOCUS[pat.weakness.kind] : null
+  const lesson = focus?.lessonId ? lessonById(focus.lessonId) : undefined
+  const max = pat.kinds[0]?.count ?? 1
+  return (
+    <section className="flex flex-col gap-3 rounded-xl bg-surface p-4 text-sm">
+      <div>
+        <h2 className="text-lg font-semibold">Tus errores</h2>
+        <p className="text-muted">
+          Últimas {pat.games} partidas analizadas: {pat.blundersPerGame.toFixed(1).replace('.', ',')} errores graves por partida.
+        </p>
+      </div>
+      {pat.kinds.length === 0 ? (
+        <p>Sin errores marcados en esas partidas. Seguí así.</p>
+      ) : (
+        <ul className="flex flex-col gap-1">
+          {pat.kinds.map((k) => (
+            <li key={k.kind} className="flex items-center gap-2">
+              <span className="w-36 shrink-0">{k.label}</span>
+              <span className="h-2 rounded-full bg-accent" style={{ width: `${(k.count / max) * 100}%`, maxWidth: '50%' }} />
+              <span className="tabular-nums text-muted">{k.count}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      {pat.weakness && focus && (
+        <div className="flex flex-col gap-2 rounded-xl border border-accent p-3">
+          <p>
+            <span className="font-semibold">Lo que más conviene entrenar: {pat.weakness.label.toLowerCase()}.</span> {focus.advice}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {focus.theme && (
+              <Link to={`/tactica?tema=${focus.theme}`} className="btn-primary flex min-h-12 items-center justify-center px-4">
+                Practicar puzzles del tema
+              </Link>
+            )}
+            {lesson && (
+              <Link to={`/lecciones/${lesson.id}`} className="btn flex items-center justify-center px-4">
+                Lección: {lesson.title}
+              </Link>
+            )}
+            {focus.to && (
+              <Link to={focus.to} className="btn flex items-center justify-center px-4">
+                Ver mis aperturas
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+    </section>
   )
 }
 
