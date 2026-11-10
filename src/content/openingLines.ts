@@ -6,6 +6,9 @@ import { LINES_D4 } from './deep/d4'
 import { MORE_E4E5 } from './deep/more-e4e5'
 import { MORE_E4 } from './deep/more-e4'
 import { MORE_D4 } from './deep/more-d4'
+import { MORE2_E4E5 } from './deep/more2-e4e5'
+import { MORE2_E4 } from './deep/more2-e4'
+import { MORE2_D4 } from './deep/more2-d4'
 import { deep, type DeepDef } from './deep/kit'
 
 /**
@@ -13,7 +16,7 @@ import { deep, type DeepDef } from './deep/kit'
  * Dentro de una apertura, las líneas solo se separan por jugadas del rival (las del usuario no se contradicen), así
  * que comparten tarjetas de repaso. Las tarjetas llevan el id de la apertura como prefijo: no chocan con el repertorio.
  */
-const DEFS: DeepDef[] = [...LINES_E4E5, ...MORE_E4E5, ...LINES_E4, ...MORE_E4, ...LINES_D4, ...MORE_D4]
+const DEFS: DeepDef[] = [...LINES_E4E5, ...MORE_E4E5, ...LINES_E4, ...MORE_E4, ...LINES_D4, ...MORE_D4, ...MORE2_E4E5, ...MORE2_E4, ...MORE2_D4]
 
 export const DEEP_LINES: RepLine[] = DEFS.map((d) => deep(d, openingById(d.opening)?.name ?? d.opening))
 

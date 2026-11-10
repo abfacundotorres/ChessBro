@@ -14,7 +14,9 @@ run('errores del rival (Stockfish)', () => {
     const depth = Number(process.env.DEPTH ?? 11)
     const out: string[] = []
     const seen = new Set<string>()
+    const only = process.env.ONLY?.split(',')
     for (const line of DEEP_LINES) {
+      if (only && !only.includes(line.opening!)) continue
       const maxPly = Math.min(line.moves.length, 12)
       for (let i = 0; i < maxPly; i++) {
         const mine = (i % 2 === 0) === (line.color === 'w')

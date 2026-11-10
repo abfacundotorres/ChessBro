@@ -9,7 +9,7 @@ import { drillItems } from '../../engine/repertoire'
 describe('líneas de la biblioteca de aperturas', () => {
   it('cubre las 10 aperturas principales con 3 o 4 líneas cada una', () => {
     const ids = [...new Set(DEEP_LINES.map((l) => l.opening))]
-    expect(ids.sort()).toEqual(['caro-kann', 'escandinava', 'escocesa', 'francesa', 'gambito-dama', 'india-rey', 'italiana', 'london', 'ruy', 'siciliana'].sort())
+    for (const id of ['caro-kann', 'escandinava', 'escocesa', 'francesa', 'gambito-dama', 'india-rey', 'italiana', 'london', 'ruy', 'siciliana']) expect(ids, id).toContain(id)
     for (const id of ids) expect(deepLinesOf(id!).length, id).toBeGreaterThanOrEqual(3)
     expect(DEEP_LINES.length).toBeGreaterThanOrEqual(39)
   })
