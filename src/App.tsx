@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { HashRouter, NavLink, Route, Routes } from 'react-router-dom'
+import { HashRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Home } from './features/home/Home'
 import { Tactics } from './features/tactics/Tactics'
 import { Welcome } from './features/welcome/Welcome'
@@ -10,25 +10,47 @@ import { useLevelChoice } from './data/level'
 import { Repertoire } from './features/repertoire/Repertoire'
 import { LineView } from './features/repertoire/LineView'
 import { ReviewRepertoire } from './features/repertoire/Review'
-import { Plan } from './features/plan/Plan'
 import { Lessons } from './features/lessons/Lessons'
 import { LessonView } from './features/lessons/LessonView'
 import { EndgamePlay } from './features/endgames/EndgamePlay'
 import { Games } from './features/games/Games'
 import { GameDetail } from './features/games/GameDetail'
 import { FreeBoard } from './features/board/FreeBoard'
+import { Learn } from './features/learn/Learn'
 import { Openings } from './features/openings/Openings'
 import { OpeningView } from './features/openings/OpeningView'
 import { Settings } from './features/settings/Settings'
 import { UpdateBanner } from './ui/UpdateBanner'
 
+/** Cuatro pestañas; cada una cubre varias rutas (por ejemplo, Aprender incluye lecciones, aperturas, táctica y finales). */
 const NAV = [
-  { to: '/', label: 'Inicio', end: true },
-  { to: '/lecciones', label: 'Lecciones', end: false },
-  { to: '/tactica', label: 'Táctica', end: false },
-  { to: '/partidas', label: 'Partidas', end: false },
-  { to: '/ajustes', label: 'Ajustes', end: false },
+  { to: '/', label: 'Hoy', match: ['/'] },
+  { to: '/aprender', label: 'Aprender', match: ['/aprender', '/lecciones', '/tactica', '/aperturas', '/repertorio', '/finales', '/tablero'] },
+  { to: '/partidas', label: 'Partidas', match: ['/partidas'] },
+  { to: '/ajustes', label: 'Ajustes', match: ['/ajustes'] },
 ]
+
+function TabBar() {
+  const { pathname } = useLocation()
+  const active = NAV.find((n) => n.match.some((m) => (m === '/' ? pathname === '/' : pathname === m || pathname.startsWith(`${m}/`)))) ?? NAV[0]
+  return (
+    <nav className="fixed inset-x-0 bottom-0 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]">
+      <ul className="mx-auto grid max-w-lg grid-cols-4">
+        {NAV.map((n) => (
+          <li key={n.to}>
+            <Link
+              to={n.to}
+              aria-current={n === active ? 'page' : undefined}
+              className={`flex min-h-14 items-center justify-center text-sm font-medium ${n === active ? 'text-accent' : 'text-muted'}`}
+            >
+              {n.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}
 
 export function App() {
   const style = useStyleChoice()
@@ -51,7 +73,8 @@ export function App() {
             <Route path="/repertorio" element={<Repertoire />} />
             <Route path="/repertorio/repaso" element={<ReviewRepertoire />} />
             <Route path="/repertorio/:id" element={<LineView />} />
-            <Route path="/plan" element={<Plan />} />
+            <Route path="/plan" element={<Navigate to="/" replace />} />
+            <Route path="/aprender" element={<Learn />} />
             <Route path="/lecciones" element={<Lessons />} />
             <Route path="/lecciones/:id" element={<LessonView />} />
             <Route path="/finales/:id" element={<EndgamePlay />} />
@@ -63,23 +86,7 @@ export function App() {
             <Route path="*" element={<Home />} />
           </Routes>
         </main>
-        <nav className="fixed inset-x-0 bottom-0 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]">
-          <ul className="mx-auto grid max-w-lg grid-cols-5">
-            {NAV.map((n) => (
-              <li key={n.to}>
-                <NavLink
-                  to={n.to}
-                  end={n.end}
-                  className={({ isActive }) =>
-                    `flex min-h-14 items-center justify-center text-[13px] font-medium ${isActive ? 'text-accent' : 'text-muted'}`
-                  }
-                >
-                  {n.label}
-                </NavLink>
-              </li>
-            ))}
-          </ul>
-        </nav>
+        <TabBar />
       </div>
     </HashRouter>
   )

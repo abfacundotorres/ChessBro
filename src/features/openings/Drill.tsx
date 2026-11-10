@@ -23,9 +23,9 @@ const SIZE = 10
  * "¿Qué jugás acá?": posiciones sueltas de las líneas de la apertura. Si fallás, avisa y da pistas; al acertar explica por qué.
  * Lo que fallás vuelve en el repaso (si esa posición ya estaba en tu repaso).
  */
-export function Drill({ items }: { items: DrillItem[] }) {
+export function Drill({ items, size = SIZE, onDone, doneLabel }: { items: DrillItem[]; size?: number; onDone?: () => void; doneLabel?: string }) {
   const [round, setRound] = useState(1)
-  const set = useMemo(() => shuffled(items, round * 104729).slice(0, SIZE), [items, round])
+  const set = useMemo(() => shuffled(items, round * 104729).slice(0, size), [items, round, size])
   const [i, setI] = useState(0)
   const [wrong, setWrong] = useState(0) // errores en esta posición
   const [hint, setHint] = useState<'none' | 'square' | 'move'>('none')
@@ -61,9 +61,14 @@ export function Drill({ items }: { items: DrillItem[] }) {
           {clean} de {set.length} a la primera
         </p>
         <p className="text-muted">Las que fallaste vuelven en tu repaso del repertorio.</p>
+        {onDone && (
+          <button type="button" className="btn-primary" onClick={onDone}>
+            {doneLabel ?? 'Siguiente'}
+          </button>
+        )}
         <button
           type="button"
-          className="btn-primary"
+          className={onDone ? 'btn' : 'btn-primary'}
           onClick={() => {
             setRound((r) => r + 1)
             setI(0)

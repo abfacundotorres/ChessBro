@@ -347,3 +347,21 @@
 - **Pantalla**: la apertura se organiza en pestañas (Resumen, Líneas, Ejercicios) para que entre bien en el celular, y se
   reforzó el margen inferior (`env(safe-area-inset-bottom)`) por un corte que se vio en el teléfono. No pude reproducirlo
   en pantallas simuladas de 360 y 393 px, así que ese arreglo es preventivo.
+
+## H12: app más simple y aperturas "vivas"
+- **Menos pantallas** (a pedido: "menos pero más profundo"): la barra inferior pasó de 5 a **4 pestañas: Hoy, Aprender,
+  Partidas y Ajustes**. *Hoy* es el plan (antes Plan + Inicio): arriba "Para hoy" con las tareas y plegado lo demás
+  (esta semana, tus errores, tu banda, horas por semana). *Aprender* agrupa Lecciones y finales, Aperturas, Táctica y
+  Tablero libre, con el camino 400 → 1800 plegado. Las rutas viejas siguen funcionando (`/plan` redirige a Hoy) y la
+  pestaña correcta se marca activa en cada pantalla. Se eliminó la pantalla de módulos de Inicio.
+- **Aperturas vivas** (`features/openings/`, `engine/sparring.ts`): cada apertura ofrece
+  - **Entrenar · 5 min**: una partida contra el rival, 4 posiciones, 2 preguntas y una trampa, paso a paso;
+  - **Jugar contra el rival**: las 3 líneas de la apertura forman un árbol; el rival sortea entre sus ramas (evita repetir
+    la anterior en el mismo punto), a veces se desvía y se avisa ("El rival eligió otra variante: …"); en tu turno hay una sola
+    jugada del libro (lo comprueba un test para las 10 aperturas). Al terminar, la línea queda practicada y sus
+    posiciones entran en el repaso;
+  - posiciones sueltas, preguntas y trampa, por separado.
+  Límite: el rival solo se desvía entre las ramas escritas (3 por apertura); no improvisa jugadas nuevas, y si juegás algo
+  fuera del libro se te dice que no es la jugada de la línea.
+- **Menos texto, más tablero**: una nota corta aparece bajo el tablero con cada jugada (tuya y del rival), con voz si la
+  activaste; la idea, los planes y los errores típicos quedan plegados.

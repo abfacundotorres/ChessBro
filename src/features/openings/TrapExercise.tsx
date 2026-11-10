@@ -6,7 +6,7 @@ import type { Opening } from '../../content/openings'
 import { sanToFigurine, tryMove, type Color, type MoveInput } from '../../engine/game'
 
 /** "Encontrá el golpe": la posición justo antes de la jugada que castiga la trampa. */
-export function TrapExercise({ opening }: { opening: Opening }) {
+export function TrapExercise({ opening, onDone, doneLabel }: { opening: Opening; onDone?: () => void; doneLabel?: string }) {
   const trap = opening.trap!
   const at = trap.punishAt!
   const { fen, color, expected } = useMemo(() => {
@@ -44,6 +44,11 @@ export function TrapExercise({ opening }: { opening: Opening }) {
         <div className="flex flex-col gap-2">
           <p>{trap.text}</p>
           <Speak text={trap.text} auto />
+          {onDone && (
+            <button type="button" className="btn-primary" onClick={onDone}>
+              {doneLabel ?? 'Siguiente'}
+            </button>
+          )}
         </div>
       ) : (
         <button type="button" className="btn" onClick={() => setSolved(true)}>

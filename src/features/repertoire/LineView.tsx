@@ -59,11 +59,6 @@ function Study({ line, onPractice }: { line: RepLine; onPractice: () => void }) 
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="rounded-xl bg-surface p-4">
-        <p className="font-semibold">La idea</p>
-        <p className="mt-1">{line.idea}</p>
-        <Speak className="mt-2" text={line.idea} />
-      </div>
       <Board fen={view.fen} orientation={line.color === 'w' ? 'white' : 'black'} lastMove={view.lastMove} checkSquare={view.checkSquare} movableColor={null} />
       <p className="min-h-6 text-center text-sm" aria-live="polite">
         {cur ? (
@@ -99,14 +94,16 @@ function Study({ line, onPractice }: { line: RepLine; onPractice: () => void }) 
         </button>
       </div>
       <MoveList startFen={steps[0]!.fenBefore} moves={view.moves} />
-      <div className="rounded-xl bg-surface p-4 text-sm">
-        <p className="font-semibold">El plan</p>
-        <ul className="mt-1 list-disc pl-5">
+      <details className="rounded-xl bg-surface p-4 text-sm">
+        <summary className="cursor-pointer font-semibold">La idea y el plan</summary>
+        <p className="mt-2">{line.idea}</p>
+        <Speak className="mt-2" text={line.idea} />
+        <ul className="mt-2 list-disc pl-5">
           {line.plan.map((p) => (
             <li key={p}>{p}</li>
           ))}
         </ul>
-      </div>
+      </details>
       {line.quiz && line.quiz.length > 0 && (
         <section className="flex flex-col gap-2">
           <h2 className="font-semibold">Preguntas</h2>
@@ -189,6 +186,14 @@ function Practice({ line }: { line: RepLine }) {
         highlights={hint !== 'none' && next ? [next.from] : []}
         arrows={hint === 'move' && next ? [{ startSquare: next.from, endSquare: next.to, color: 'rgba(36, 120, 255, 0.85)' }] : undefined}
       />
+      {k > 0 && line.notes?.[k - 1] && (
+        <div className="flex items-start gap-2 rounded-xl border border-accent p-3 text-sm" aria-live="polite">
+          <p className="min-w-0 flex-1">
+            <span className="font-mono font-semibold">{sanToFigurine(steps[k - 1]!.san)}</span> · {line.notes[k - 1]}
+          </p>
+          <Speak text={line.notes[k - 1]!} auto className="shrink-0" />
+        </div>
+      )}
       <p className={`text-center font-medium ${wrong ? 'text-red-500' : done ? 'text-accent' : ''}`} aria-live="polite">
         {done
           ? mistakes === 0

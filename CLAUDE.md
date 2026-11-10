@@ -44,9 +44,9 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   `lessonsSerias.ts` — sus versiones serias; `styled.ts` aplica el estilo elegido.
 - `src/content/repertoire.ts` — las 31 líneas del repertorio (1.e4; 1…e5 / 1…d5); `src/engine/repertoire.ts`
   deriva las tarjetas de repaso. `src/engine/plan.ts` — metas y tareas del plan semanal.
-- `src/features/repertoire/`, `src/features/plan/` — repertorio (estudiar, practicar, repasar) y plan.
+- `src/features/repertoire/`, `src/features/plan/` (pantalla "Hoy"), `src/features/learn/` ("Aprender") — repertorio (estudiar, practicar, repasar), plan y hub.
 - `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
-  de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura.
+  de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura; `src/engine/sparring.ts` — árbol de variantes para practicar contra el rival.
   `src/content/deep/` + `openingLines.ts` — 30 líneas con una nota por jugada (se reusan en la pantalla del repertorio).
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
@@ -83,3 +83,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H9 Comentarios de entrenador por error (preguntas y variantes) y elección de voz/velocidad
 - [x] H10 Plan semanal según tus errores (punto débil, lección y puzzles del tema)
 - [x] H11 Aperturas a fondo: 30 líneas con una explicación por jugada, ejercicios y repaso
+- [x] H12 Cuatro pestañas (Hoy, Aprender, Partidas, Ajustes) y aperturas vivas: sesión de 5 min y práctica contra el rival que se desvía

@@ -29,7 +29,7 @@ const check = (ok, what) => {
 }
 
 const ROUTES = [
-  '/', '/lecciones', '/lecciones/peones', '/lecciones/piezas-mov', '/lecciones/trampas', '/lecciones/lucena', '/lecciones/calculo', '/tactica', '/partidas', '/aperturas', '/aperturas/ruy', '/ajustes',
+  '/', '/aprender', '/lecciones', '/lecciones/peones', '/lecciones/piezas-mov', '/lecciones/trampas', '/lecciones/lucena', '/lecciones/calculo', '/tactica', '/partidas', '/aperturas', '/aperturas/ruy', '/ajustes',
   '/repertorio', '/repertorio/w-italiana-c3', '/repertorio/repaso', '/plan', '/finales/lucena', '/finales/philidor', '/tablero',
 ]
 

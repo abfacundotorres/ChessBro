@@ -15,9 +15,9 @@ function shuffled<T>(list: readonly T[], seed: number): T[] {
 }
 
 /** Preguntas de concepto de a una, con la explicación al responder. */
-export function QuizView({ items }: { items: QuizItem[] }) {
+export function QuizView({ items, limit, onDone, doneLabel }: { items: QuizItem[]; limit?: number; onDone?: () => void; doneLabel?: string }) {
   const [round, setRound] = useState(1)
-  const order = useMemo(() => shuffled(items, round * 7919), [items, round])
+  const order = useMemo(() => shuffled(items, round * 7919).slice(0, limit ?? items.length), [items, round, limit])
   const [i, setI] = useState(0)
   const [picked, setPicked] = useState<number | null>(null)
   const [right, setRight] = useState(0)
@@ -30,6 +30,11 @@ export function QuizView({ items }: { items: QuizItem[] }) {
         <p className="font-semibold">
           {right} de {order.length} bien a la primera
         </p>
+        {onDone && (
+          <button type="button" className="btn-primary" onClick={onDone}>
+            {doneLabel ?? 'Siguiente'}
+          </button>
+        )}
         <button
           type="button"
           className="btn"

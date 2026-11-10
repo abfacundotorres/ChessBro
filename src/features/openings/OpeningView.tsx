@@ -14,6 +14,8 @@ import { Speak } from '../../ui/Speak'
 import { Drill } from './Drill'
 import { QuizView } from './QuizView'
 import { TrapExercise } from './TrapExercise'
+import { Sparring } from './Sparring'
+import { Session } from './Session'
 import { deepLinesOf } from '../../content/openingLines'
 import { ALL_CARDS } from '../../content/repertoireCards'
 import { repStats } from '../../data/repertoire'
@@ -62,11 +64,10 @@ function Stepper({ moves, orientation }: { moves: string[]; orientation: 'white'
   )
 }
 
-type Tab = 'resumen' | 'lineas' | 'ejercicios'
-type Ex = 'drill' | 'quiz' | 'trap'
+type Mode = 'home' | 'session' | 'sparring' | 'drill' | 'quiz' | 'trap'
 
 function Body({ o }: { o: Opening }) {
-  const [tab, setTab] = useState<Tab>('resumen')
+  const [mode, setMode] = useState<Mode>('home')
   const games = useLiveQuery(() => db.games.toArray(), [], [])
   const mine = openingStats(
     gameStats(games.filter((g) => openingFamily(g.opening)?.id === o.id)),
@@ -79,141 +80,147 @@ function Body({ o }: { o: Opening }) {
   const items = useMemo(() => drillItems(deepLines, `${o.id}:`), [deepLines, o.id])
   const quiz = useMemo(() => deepLines.flatMap((l) => l.quiz ?? []), [deepLines])
   const hasTrap = o.trap?.punishAt !== undefined
-  const exercises: { key: Ex; label: string }[] = [
-    ...(items.length > 0 ? [{ key: 'drill' as const, label: '¿Qué jugás?' }] : []),
-    ...(quiz.length > 0 ? [{ key: 'quiz' as const, label: 'Preguntas' }] : []),
-    ...(hasTrap ? [{ key: 'trap' as const, label: 'Trampa' }] : []),
-  ]
-  const [ex, setEx] = useState<Ex | null>(null)
-  const exNow = ex && exercises.some((e) => e.key === ex) ? ex : (exercises[0]?.key ?? null)
+  const deep = deepLines.length > 0
+  const back = () => setMode('home')
+
+  const header = (
+    <header>
+      <Link to="/aperturas" className="text-sm text-muted">
+        ← Aperturas
+      </Link>
+      <h1 className="text-xl font-bold">{o.name}</h1>
+      <p className="text-sm text-muted">
+        {GROUP_LABELS[o.group]} · {o.side === 'blancas' ? 'la elegís con blancas' : 'la jugás con negras'}
+      </p>
+    </header>
+  )
+
+  if (mode !== 'home') {
+    return (
+      <div className="flex flex-col gap-3">
+        <button type="button" className="self-start text-sm text-muted" onClick={back}>
+          ← {o.name}
+        </button>
+        {mode === 'session' && <Session opening={o} lines={deepLines} items={items} quiz={quiz} onExit={back} />}
+        {mode === 'sparring' && <Sparring key="sp" lines={deepLines} color={deepLines[0]!.color} onDone={back} doneLabel="Volver" />}
+        {mode === 'drill' && <Drill key="dr" items={items} />}
+        {mode === 'quiz' && <QuizView key="qz" items={quiz} />}
+        {mode === 'trap' && hasTrap && <TrapExercise key="tr" opening={o} />}
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-3">
-      <header>
-        <Link to="/aperturas" className="text-sm text-muted">
-          ← Aperturas
-        </Link>
-        <h1 className="text-xl font-bold">{o.name}</h1>
-        <p className="text-sm text-muted">
-          {GROUP_LABELS[o.group]} · {o.side === 'blancas' ? 'la elegís con blancas' : 'la jugás con negras'}
-        </p>
-        <p className="mt-1 font-mono text-sm">{o.moves.map((m, k) => `${k % 2 === 0 ? `${k / 2 + 1}.` : ''}${sanToFigurine(m)}`).join(' ')}</p>
-      </header>
+      {header}
+      <p className="font-mono text-sm">{o.moves.map((m, k) => `${k % 2 === 0 ? `${k / 2 + 1}.` : ''}${sanToFigurine(m)}`).join(' ')}</p>
 
-      <div className="grid grid-cols-3 gap-2" role="tablist">
-        {(
-          [
-            ['resumen', 'Resumen'],
-            ['lineas', `Líneas${deepLines.length > 0 ? ` (${deepLines.length})` : ''}`],
-            ['ejercicios', 'Ejercicios'],
-          ] as const
-        ).map(([k, label]) => (
-          <button key={k} type="button" role="tab" aria-selected={tab === k} className={tab === k ? 'btn-primary' : 'btn'} onClick={() => setTab(k)}>
-            {label}
-          </button>
-        ))}
-      </div>
-
-      {tab === 'resumen' && (
+      {deep ? (
         <>
-          <div className="rounded-xl bg-surface p-4">
-            <p className="font-semibold">La idea</p>
-            <p className="mt-1">{o.idea}</p>
-            <Speak className="mt-2" text={`${o.name}. ${o.idea} Planes: ${o.plans.join('. ')}. Errores típicos: ${o.mistakes.join('. ')}.`} />
+          <button type="button" className="btn-primary min-h-14 text-base" onClick={() => setMode('session')}>
+            Entrenar esta apertura · 5 min
+          </button>
+          <div className="grid grid-cols-2 gap-2">
+            <button type="button" className="btn" onClick={() => setMode('sparring')}>
+              Jugar contra el rival
+            </button>
+            <button type="button" className="btn" onClick={() => setMode('drill')}>
+              ¿Qué jugás acá?
+            </button>
+            <button type="button" className="btn" onClick={() => setMode('quiz')}>
+              Preguntas
+            </button>
+            {hasTrap ? (
+              <button type="button" className="btn" onClick={() => setMode('trap')}>
+                Trampa
+              </button>
+            ) : (
+              <Link to="/repertorio" className="btn flex items-center justify-center">
+                Mi repertorio
+              </Link>
+            )}
           </div>
 
-          <Stepper moves={o.moves} orientation={o.side === 'negras' ? 'black' : 'white'} />
-
-          <div className="rounded-xl bg-surface p-4 text-sm">
-            <p className="font-semibold">Planes</p>
-            <ul className="mt-1 list-disc pl-5">
-              {o.plans.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="rounded-xl bg-surface p-4 text-sm">
-            <p className="font-semibold">Errores típicos</p>
-            <ul className="mt-1 list-disc pl-5">
-              {o.mistakes.map((p) => (
-                <li key={p}>{p}</li>
-              ))}
-            </ul>
-          </div>
-
-          {o.trap && (
-            <section className="flex flex-col gap-2 rounded-xl border border-accent p-4 text-sm">
-              <p className="font-semibold">Trampa: {o.trap.name}</p>
-              <p>{o.trap.text}</p>
-              <Stepper moves={o.trap.moves} orientation={o.side === 'negras' ? 'black' : 'white'} />
-            </section>
-          )}
-
-          {mine.length > 0 && (
-            <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
-              <h2 className="font-semibold">En tus partidas</h2>
-              <StatsRows stats={mine} />
-            </section>
-          )}
+          <section className="flex flex-col gap-2">
+            <h2 className="font-semibold">Estudiar las líneas</h2>
+            {deepLines.map((l) => {
+              const st = stats?.get(l.id)
+              return (
+                <Link key={l.id} to={`/repertorio/${l.id}`} className="rounded-xl bg-surface p-3 active:scale-[0.99]">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="font-medium">{l.name}</p>
+                    {st?.practiced && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-accent">practicada</span>}
+                  </div>
+                  <p className="text-xs text-muted">
+                    {l.moves.length} jugadas · jugás con {l.color === 'w' ? 'blancas' : 'negras'}
+                    {st && st.cards > 0 ? ` · ${st.solid}/${st.cards} bien aprendidas` : ''}
+                  </p>
+                </Link>
+              )
+            })}
+          </section>
         </>
-      )}
-
-      {tab === 'lineas' && (
-        <section className="flex flex-col gap-2">
-          {deepLines.length > 0 ? (
-            <>
-              <p className="text-sm text-muted">Cada línea se estudia jugada por jugada, con el porqué de cada una. Después la practicás y entra en tu repaso.</p>
-              {deepLines.map((l) => {
-                const st = stats?.get(l.id)
-                return (
-                  <Link key={l.id} to={`/repertorio/${l.id}`} className="rounded-xl bg-surface p-3 active:scale-[0.99]">
-                    <div className="flex items-center justify-between gap-2">
-                      <p className="font-medium">{l.name}</p>
-                      {st?.practiced && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-accent">practicada</span>}
-                    </div>
-                    <p className="text-xs text-muted">
-                      {l.moves.length} jugadas · jugás con {l.color === 'w' ? 'blancas' : 'negras'}
-                      {st && st.cards > 0 ? ` · ${st.solid}/${st.cards} posiciones bien aprendidas` : ''}
-                    </p>
-                  </Link>
-                )
-              })}
-            </>
-          ) : (
-            <p className="rounded-xl bg-surface p-4 text-sm text-muted">Esta apertura todavía no tiene líneas a fondo. Mirá las del repertorio, si hay.</p>
+      ) : (
+        <>
+          <p className="rounded-xl bg-surface p-4">{o.idea}</p>
+          <Stepper moves={o.moves} orientation={o.side === 'negras' ? 'black' : 'white'} />
+          {hasTrap && (
+            <button type="button" className="btn" onClick={() => setMode('trap')}>
+              Ejercicio de trampa: {o.trap!.name}
+            </button>
           )}
           {lines.length > 0 && (
-            <>
-              <h2 className="mt-2 font-semibold">Para memorizar (repertorio)</h2>
+            <section className="flex flex-col gap-2">
+              <h2 className="font-semibold">Para memorizar (repertorio)</h2>
               {lines.map((l) => (
                 <Link key={l.id} to={`/repertorio/${l.id}`} className="rounded-xl bg-surface p-3 active:scale-[0.99]">
                   <p className="font-medium">{l.name}</p>
                   <p className="text-xs text-muted">{l.group}</p>
                 </Link>
               ))}
-            </>
+            </section>
           )}
-        </section>
+        </>
       )}
 
-      {tab === 'ejercicios' &&
-        (exercises.length === 0 ? (
-          <p className="rounded-xl bg-surface p-4 text-sm text-muted">Esta apertura todavía no tiene ejercicios. Probá con las líneas del repertorio.</p>
-        ) : (
-          <>
-            <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${exercises.length}, minmax(0, 1fr))` }} role="tablist">
-              {exercises.map((e) => (
-                <button key={e.key} type="button" role="tab" aria-selected={exNow === e.key} className={exNow === e.key ? 'btn-primary' : 'btn'} onClick={() => setEx(e.key)}>
-                  {e.label}
-                </button>
-              ))}
-            </div>
-            {exNow === 'drill' && <Drill key={o.id} items={items} />}
-            {exNow === 'quiz' && <QuizView key={o.id} items={quiz} />}
-            {exNow === 'trap' && hasTrap && <TrapExercise key={o.id} opening={o} />}
-          </>
-        ))}
+      <details className="rounded-xl bg-surface p-4 text-sm">
+        <summary className="cursor-pointer font-semibold">La idea, los planes y los errores típicos</summary>
+        <div className="mt-2 flex flex-col gap-2">
+          {deep && <p>{o.idea}</p>}
+          <Speak text={`${o.name}. ${o.idea} Planes: ${o.plans.join('. ')}. Errores típicos: ${o.mistakes.join('. ')}.`} />
+          <p className="font-semibold">Planes</p>
+          <ul className="list-disc pl-5">
+            {o.plans.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+          <p className="font-semibold">Errores típicos</p>
+          <ul className="list-disc pl-5">
+            {o.mistakes.map((p) => (
+              <li key={p}>{p}</li>
+            ))}
+          </ul>
+        </div>
+      </details>
+
+      {deep && o.trap && (
+        <details className="rounded-xl bg-surface p-4 text-sm">
+          <summary className="cursor-pointer font-semibold">Trampa: {o.trap.name}</summary>
+          <div className="mt-2 flex flex-col gap-2">
+            <p>{o.trap.text}</p>
+            <Stepper moves={o.trap.moves} orientation={o.side === 'negras' ? 'black' : 'white'} />
+          </div>
+        </details>
+      )}
+
+      {mine.length > 0 && (
+        <details className="rounded-xl bg-surface p-4 text-sm">
+          <summary className="cursor-pointer font-semibold">En tus partidas</summary>
+          <div className="mt-2">
+            <StatsRows stats={mine} />
+          </div>
+        </details>
+      )}
     </div>
   )
 }

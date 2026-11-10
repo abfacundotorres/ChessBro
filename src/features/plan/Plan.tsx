@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { planSnapshot, WEEKLY_HOURS } from '../../data/plan'
@@ -5,11 +6,22 @@ import { setSetting } from '../../data/games'
 import { toDateStr } from '../../engine/dates'
 import { MAX_HOURS, MIN_HOURS, fitToSession, goalsFor, todayTasks, weekProgress, type Task } from '../../engine/plan'
 import { StreakChip } from '../../ui/StreakChip'
-import { FOCUS, MIN_GAMES } from '../../engine/patterns'
+import { FOCUS, MIN_GAMES, type Patterns as PatternsData } from '../../engine/patterns'
 import { lessonById } from '../../content/lessons'
+import { Diagnosis } from '../home/Diagnosis'
 
 const HOURS = Array.from({ length: MAX_HOURS - MIN_HOURS + 1 }, (_, i) => MIN_HOURS + i)
 
+function Details({ title, open, children }: { title: string; open?: boolean; children: ReactNode }) {
+  return (
+    <details open={open} className="rounded-xl bg-surface p-4">
+      <summary className="cursor-pointer text-lg font-semibold">{title}</summary>
+      <div className="mt-3">{children}</div>
+    </details>
+  )
+}
+
+/** "Hoy": las tareas del día arriba y, plegado, el resto (progreso, errores, banda y horas por semana). */
 export function Plan() {
   const today = toDateStr(new Date())
   const snap = useLiveQuery(() => planSnapshot(today), [today])
@@ -20,17 +32,16 @@ export function Plan() {
   const minutes = tasks.reduce((a, t) => a + t.minutes, 0)
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-4">
       <header>
-        <h1 className="text-2xl font-bold">Plan</h1>
-        <p className="text-muted">Una guía para estudiar con orden. Nada se bloquea si no la cumplís.</p>
-        <div className="mt-2">
+        <h1 className="text-2xl font-bold">Hoy</h1>
+        <div className="mt-1">
           <StreakChip />
         </div>
       </header>
 
       <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold">Hoy</h2>
+        <h2 className="text-lg font-semibold">Para hoy</h2>
         {tasks.length === 0 ? (
           <p className="rounded-xl bg-surface p-4 text-sm">
             <span className="font-semibold text-accent">¡Al día!</span> Cumpliste todo lo sugerido de esta semana. Podés jugar un rato en el tablero o repasar lo que quieras.
@@ -55,10 +66,7 @@ export function Plan() {
         )}
       </section>
 
-      <Patterns pat={pat} />
-
-      <section className="flex flex-col gap-3 rounded-xl bg-surface p-4">
-        <h2 className="text-lg font-semibold">Esta semana</h2>
+      <Details title="Esta semana">
         <ul className="flex flex-col gap-3">
           {progress.map((p) => (
             <li key={p.key}>
@@ -74,13 +82,20 @@ export function Plan() {
             </li>
           ))}
         </ul>
-        <p className="text-xs text-muted">Además, repasá lo que vence: {input.counts.repReviews} posiciones del repertorio repasadas esta semana.</p>
-      </section>
+        <p className="mt-3 text-xs text-muted">Además, repasá lo que vence: {input.counts.repReviews} posiciones del repertorio repasadas esta semana.</p>
+      </Details>
 
-      <section className="flex flex-col gap-2 rounded-xl bg-surface p-4">
-        <h2 className="text-lg font-semibold">Tu semana tipo</h2>
+      <Details title="Tus errores">
+        <Errors pat={pat} />
+      </Details>
+
+      <Details title="Tu banda">
+        <Diagnosis />
+      </Details>
+
+      <Details title="Tu semana tipo">
         <p className="text-sm text-muted">¿Cuántas horas por semana podés dedicarle? Las metas se ajustan solas.</p>
-        <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Horas por semana">
+        <div className="mt-2 grid grid-cols-4 gap-2" role="radiogroup" aria-label="Horas por semana">
           {HOURS.map((h) => (
             <button
               key={h}
@@ -94,7 +109,7 @@ export function Plan() {
             </button>
           ))}
         </div>
-        <ul className="mt-1 list-disc pl-5 text-sm">
+        <ul className="mt-3 list-disc pl-5 text-sm">
           <li>
             {goals.sessions} sesiones de unos {goals.minutesPerSession} minutos
           </li>
@@ -103,36 +118,32 @@ export function Plan() {
           </li>
           <li>Nada de bullet: no sirve para aprender</li>
         </ul>
-      </section>
+      </Details>
     </div>
   )
 }
 
-function Patterns({ pat }: { pat: import('../../engine/patterns').Patterns }) {
+function Errors({ pat }: { pat: PatternsData }) {
   if (pat.games < MIN_GAMES) {
     return (
-      <section className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
-        <h2 className="text-lg font-semibold">Tus errores</h2>
+      <div className="flex flex-col gap-2 text-sm">
         <p className="text-muted">
           Analizá al menos {MIN_GAMES} partidas (tenés {pat.games}) y el plan se adapta a lo que más te cuesta.
         </p>
         <Link to="/partidas" className="btn flex items-center justify-center">
           Ir a mis partidas
         </Link>
-      </section>
+      </div>
     )
   }
   const focus = pat.weakness ? FOCUS[pat.weakness.kind] : null
   const lesson = focus?.lessonId ? lessonById(focus.lessonId) : undefined
   const max = pat.kinds[0]?.count ?? 1
   return (
-    <section className="flex flex-col gap-3 rounded-xl bg-surface p-4 text-sm">
-      <div>
-        <h2 className="text-lg font-semibold">Tus errores</h2>
-        <p className="text-muted">
-          Últimas {pat.games} partidas analizadas: {pat.blundersPerGame.toFixed(1).replace('.', ',')} errores graves por partida.
-        </p>
-      </div>
+    <div className="flex flex-col gap-3 text-sm">
+      <p className="text-muted">
+        Últimas {pat.games} partidas analizadas: {pat.blundersPerGame.toFixed(1).replace('.', ',')} errores graves por partida.
+      </p>
       {pat.kinds.length === 0 ? (
         <p>Sin errores marcados en esas partidas. Seguí así.</p>
       ) : (
@@ -170,7 +181,7 @@ function Patterns({ pat }: { pat: import('../../engine/patterns').Patterns }) {
           </div>
         </div>
       )}
-    </section>
+    </div>
   )
 }
 
