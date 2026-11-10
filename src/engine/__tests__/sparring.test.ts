@@ -8,7 +8,7 @@ const ids = (cs: { lineIds: string[] }[]) => cs.map((c) => c.lineIds.sort())
 describe('práctica contra el rival', () => {
   it('en el comienzo todas las líneas comparten la jugada y el rival se desvía después', () => {
     expect(choices(ruy, []).map((c) => c.san)).toEqual(['e4'])
-    expect(choices(ruy, ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']).map((c) => c.san).sort()).toEqual(['Nf6', 'a6', 'd6'])
+    expect(choices(ruy, ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5']).map((c) => c.san).sort()).toEqual(['Nf6', 'Nge7', 'a6', 'd6'])
   })
   it('en tu turno hay una sola jugada del libro, en todas las aperturas', () => {
     for (const o of new Set(DEEP_LINES.map((l) => l.opening!))) {
