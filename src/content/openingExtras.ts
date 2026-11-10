@@ -4,9 +4,10 @@ import type { MoveItem, ModelGame, OpeningExtras } from './deep/kit'
 import { EXTRAS_E4E5 } from './deep/extras-e4e5'
 import { EXTRAS_E4 } from './deep/extras-e4'
 import { EXTRAS_D4 } from './deep/extras-d4'
+import { EXTRAS2 } from './deep/extras2'
 
 /** Planes del medio juego, errores del rival y partidas modelo, por apertura. */
-export const EXTRAS: Record<string, OpeningExtras> = { ...EXTRAS_E4E5, ...EXTRAS_E4, ...EXTRAS_D4 }
+export const EXTRAS: Record<string, OpeningExtras> = { ...EXTRAS_E4E5, ...EXTRAS_E4, ...EXTRAS_D4, ...EXTRAS2 }
 
 export function extrasOf(openingId: string): OpeningExtras | undefined {
   return EXTRAS[openingId]
