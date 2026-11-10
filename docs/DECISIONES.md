@@ -414,3 +414,17 @@
   antes de una jugada floja.
 - **Pendiente**: más ramas en cada apertura (hoy el rival se desvía entre 3 o 4 variantes) y partidas de ejemplo con más
   variedad. Las explicaciones siguen sin verificarlas ningún programa.
+
+## H15: más ramas del rival
+- **Qué**: 13 líneas nuevas (**85 en total**) en las 8 aperturas más comunes, para que al practicar contra el rival se
+  desvíe más y no se repita tan seguido: Italiana (3…d6; Dos Caballos con …Ae7), Ruy López (5…Ac5; Cozio), Siciliana (3.Ab5+;
+  Ataque Inglés), Caro-Kann (Panov; Dos Caballos), Londres (2…Cc6), Francesa (Tarrasch) y Gambito de Dama (3…a6; …Ag4;
+  Cambridge Springs). Las ramas se separan de las anteriores **solo por jugadas del rival** (con negras, "del rival" son las de
+  las blancas), así que el árbol sigue teniendo una sola jugada propia por posición; un test lo exige y atrapó dos
+  intentos míos que no cumplían (la Siciliana con 2…Cc6 y la Francesa con 3…c5 elegían otra jugada propia).
+- **Herencia de notas** (`content/deep/branches.ts`): cada rama solo escribe las notas de sus jugadas nuevas; las del
+  comienzo compartido se heredan de otra línea de la misma apertura. Un error de cuenta lanza una excepción al cargar.
+- **Verificación**: 18 candidatas probadas con Stockfish; pasaron 14 (la del Escandinava con …Dd6 y dos de Londres/Francesa
+  se descartaron por jugadas flojas o ilegales). Las 85 líneas pasan el control `DEEP=1`.
+- **Límite**: la Escandinava y las aperturas "de peón de rey/dama" genéricas no recibieron ramas nuevas. Las explicaciones
+  siguen sin verificarlas ningún programa.

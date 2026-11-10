@@ -47,7 +47,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/repertoire/`, `src/features/plan/` (pantalla "Hoy"), `src/features/learn/` ("Aprender") — repertorio (estudiar, practicar, repasar), plan y hub.
 - `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
   de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura; `src/engine/sparring.ts` — árbol de variantes para practicar contra el rival.
-  `src/content/deep/` + `openingLines.ts` — 72 líneas con una nota por jugada (se reusan en la pantalla del repertorio); `openingExtras.ts` — planes, errores del rival y partidas de ejemplo.
+  `src/content/deep/` + `openingLines.ts` — 85 líneas con una nota por jugada (`deep/branches.ts` hereda notas) (se reusan en la pantalla del repertorio); `openingExtras.ts` — planes, errores del rival y partidas de ejemplo.
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
@@ -86,3 +86,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H12 Cuatro pestañas (Hoy, Aprender, Partidas, Ajustes) y aperturas vivas: sesión de 5 min y práctica contra el rival que se desvía
 - [x] H13 Aperturas a fondo (1ª entrega): 39 líneas, planes del medio juego, errores del rival y partidas de ejemplo
 - [x] H14 Aperturas a fondo (2ª entrega): las 11 aperturas restantes (72 líneas en total), con planes, errores del rival y partidas de ejemplo
+- [x] H15 Más ramas del rival: 13 líneas nuevas (85 en total) en las aperturas más comunes
