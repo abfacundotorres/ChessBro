@@ -390,3 +390,27 @@
   candidatas), `selfplay.test.ts` (SELFPLAY=1: continúa una línea con el motor) y `author6.test.ts` (EXTRAS=1: verifica los
   ejercicios y partidas ya escritos).
 - **Pendiente**: las 13 aperturas restantes, más ramas en las 10 principales y partidas de ejemplo con más variedad.
+
+## H14: aperturas a fondo, segunda entrega (las 11 que faltaban)
+- **Alcance**: Evans, Cuatro Caballos, Apertura del Alfil, Vienesa, Gambito de Rey, Petroff, Philidor, Alekhine, Pirc/Moderna,
+  Colle e Inglesa, al mismo nivel que las 10 anteriores. Quedan **sin líneas propias** las dos entradas genéricas ("Otras con
+  1.e4" y "Otras con 1.d4"): no son aperturas sino un cajón para partidas que se salieron de la teoría.
+- **Contenido**: 33 líneas nuevas (3 por apertura, **72 en total**), con una explicación por jugada, una pregunta cada una,
+  22 ejercicios de plan, 14 de errores del rival y una partida de ejemplo por apertura (21 en total, todas armadas con el
+  motor). Cada apertura ya tiene "Entrenar · 5 min", "Jugar contra el rival", posiciones, preguntas, planes, errores del
+  rival y partida de ejemplo.
+- **Cómo se eligieron las líneas**: se probaron 49 candidatas con Stockfish; las que tenían jugadas flojas se descartaron o
+  se reemplazaron por continuaciones del propio motor. Un error mío que atrapó el test del árbol: dos líneas de la Cuatro
+  Caballos, y dos de la Philidor, elegían jugadas *propias* distintas en la misma posición; se reemplazaron por ramas que
+  se separan solo por jugadas del rival.
+- **Planes**: salen de jugadas de las propias líneas (`planFrom`), así que la respuesta y su explicación ya estaban
+  verificadas; el control de `EXTRAS=1` exige pérdida ≤ 2,5 puntos de probabilidad de ganar.
+- **Errores del rival**: se buscaron con Stockfish probando todas las jugadas del rival en cada punto de las líneas
+  (`ONLY=…` limita a ciertas aperturas) y se dejaron los más naturales (un peón que queda sin defensa, una pieza que
+  abandona su función). Se descartaron dos con respuesta imprecisa (Inglesa …e4 y un plan del Evans).
+- **Partidas de ejemplo**: siguen siendo del motor jugando contra sí mismo (no reales). En la del Gambito de Rey el control
+  marca la propia jugada f4 (el motor la ve ~7 puntos peor que lo mejor); es coherente con la teoría del gambito, así que el
+  umbral para jugadas propias en las partidas de ejemplo pasó de 6 a 8, igual que el de las líneas. La del Evans se recortó
+  antes de una jugada floja.
+- **Pendiente**: más ramas en cada apertura (hoy el rival se desvía entre 3 o 4 variantes) y partidas de ejemplo con más
+  variedad. Las explicaciones siguen sin verificarlas ningún programa.
