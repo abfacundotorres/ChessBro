@@ -39,7 +39,6 @@ const PUNISH: Record<string, MoveItem[]> = {
   ],
   inglesa: [
     pun('ing-pun-b5', 'Las negras avanzaron …b5', 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 b5', 'cxb5', '…b5? ofrece un peón sin ninguna compensación: cxb5 lo captura. Los peones de ala que avanzan sin apoyo se pierden.', 'El rival se equivocó: ¿qué capturás?'),
-    pun('ing-pun-e4', 'Las negras empujaron …e4', 'c4 e5 Nc3 e4', 'Nxe4', '…e4? avanza un peón sin apoyo: tu caballo de c3 lo captura. Un peón avanzado necesita defensa; si no, se pierde.', 'El rival se equivocó: ¿qué capturás?'),
   ],
 }
 
@@ -49,7 +48,7 @@ export const EXTRAS2: Record<string, OpeningExtras> = {
     model: {
       title: 'Evans: la iniciativa del gambito',
       color: 'w',
-      moves: L('e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 cxd4 Nxe4 d5 Ne7 Qd4 Nf6 Bg5 d6 Nbd2 Nf5 Rae1+ Kf8 Qb2 h6 Bxf6 gxf6 Re4 Ng7'),
+      moves: L('e4 e5 Nf3 Nc6 Bc4 Bc5 b4 Bxb4 c3 Ba5 d4 exd4 O-O Nf6 cxd4 Nxe4 d5 Ne7 Qd4 Nf6 Bg5 d6 Nbd2 Nf5 Rae1+ Kf8 Qb2 h6'),
       notes: {
         6: 'El gambito: ofrecés el peón de b para ganar tiempo con c3 y d4.',
         10: 'd4: el golpe central que justifica el sacrificio.',
@@ -58,9 +57,8 @@ export const EXTRAS2: Record<string, OpeningExtras> = {
         16: 'd5 ataca el caballo de c6 y gana tiempo.',
         18: 'La dama se centraliza y ataca el caballo de e4.',
         24: 'La torre da jaque en la columna e: el rey negro sigue en el centro.',
-        28: 'Cambiás alfil por caballo y las negras recapturan con el peón de g: la estructura negra queda dañada.',
       },
-      summary: 'El Evans es una apertura de iniciativa: el peón sacrificado compra tiempo y un centro fuerte. Aunque el material queda parejo, el rey negro quedó incómodo en el centro.',
+      summary: 'El Evans es una apertura de iniciativa: el peón sacrificado compra tiempo y un centro fuerte. Aunque el material queda parejo, el rey negro quedó incómodo en el centro y las blancas tienen todas sus piezas en juego.',
     },
   },
   'cuatro-caballos': {

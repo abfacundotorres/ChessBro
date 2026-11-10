@@ -14,7 +14,7 @@ export function planFrom(lineId: string, k: number, p: { id: string; title: stri
 export const PLANS2: Record<string, MoveItem[]> = {
   evans: [
     planFrom('evans-d6', 20, { id: 'evans-plan-bb5', title: 'La dama negra está en d7', prompt: '¿Cómo ganás un tiempo?', why: 'Ab5 clava el caballo de c6 contra la dama de d7: el caballo no puede moverse sin dejar la dama expuesta. Es una forma simple de ganar tiempo y mantener la iniciativa que te dio el gambito.' }),
-    planFrom('evans-rech', 14, { id: 'evans-plan-nd5', title: 'Después de rechazar el gambito', prompt: '¿Qué casilla central ocupás?', why: 'Cd5: ocupás una casilla central desde donde atacás b6 y f6. Si las negras cambian caballos, recapturás con el alfil, que queda centralizado y apunta a f7.' }),
+    planFrom('evans-acc', 12, { id: 'evans-plan-oo', title: 'Después de d4 y …exd4', prompt: '¿Recuperás el peón o desarrollás?', why: 'O-O: preferís desarrollar a recuperar el peón de inmediato. El rey queda a salvo y la torre se conecta; el peón de d4 lo recuperás después, con el centro y las piezas activas a tu favor.' }),
   ],
   'cuatro-caballos': [
     planFrom('4c-espanola', 12, { id: '4c-plan-bg5', title: 'Después de d3 y …d6', prompt: '¿Cómo aumentás la presión?', why: 'Ag5 clava el caballo de f6 contra la dama: aumentás la presión sobre el centro negro. Si cambian alfil por caballo, doblan tus peones, pero tus piezas ganan actividad.' }),

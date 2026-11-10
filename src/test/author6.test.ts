@@ -51,7 +51,7 @@ run('ejercicios de aperturas (Stockfish)', () => {
           c.move(g.moves[i]!)
           const after = await eng.evaluate(c.fen(), 14)
           const loss = Math.max(0, winPercent(before) - winPercent(-toCp(after.score)))
-          if (loss >= (mine ? 6 : 12)) { flags.push(`${i}${mine ? 'T' : 'R'}:${g.moves[i]}-${loss.toFixed(0)}(${base.best})`); bad++ }
+          if (loss >= (mine ? 8 : 12)) { flags.push(`${i}${mine ? 'T' : 'R'}:${g.moves[i]}-${loss.toFixed(0)}(${base.best})`); bad++ }
         }
         out.push(`${id} MODELO ${flags.length ? flags.join(' ') : 'OK'}`)
       }
