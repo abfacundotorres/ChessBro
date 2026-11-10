@@ -7,10 +7,11 @@ import { ALL_CARDS, REP_CARDS, anyLineById } from '../repertoireCards'
 import { drillItems } from '../../engine/repertoire'
 
 describe('líneas de la biblioteca de aperturas', () => {
-  it('cubre las 10 aperturas principales con 3 líneas cada una', () => {
+  it('cubre las 10 aperturas principales con 3 o 4 líneas cada una', () => {
     const ids = [...new Set(DEEP_LINES.map((l) => l.opening))]
     expect(ids.sort()).toEqual(['caro-kann', 'escandinava', 'escocesa', 'francesa', 'gambito-dama', 'india-rey', 'italiana', 'london', 'ruy', 'siciliana'].sort())
-    for (const id of ids) expect(deepLinesOf(id!).length, id).toBe(3)
+    for (const id of ids) expect(deepLinesOf(id!).length, id).toBeGreaterThanOrEqual(3)
+    expect(DEEP_LINES.length).toBeGreaterThanOrEqual(39)
   })
 
   it('los ids son únicos y no chocan con el repertorio', () => {

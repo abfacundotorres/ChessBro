@@ -365,3 +365,28 @@
   fuera del libro se te dice que no es la jugada de la línea.
 - **Menos texto, más tablero**: una nota corta aparece bajo el tablero con cada jugada (tuya y del rival), con voz si la
   activaste; la idea, los planes y los errores típicos quedan plegados.
+
+## H13: aperturas a fondo, primera entrega (de varias)
+- **Alcance acordado**: "las dos cosas, de a tandas": profundizar las 10 aperturas principales (más ramas, más largas) y
+  después llevar las 13 restantes al mismo nivel. Contenido pedido: planes del medio juego, errores del rival y cómo
+  castigarlos, y partidas de ejemplo. **Esta entrega** cubre las 10 principales; las otras 13 quedan para la siguiente.
+- **Líneas**: de 30 a **39** (una más por apertura, salvo la Escocesa, cuyas candidatas no pasaron el control de
+  Stockfish). Las nuevas se separan de las anteriores solo por jugadas del rival, para que el árbol de variantes siga
+  teniendo una sola jugada tuya por posición (un test lo exige; ya atrapó una transposición en la Alapin).
+- **Planes del medio juego** (`MoveItem` con `kind: 'plan'`): posiciones al final de las líneas donde elegís la jugada que
+  sigue el plan; se aceptan alternativas que el motor también aprueba (`alt`). Verificado: respuesta con pérdida ≤ 2,5
+  puntos de probabilidad de ganar y alternativas ≤ 3,5.
+- **Errores del rival** (`kind: 'punish'`): 24 posiciones donde el rival cometió un error plausible de nivel 500–1200 y vos
+  tenés que castigarlo. Las candidatas se buscaron probando con Stockfish **todas** las jugadas del rival en cada punto
+  de las líneas (`src/test/explore2.test.ts`) y se descartaron los regalos de dama; después se fijó que el error del rival
+  pierda al menos 4 puntos y que tu respuesta sea la mejor o casi.
+- **Partidas de ejemplo**: 10, una por apertura, **armadas con Stockfish jugando contra sí mismo** (profundidad 12) a partir
+  del final de una línea, y comentadas jugada a jugada en los momentos clave. **No son partidas reales** y la pantalla lo
+  dice; así evito atribuir partidas a jugadores que no las jugaron. Los comentarios se limitan a lo que se ve en el tablero.
+- **Dónde aparecen**: botones "Planes del medio juego", "Errores del rival" y "Partida de ejemplo" en cada apertura, y un
+  plan y un error del rival dentro de la sesión de 5 minutos.
+- **Herramientas de autoría nuevas** (se activan por variable de entorno): `explore.test.ts` (EXPLORE=1: evalúa posiciones y
+  jugadas), `explore2.test.ts` (EXPLORE2=1: busca errores del rival), `linecheck.test.ts` (LINECHECK=1: valida líneas
+  candidatas), `selfplay.test.ts` (SELFPLAY=1: continúa una línea con el motor) y `author6.test.ts` (EXTRAS=1: verifica los
+  ejercicios y partidas ya escritos).
+- **Pendiente**: las 13 aperturas restantes, más ramas en las 10 principales y partidas de ejemplo con más variedad.

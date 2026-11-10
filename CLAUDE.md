@@ -38,7 +38,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
 - `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
   de autoría que imprimen lo que dice el motor de posiciones candidatas: `author.test.ts` (ejercicios),
-  `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`) y `author4.test.ts` (líneas de repertorio, `REP_LINES=…`) y `author5.test.ts` (líneas de la biblioteca de aperturas, `DEEP=1`).
+  `author2.test.ts` (adivinanzas de jugadas, `CHALLENGES=…`) y `author3.test.ts` (mini-juegos de tocar, `TAPS=…`) y `author4.test.ts` (líneas de repertorio, `REP_LINES=…`) y `author5.test.ts` (líneas de la biblioteca de aperturas, `DEEP=1`), `author6.test.ts` (ejercicios y partidas de ejemplo, `EXTRAS=1`), más `explore`/`explore2`/`linecheck`/`selfplay` (búsqueda de candidatas).
 - `src/content/lessonKit.ts` — helpers para escribir lecciones; `lessonsPrincipiantes.ts` — banda 400–800 y aperturas;
   `lessonsNuevas.ts` — lecciones lúdicas;
   `lessonsSerias.ts` — sus versiones serias; `styled.ts` aplica el estilo elegido.
@@ -47,7 +47,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/repertoire/`, `src/features/plan/` (pantalla "Hoy"), `src/features/learn/` ("Aprender") — repertorio (estudiar, practicar, repasar), plan y hub.
 - `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
   de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura; `src/engine/sparring.ts` — árbol de variantes para practicar contra el rival.
-  `src/content/deep/` + `openingLines.ts` — 30 líneas con una nota por jugada (se reusan en la pantalla del repertorio).
+  `src/content/deep/` + `openingLines.ts` — 39 líneas con una nota por jugada (se reusan en la pantalla del repertorio); `openingExtras.ts` — planes, errores del rival y partidas de ejemplo.
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
@@ -84,3 +84,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H10 Plan semanal según tus errores (punto débil, lección y puzzles del tema)
 - [x] H11 Aperturas a fondo: 30 líneas con una explicación por jugada, ejercicios y repaso
 - [x] H12 Cuatro pestañas (Hoy, Aprender, Partidas, Ajustes) y aperturas vivas: sesión de 5 min y práctica contra el rival que se desvía
+- [x] H13 Aperturas a fondo (1ª entrega): 39 líneas, planes del medio juego, errores del rival y partidas de ejemplo

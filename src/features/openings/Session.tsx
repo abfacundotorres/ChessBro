@@ -3,23 +3,33 @@ import { Drill } from './Drill'
 import { QuizView } from './QuizView'
 import { Sparring } from './Sparring'
 import { TrapExercise } from './TrapExercise'
+import { MovePuzzle } from './MovePuzzle'
+import type { PuzzleItem } from '../../content/openingExtras'
 import type { Opening } from '../../content/openings'
 import type { DrillItem, RepLine } from '../../engine/repertoire'
 
-type Step = 'sparring' | 'drill' | 'quiz' | 'trap'
+type Step = 'sparring' | 'drill' | 'plan' | 'punish' | 'quiz' | 'trap'
 
 const TITLE: Record<Step, string> = {
   sparring: 'Jugá la línea contra el rival',
   drill: '¿Qué jugás acá?',
+  plan: 'Un plan del medio juego',
+  punish: 'El rival se equivocó',
   quiz: 'Una pregunta',
   trap: 'Una trampa',
 }
 
-/** Sesión de unos 5 minutos: una partida de práctica, 4 posiciones, 2 preguntas y una trampa. Se avanza paso a paso. */
-export function Session({ opening, lines, items, quiz, onExit }: { opening: Opening; lines: RepLine[]; items: DrillItem[]; quiz: { q: string; options: string[]; answer: number; why: string }[]; onExit: () => void }) {
+/** Sesión de unos 5 minutos: una partida de práctica, 3 posiciones, un plan, un error del rival y una pregunta. Se avanza paso a paso. */
+export function Session({ opening, lines, items, plans, punish, quiz, onExit }: { opening: Opening; lines: RepLine[]; items: DrillItem[]; plans: PuzzleItem[]; punish: PuzzleItem[]; quiz: { q: string; options: string[]; answer: number; why: string }[]; onExit: () => void }) {
   const steps = useMemo<Step[]>(
-    () => [...(lines.length > 0 ? (['sparring'] as const) : []), ...(items.length > 0 ? (['drill'] as const) : []), ...(quiz.length > 0 ? (['quiz'] as const) : []), ...(opening.trap?.punishAt !== undefined ? (['trap'] as const) : [])],
-    [lines.length, items.length, quiz.length, opening.trap],
+    () => [
+      ...(lines.length > 0 ? (['sparring'] as const) : []),
+      ...(items.length > 0 ? (['drill'] as const) : []),
+      ...(plans.length > 0 ? (['plan'] as const) : []),
+      ...(punish.length > 0 ? (['punish'] as const) : opening.trap?.punishAt !== undefined ? (['trap'] as const) : []),
+      ...(quiz.length > 0 ? (['quiz'] as const) : []),
+    ],
+    [lines.length, items.length, plans.length, punish.length, quiz.length, opening.trap],
   )
   const [i, setI] = useState(0)
   if (steps.length === 0) return null
@@ -58,8 +68,10 @@ export function Session({ opening, lines, items, quiz, onExit }: { opening: Open
         <div className="h-full bg-accent transition-[width]" style={{ width: `${((i + 1) / steps.length) * 100}%` }} />
       </div>
       {step === 'sparring' && <Sparring key={`s${i}`} lines={lines} color={lines[0]!.color} onDone={next} doneLabel={label} />}
-      {step === 'drill' && <Drill key={`d${i}`} items={items} size={4} onDone={next} doneLabel={label} />}
-      {step === 'quiz' && <QuizView key={`q${i}`} items={quiz} limit={2} onDone={next} doneLabel={label} />}
+      {step === 'drill' && <Drill key={`d${i}`} items={items} size={3} onDone={next} doneLabel={label} />}
+      {step === 'plan' && <MovePuzzle key={`p${i}`} items={plans} size={1} onDone={next} doneLabel={label} />}
+      {step === 'punish' && <MovePuzzle key={`x${i}`} items={punish} size={1} onDone={next} doneLabel={label} />}
+      {step === 'quiz' && <QuizView key={`q${i}`} items={quiz} limit={1} onDone={next} doneLabel={label} />}
       {step === 'trap' && <TrapExercise key={`t${i}`} opening={opening} onDone={next} doneLabel={label} />}
     </div>
   )

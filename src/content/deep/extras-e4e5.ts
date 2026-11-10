@@ -1,0 +1,141 @@
+import type { OpeningExtras } from './kit'
+
+const L = (s: string) => s.split(' ')
+
+/** Planes del medio juego, errores del rival y partida de ejemplo: aperturas con 1.e4 e5 (con blancas). */
+export const EXTRAS_E4E5: Record<string, OpeningExtras> = {
+  italiana: {
+    items: [
+      {
+        id: 'it-plan-h3',
+        kind: 'plan',
+        title: 'Antes de abrir el centro con d4',
+        prompt: '¿Qué jugada evita la clavada …Ag4?',
+        moves: L('e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6'),
+        answer: 'h3',
+        alt: ['Bb3', 'Nbd2'],
+        why: 'h3 evita …Ag4, que clavaría tu caballo de f3 justo antes de que juegues d4. Es una jugada de prevención: preparás el centro sin dar ninguna ventaja. Bb3 (para que no te ataquen el alfil con …b5) o Cbd2 también sirven; la idea es completar las piezas antes de abrir el juego.',
+      },
+      {
+        id: 'it-pun-h5',
+        kind: 'punish',
+        title: 'Las negras movieron el caballo a h5',
+        prompt: 'El rival se equivocó: ¿cómo lo castigás?',
+        moves: L('e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 Nh5'),
+        answer: 'Bxf7+',
+        why: '…Ch5? deja f7 defendido solo por el rey y el caballo de h5 sin ninguna protección. Axf7+ Rxf7 Cxe5+ Cxe5 Dxh5+ gana material y deja al rey negro expuesto. La idea: cuando el caballo que defendía f7 se va, el sacrificio funciona.',
+      },
+      {
+        id: 'it-pun-xe4',
+        kind: 'punish',
+        title: 'Las negras tomaron el peón de e4',
+        prompt: 'El rival se equivocó: ¿qué recapturás?',
+        moves: L('e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Nxe4'),
+        answer: 'dxe4',
+        why: '…Cxe4? cae por el peón de d3: dxe4 gana una pieza por un peón. En la Italiana tranquila tu peón de d3 vigila e4: cada vez que algo entre ahí, recapturás.',
+      },
+    ],
+    model: {
+      title: 'Italiana tranquila: ganar espacio de a poco',
+      color: 'w',
+      moves: L('e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d3 d6 O-O O-O Re1 a6 h3 h6 Nbd2 Be6 a4 Ba7 b4 Qd7 Bxe6 Qxe6 Nc4 Rfe8 Be3 b5 Ncd2 Bxe3 Rxe3 Qd7'),
+      notes: {
+        10: 'Enrocás: el rey queda a salvo antes de empezar a mover el centro.',
+        14: 'h3 evita …Ag4: así tu caballo de f3 y tu centro quedan tranquilos.',
+        16: 'El caballo de b1 va a d2 para después reubicarse en c4.',
+        18: 'a4 prepara b4: querés ganar espacio en el flanco de dama y echar al alfil negro.',
+        20: 'b4: ahora el alfil negro no puede volver a c5 y ganás espacio.',
+        22: 'Cambiás alfiles y simplificás: el caballo de d2 queda libre para ir a c4.',
+        24: 'El caballo llega a c4, una casilla fuerte: apunta a d6 y a e5.',
+        26: 'Desarrollás el último alfil: ahora todas las piezas participan.',
+      },
+      summary: 'No hubo ningún golpe táctico: una posición cómoda y pareja, con más espacio para las blancas en el flanco de dama. Eso es la Italiana tranquila: ganar poco a poco, sin riesgos.',
+    },
+  },
+  ruy: {
+    items: [
+      {
+        id: 'ruy-plan-h3',
+        kind: 'plan',
+        title: 'Antes de jugar d4',
+        prompt: '¿Qué jugada de prevención conviene?',
+        moves: L('e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O'),
+        answer: 'h3',
+        alt: ['a4'],
+        why: 'h3 evita …Ag4 antes de jugar d4: en la Ruy López cada jugada prepara el centro. a4 (atacando el peón de b5) también es buena; el plan sigue siendo d4 con todas las piezas listas.',
+      },
+      {
+        id: 'ruy-pun-d5',
+        kind: 'punish',
+        title: 'Las negras jugaron …d5 en la Ruy López',
+        prompt: 'El rival se equivocó: ¿qué capturás?',
+        moves: L('e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O d5'),
+        answer: 'Nxe5',
+        alt: ['exd5'],
+        why: '…d5? descuida e5. Cxe5 gana un peón central; si las negras toman con …dxe4, Cxc6 y Ce5+ dejan a las blancas con una ventaja clara. (exd5 también es buena.) Moral: antes de empujar un peón, mirá qué piezas dejaste de defender.',
+      },
+    ],
+    model: {
+      title: 'Ruy López cerrada: la paciencia da frutos',
+      color: 'w',
+      moves: L('e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 d6 c3 O-O h3 Be6 d4 Bxb3 axb3 exd4 cxd4 Nb4 Nc3 Re8 Bf4 d5 e5 Nd7 e6 fxe6 Rxe6 c5'),
+      notes: {
+        14: 'c3: la jugada clave de la Ruy López. Prepara d4 y le da una retirada al alfil.',
+        16: 'h3 evita …Ag4 antes de abrir el centro con d4.',
+        18: 'd4: por fin el centro. Todo el plan de la Ruy López (c3, h3, Te1) era para jugar esto en el mejor momento.',
+        20: 'Recapturás con el peón de a: queda un peón doblado en b, pero abrís la columna a para tu torre.',
+        24: 'El caballo de b1 sale a c3 y apoya el centro.',
+        28: 'e5: ganás espacio y atacás el caballo de f6.',
+        30: 'e6: un golpe en el centro; las negras tienen que recapturar.',
+      },
+      summary: 'La Ruy López premia la paciencia: después de preparar c3, h3 y d4, las piezas blancas quedaron más activas que las negras. No hace falta apurarse: cada jugada tranquila tiene un motivo.',
+    },
+  },
+  escocesa: {
+    items: [
+      {
+        id: 'esc-plan-bg5',
+        kind: 'plan',
+        title: 'Completá tu desarrollo',
+        prompt: '¿Qué pieza te falta sacar?',
+        moves: L('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 d6 Bd3 Nf6 Nc3 Be7 O-O O-O'),
+        answer: 'Bg5',
+        alt: ['Rd1', 'Bf4', 'h3'],
+        why: 'Todavía te falta desarrollar el alfil de c1: Ag5 lo saca con presión sobre el caballo de f6, que defiende el enroque. Td1 o Af4 también valen; lo importante es no dejar piezas en casa.',
+      },
+      {
+        id: 'esc-pun-bc5',
+        kind: 'punish',
+        title: 'Las negras movieron el alfil a c5',
+        prompt: 'El rival se equivocó: ¿qué ganás?',
+        moves: L('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5 Bc5'),
+        answer: 'exf6',
+        why: '…Ac5? olvida que el peón de e5 ataca al caballo de f6: exf6 gana una pieza. Antes de mover, mirá siempre qué amenaza tiene el rival; después de e5 el caballo de f6 tenía que irse.',
+      },
+      {
+        id: 'esc-pun-be7',
+        kind: 'punish',
+        title: 'Las negras desarrollaron el alfil a e7',
+        prompt: 'El rival se equivocó: ¿qué peón queda sin defensa?',
+        moves: L('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 Be7'),
+        answer: 'Qxg7',
+        why: '…Ae7? deja el peón de g7 sin defensa: la dama lo captura y ataca la torre de h8. Un detalle de la Escocesa: la dama en d4 apunta a g7 y a a7 por las diagonales.',
+      },
+    ],
+    model: {
+      title: 'Escocesa: centro abierto y piezas activas',
+      color: 'w',
+      moves: L('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 d6 Bd3 Nf6 Nc3 Be7 O-O O-O h3 Re8 f4 b6 Be3 Bb7 Bf2 d5 e5 Bc5'),
+      notes: {
+        8: 'Recapturás con la dama: queda centralizada y fuerte.',
+        10: 'Desarrollás el alfil apuntando al flanco de rey, con una posición activa.',
+        12: 'Defendés e4 con un caballo y lo desarrollás.',
+        14: 'Enrocás: rey seguro y torres conectadas.',
+        16: 'h3 prepara f4 sin que …Ag4 moleste.',
+        18: 'f4: ganás espacio en el centro y preparás e5.',
+        24: 'e5: el peón avanza y ataca al caballo de f6.',
+      },
+      summary: 'Una partida típica de Escocesa: el centro se abre pronto y gana el bando que desarrolla mejor y usa el espacio. Las negras tienen contrajuego, pero las blancas tienen la iniciativa.',
+    },
+  },
+}

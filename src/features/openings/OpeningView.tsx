@@ -16,6 +16,9 @@ import { QuizView } from './QuizView'
 import { TrapExercise } from './TrapExercise'
 import { Sparring } from './Sparring'
 import { Session } from './Session'
+import { MovePuzzle } from './MovePuzzle'
+import { ModelGameView } from './ModelGameView'
+import { modelOf, puzzlesOf } from '../../content/openingExtras'
 import { deepLinesOf } from '../../content/openingLines'
 import { ALL_CARDS } from '../../content/repertoireCards'
 import { repStats } from '../../data/repertoire'
@@ -64,7 +67,7 @@ function Stepper({ moves, orientation }: { moves: string[]; orientation: 'white'
   )
 }
 
-type Mode = 'home' | 'session' | 'sparring' | 'drill' | 'quiz' | 'trap'
+type Mode = 'home' | 'session' | 'sparring' | 'drill' | 'quiz' | 'trap' | 'plan' | 'punish' | 'model'
 
 function Body({ o }: { o: Opening }) {
   const [mode, setMode] = useState<Mode>('home')
@@ -79,6 +82,9 @@ function Body({ o }: { o: Opening }) {
   const stats = useLiveQuery(() => repStats(deepLines, ALL_CARDS, today), [deepLines, today])
   const items = useMemo(() => drillItems(deepLines, `${o.id}:`), [deepLines, o.id])
   const quiz = useMemo(() => deepLines.flatMap((l) => l.quiz ?? []), [deepLines])
+  const plans = useMemo(() => puzzlesOf(o.id, 'plan'), [o.id])
+  const punish = useMemo(() => puzzlesOf(o.id, 'punish'), [o.id])
+  const model = modelOf(o.id)
   const hasTrap = o.trap?.punishAt !== undefined
   const deep = deepLines.length > 0
   const back = () => setMode('home')
@@ -101,7 +107,10 @@ function Body({ o }: { o: Opening }) {
         <button type="button" className="self-start text-sm text-muted" onClick={back}>
           ← {o.name}
         </button>
-        {mode === 'session' && <Session opening={o} lines={deepLines} items={items} quiz={quiz} onExit={back} />}
+        {mode === 'session' && <Session opening={o} lines={deepLines} items={items} plans={plans} punish={punish} quiz={quiz} onExit={back} />}
+        {mode === 'plan' && <MovePuzzle key="pl" items={plans} />}
+        {mode === 'punish' && <MovePuzzle key="pu" items={punish} />}
+        {mode === 'model' && model && <ModelGameView game={model} />}
         {mode === 'sparring' && <Sparring key="sp" lines={deepLines} color={deepLines[0]!.color} onDone={back} doneLabel="Volver" />}
         {mode === 'drill' && <Drill key="dr" items={items} />}
         {mode === 'quiz' && <QuizView key="qz" items={quiz} />}
@@ -130,14 +139,25 @@ function Body({ o }: { o: Opening }) {
             <button type="button" className="btn" onClick={() => setMode('quiz')}>
               Preguntas
             </button>
-            {hasTrap ? (
+            {plans.length > 0 && (
+              <button type="button" className="btn" onClick={() => setMode('plan')}>
+                Planes del medio juego
+              </button>
+            )}
+            {punish.length > 0 && (
+              <button type="button" className="btn" onClick={() => setMode('punish')}>
+                Errores del rival
+              </button>
+            )}
+            {hasTrap && (
               <button type="button" className="btn" onClick={() => setMode('trap')}>
                 Trampa
               </button>
-            ) : (
-              <Link to="/repertorio" className="btn flex items-center justify-center">
-                Mi repertorio
-              </Link>
+            )}
+            {model && (
+              <button type="button" className="btn" onClick={() => setMode('model')}>
+                Partida de ejemplo
+              </button>
             )}
           </div>
 

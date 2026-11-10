@@ -1,0 +1,166 @@
+import type { OpeningExtras } from './kit'
+
+const L = (s: string) => s.split(' ')
+
+/** Planes del medio juego, errores del rival y partida de ejemplo: defensas contra 1.e4 (con negras). */
+export const EXTRAS_E4: Record<string, OpeningExtras> = {
+  siciliana: {
+    items: [
+      {
+        id: 'sic-plan-oo',
+        kind: 'plan',
+        title: 'Después de Ae2 y O-O del rival',
+        prompt: '¿Cuál es tu plan?',
+        moves: L('e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O'),
+        answer: 'O-O',
+        alt: ['Be6'],
+        why: 'Enrocá: tu rey queda a salvo y después ya podés jugar …Ae6 y …Dc7 con calma. Hay tiempo: tu centro (peones d6 y e5) es sólido.',
+      },
+      {
+        id: 'sic-pun-bd3',
+        kind: 'punish',
+        title: 'Las blancas movieron el alfil a d3',
+        prompt: 'El rival se equivocó: ¿qué capturás?',
+        moves: L('e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Bd3'),
+        answer: 'Qxg2',
+        why: 'Ad3? abandona la defensa de g2: el alfil de f1 la protegía. Dxg2 gana un peón y ataca la torre de h1; el motor evalúa que las negras quedan claramente mejor. Mirá siempre qué defendía la pieza que se movió.',
+      },
+    ],
+    model: {
+      title: 'Siciliana abierta: peones centrales y contrajuego',
+      color: 'b',
+      moves: L('e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O Qd3 Be6 Rd1 Qc7 Be3 Nbd7 Nd5 Bxd5 exd5 Rac8 Rac1 Ne8 a4 Nb6 Nd2 Nxa4'),
+      notes: {
+        11: '…e5: echás al caballo de d4 y te quedás con el control del centro.',
+        15: 'Enrocás: el rey queda a salvo y ahora podés jugar con calma.',
+        19: 'La dama se ubica en c7: presiona la columna c, donde las negras tienen contrajuego.',
+        23: 'Cambiás tu alfil por el caballo de d5: lo hacés cuando ese caballo es una pieza fuerte para el rival.',
+        25: 'Torre a la columna c: tu contrajuego en el flanco de dama.',
+      },
+      summary: 'La Siciliana te da un centro sólido (d6 y e5) y contrajuego por la columna c. No hubo ataques salvajes: igual que en la vida real, la partida se decide por pequeños detalles.',
+    },
+  },
+  francesa: {
+    items: [
+      {
+        id: 'fra-plan-c5',
+        kind: 'plan',
+        title: 'El plan de toda la Francesa',
+        prompt: '¿Qué ruptura prepará tu juego?',
+        moves: L('e4 e6 d4 d5 Nc3 Nf6 Bg5 Be7 e5 Nfd7 Bxe7 Qxe7 f4 O-O Nf3'),
+        answer: 'c5',
+        why: '…c5: el golpe de toda la Francesa. Atacás d4, la base de la cadena de peones blancos; sin esta ruptura las negras se quedan sin juego.',
+      },
+      {
+        id: 'fra-plan-nbd7',
+        kind: 'plan',
+        title: 'Completá tu desarrollo',
+        prompt: '¿Qué jugás en esta posición simétrica?',
+        moves: L('e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O Bg5 Bg4 Nbd2'),
+        answer: 'Nbd7',
+        alt: ['Re8', 'h6', 'c6'],
+        why: 'Completá el desarrollo con …Cbd7: la posición es simétrica y gana quien juega mejor. Te8 o …h6 también valen; lo importante es que no te queden piezas sin sacar.',
+      },
+      {
+        id: 'fra-pun-bg5',
+        kind: 'punish',
+        title: 'Las blancas movieron el alfil a g5',
+        prompt: 'El rival se equivocó: ¿qué peón cae?',
+        moves: L('e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 Bg5'),
+        answer: 'Qxb2',
+        why: 'Ag5? deja b2 sin defensa: el alfil de c1 era quien la protegía. Dxb2 gana un peón. En la Francesa con …Db6 tu dama vigila b2 y d4: cada vez que el rival mueve el alfil de c1, mirá si b2 quedó sola.',
+      },
+    ],
+    model: {
+      title: 'Francesa del Cambio: igualdad y desarrollo',
+      color: 'b',
+      moves: L('e4 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bd3 Bd6 O-O O-O Bg5 Bg4 Nbd2 Re8 Re1 Nbd7 h3 Rxe1+ Qxe1 Bxf3 Nxf3 h6 Be3 c5 c4 Qc7 Rc1 a6 dxc5 Nxc5'),
+      notes: {
+        11: 'Los dos enrocan: la posición es simétrica y gana quien juega mejor.',
+        15: 'Torre a la columna e: lista para cuando se cambien piezas.',
+        19: 'Cambiás torres y la dama blanca se aleja del centro.',
+        21: 'Cambiás alfil por caballo: sacás una pieza que defendía el centro y el enroque blanco.',
+        25: '…c5: la ruptura central. Desde la simetría, empezás a pelear por la iniciativa.',
+        31: 'Recapturás con el caballo y la partida sigue equilibrada.',
+      },
+      summary: 'Una variante del Cambio típica: simétrica y tranquila, con cambios de piezas y un solo plan claro (…c5). Lo que decide es jugar con precisión y no cometer errores.',
+    },
+  },
+  'caro-kann': {
+    items: [
+      {
+        id: 'caro-plan-ngf6',
+        kind: 'plan',
+        title: 'Último caballo',
+        prompt: '¿Cómo seguís el desarrollo?',
+        moves: L('e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4'),
+        answer: 'Ngf6',
+        alt: ['Qa5+'],
+        why: 'Desarrollá el último caballo con …Cgf6 y después …Ae7 y enrocá. Ojo: …Dc7?? pierde la dama por Axc7: el alfil de f4 vigila esa casilla. También se puede interponer con …Da5+ para desarrollar con tiempo.',
+      },
+      {
+        id: 'caro-pun-qd2',
+        kind: 'punish',
+        title: 'Las blancas movieron la dama a d2',
+        prompt: 'El rival se equivocó: ¿qué peón queda sin defensa?',
+        moves: L('e4 c6 d4 d5 e5 Bf5 Nf3 e6 Be2 c5 Be3 Qb6 Qd2'),
+        answer: 'Qxb2',
+        why: 'Dd2? parece defender b2, pero el peón de c2 le tapa el camino: b2 sigue sin protección. Dxb2 gana un peón; si las blancas ofrecen cambiar damas con Dc3, cambiás y quedás un peón arriba.',
+      },
+    ],
+    model: {
+      title: 'Caro-Kann clásica: sólido y paciente',
+      color: 'b',
+      moves: L('e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4 Qa5+ Bd2 Qc7 O-O-O Ngf6 Kb1 Be7 Ne4 Rd8 Qe2 Nxe4 Qxe4 Nf6 Qe2 c5 dxc5 Qxc5'),
+      notes: {
+        13: 'Desarrollás el caballo de dama y vigilás e5.',
+        17: 'Aceptás cambiar alfiles: simplificás y desactivás el alfil rival.',
+        21: 'Con jaque ganás un tiempo: la dama sale del ataque del alfil de f4.',
+        25: 'Desarrollás el último caballo: ya solo te falta enrocar.',
+        27: 'El alfil sale a e7 y te prepara para enrocar.',
+        31: 'Cambiás caballos para aliviar tu posición.',
+        35: '…c5: la ruptura que libera tu posición y ataca el centro.',
+        37: 'Recapturás en c5 con la dama: tu estructura queda sana y tus piezas, activas.',
+      },
+      summary: 'La Caro-Kann premia la solidez: sin debilidades y con una ruptura en …c5 cuando todas las piezas están listas. No hace falta complicar la partida.',
+    },
+  },
+  escandinava: {
+    items: [
+      {
+        id: 'esca-plan-nbd7',
+        kind: 'plan',
+        title: 'Último caballo',
+        prompt: '¿Qué pieza falta desarrollar?',
+        moves: L('e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 O-O'),
+        answer: 'Nbd7',
+        alt: ['Bb4'],
+        why: 'Desarrollá el último caballo con …Cbd7: ya solo te falta enrocar. Mantené la dama en a5, fuera de peligro, y no te apures con …Axc2??, que pierde una pieza.',
+      },
+      {
+        id: 'esca-pun-bd3',
+        kind: 'punish',
+        title: 'Las blancas movieron el alfil a d3',
+        prompt: 'El rival se equivocó: ¿qué capturás?',
+        moves: L('e4 d5 exd5 Qxd5 d4 Nf6 Bd3'),
+        answer: 'Qxg2',
+        why: 'Ad3? deja g2 sin defensa: el alfil de f1 la protegía. Dxg2 gana un peón y ataca la torre de h1; si cambian damas con Df3, cambiás y quedás un peón arriba.',
+      },
+    ],
+    model: {
+      title: 'Escandinava: dama activa y estructura sólida',
+      color: 'b',
+      moves: L('e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 Ne4 Qd8 Ng3 Bg4 c3 Be7 h3 Bxf3 Qxf3 Nbd7 O-O-O O-O Ne4 Nxe4 Qxe4 Nf6 Qf3 b5'),
+      notes: {
+        15: 'El caballo se fue de c3 y el alfil de d2 ataca tu dama: la dama vuelve a d8.',
+        17: 'El alfil sale con presión al caballo de f3.',
+        21: 'Cambiás alfil por caballo: sacás una pieza que defendía el centro y el enroque blanco.',
+        23: 'Desarrollás el último caballo: ya solo falta enrocar.',
+        25: 'Enrocás: el rey queda a salvo y tu posición es sólida.',
+        27: 'Cambiás caballos para aliviar tu posición.',
+        31: '…b5: ganás espacio en el flanco de dama con una posición tranquila y sólida.',
+      },
+      summary: 'La Escandinava deja una posición sólida: la dama sale temprano, pero con tiempos bien usados todas tus piezas se desarrollan y tu estructura es sana.',
+    },
+  },
+}

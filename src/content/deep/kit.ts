@@ -34,3 +34,37 @@ export function deep(d: DeepDef, group: string): RepLine {
     quiz: d.quiz,
   }
 }
+
+/**
+ * Posición de ejercicio dentro de una apertura. `moves` lleva desde la posición inicial hasta la posición del ejercicio
+ * (el que mueve es el usuario: en 'punish' la última jugada es el error del rival).
+ */
+export interface MoveItem {
+  id: string
+  kind: 'plan' | 'punish'
+  title: string
+  /** Una frase con lo que hay que hacer ("¿Cuál es el plan?", "El rival se equivocó: castigalo"). */
+  prompt: string
+  moves: string[]
+  /** La jugada correcta (SAN). */
+  answer: string
+  /** Otras jugadas que también valen (casi igual de buenas según el motor). */
+  alt?: string[]
+  /** Por qué: el plan o el motivo táctico. */
+  why: string
+}
+
+export interface ModelGame {
+  title: string
+  /** Quién sos en la partida. */
+  color: Color
+  moves: string[]
+  /** Comentario de momentos clave: índice de la jugada → texto. */
+  notes: Record<number, string>
+  summary: string
+}
+
+export interface OpeningExtras {
+  items: MoveItem[]
+  model?: ModelGame
+}
