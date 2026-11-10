@@ -71,8 +71,7 @@ export const EXTRAS_E4E5: Record<string, OpeningExtras> = {
         prompt: 'El rival se equivocó: ¿qué capturás?',
         moves: L('e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O d5'),
         answer: 'Nxe5',
-        alt: ['exd5'],
-        why: '…d5? descuida e5. Cxe5 gana un peón central; si las negras toman con …dxe4, Cxc6 y Ce5+ dejan a las blancas con una ventaja clara. (exd5 también es buena.) Moral: antes de empujar un peón, mirá qué piezas dejaste de defender.',
+        why: '…d5? descuida e5. Cxe5 gana un peón central; si las negras toman con …dxe4, Cxc6 y Ce5+ dejan a las blancas con una ventaja clara. Moral: antes de empujar un peón, mirá qué piezas dejaste de defender.',
       },
     ],
     model: {
@@ -125,11 +124,11 @@ export const EXTRAS_E4E5: Record<string, OpeningExtras> = {
     model: {
       title: 'Escocesa: centro abierto y piezas activas',
       color: 'w',
-      moves: L('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 d6 Bd3 Nf6 Nc3 Be7 O-O O-O h3 Re8 f4 b6 Be3 Bb7 Bf2 d5 e5 Bc5'),
+      moves: L('e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nxd4 Qxd4 d6 Nc3 Nf6 Bd3 Be7 O-O O-O h3 Re8 f4 b6 Be3 Bb7 Bf2 d5 e5 Bc5'),
       notes: {
         8: 'Recapturás con la dama: queda centralizada y fuerte.',
-        10: 'Desarrollás el alfil apuntando al flanco de rey, con una posición activa.',
-        12: 'Defendés e4 con un caballo y lo desarrollás.',
+        10: 'Desarrollás el caballo de dama y defendés el peón de e4.',
+        12: 'Alfil a d3, apuntando al flanco de rey, con una posición activa.',
         14: 'Enrocás: rey seguro y torres conectadas.',
         16: 'h3 prepara f4 sin que …Ag4 moleste.',
         18: 'f4: ganás espacio en el centro y preparás e5.',
