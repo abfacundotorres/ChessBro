@@ -88,4 +88,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H14 Aperturas a fondo (2ª entrega): las 11 aperturas restantes (72 líneas en total), con planes, errores del rival y partidas de ejemplo
 - [x] H15 Más ramas del rival: 13 líneas nuevas (85 en total) en las aperturas más comunes
 - [x] H16 Robustez: avisos de error en vez de pantalla en blanco (límite de error, motor caído, partidas inválidas)
-- [ ] H17 (piloto en rama) Notas más vivas y tarjeta por jugada: Italiana hecha, faltan las otras 20 aperturas
+- [ ] H17 (en curso) Notas más vivas y tarjeta por jugada: Italiana y Escandinava hechas, faltan 19 aperturas

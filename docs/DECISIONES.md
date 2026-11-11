@@ -468,3 +468,17 @@
   con Stockfish de las líneas siguen valiendo.
 - **No verificado**: que 4.Cg5 sea "filosa y de mucha teoría" (conocimiento general, sin fuente consultada), que cada nota diga lo
   "mejor" posible (es redacción) y la presentación en un teléfono real (probada solo en Chromium a 360 px).
+
+## H17 (2ª tanda): la Escandinava con la voz nueva
+- **Alcance**: las 4 líneas de la Escandinava (con negras): notas, ideas y la explicación de una pregunta. Mismas jugadas: los controles con
+  Stockfish no cambian. La presentación por jugada es la del piloto. Las ramas nuevas de la Escandinava (pendiente 3) siguen sin hacerse.
+- **Errores encontrados al releer**: (1) 7…Cf6 decía "atacás el peón de e4" en una línea donde ese peón ya no existe (lo capturó …Dxd5);
+  ahora dice que el caballo controla e4 y d5. (2) La dama en a5 "clava el caballo de c3" solo desde que el peón de d2 se mueve (d4): con d2
+  ocupado solo presiona c3; las notas ahora lo dicen en el momento correcto. (3) La pregunta "¿por qué a5?" afirmaba que la dama queda fuera
+  del alcance de las piezas menores y de los peones; b2-b4 la ataca, así que se reformuló. (4) La nota de 3.Cf3 llamaba "la ventaja" a los
+  peones doblados; ahora "chica, pero real".
+- **Verificado con chess.js** (prueba descartable): no hay peón en e4; Cc3 no está clavado con d2 ocupado y sí tras d4; la dama puede ir a c7;
+  c6 cubre b5/d5; Ad2 rompe la clavada; …e6 tapa la diagonal del alfil de c4 sobre f7; Cf6 protege d5; Ag4 ataca f3; Cc6 y Ae3/Cf3 sobre d4;
+  la dama de f3 ataca d5; peones doblados en f2/f3.
+- **No verificado**: que la posición de la Escandinava sea "algo mejor para las blancas" en espacio (es una apreciación), ni nada de lo
+  dicho sobre b4 (se dejó sin valorar). No corrí el e2e (solo cambió texto de contenido); sí tsc, eslint, vitest y build.
