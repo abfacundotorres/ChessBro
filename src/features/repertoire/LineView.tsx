@@ -9,6 +9,7 @@ import { replay, sanToFigurine, type MoveInput } from '../../engine/game'
 import { lineSteps, type RepLine } from '../../engine/repertoire'
 import { uciToMove } from '../../engine/puzzle'
 import { Speak } from '../../ui/Speak'
+import { LineProgress, NoteCard, moveArrow } from '../../ui/NoteCard'
 import { QuizView } from '../openings/QuizView'
 import { openingById } from '../../content/openings'
 
@@ -59,7 +60,15 @@ function Study({ line, onPractice }: { line: RepLine; onPractice: () => void }) 
 
   return (
     <div className="flex flex-col gap-3">
-      <Board fen={view.fen} orientation={line.color === 'w' ? 'white' : 'black'} lastMove={view.lastMove} checkSquare={view.checkSquare} movableColor={null} />
+      <Board
+        fen={view.fen}
+        orientation={line.color === 'w' ? 'white' : 'black'}
+        lastMove={view.lastMove}
+        checkSquare={view.checkSquare}
+        movableColor={null}
+        arrows={cur ? [moveArrow(cur.from, cur.to, cur.mine)] : undefined}
+      />
+      <LineProgress steps={steps} done={i} />
       <p className="min-h-6 text-center text-sm" aria-live="polite">
         {cur ? (
           <>
@@ -73,12 +82,7 @@ function Study({ line, onPractice }: { line: RepLine; onPractice: () => void }) 
           <span className="text-muted">Posición inicial</span>
         )}
       </p>
-      {note && (
-        <div className="flex flex-col gap-2 rounded-xl border border-accent p-3 text-sm">
-          <p>{note}</p>
-          <Speak text={note} auto />
-        </div>
-      )}
+      {cur && note && <NoteCard ply={cur.ply} san={cur.san} mine={cur.mine} note={note} />}
       <div className="grid grid-cols-4 gap-2">
         <button type="button" className="btn" aria-label="Inicio" disabled={i === 0} onClick={() => setI(0)}>
           ⏮
@@ -184,16 +188,16 @@ function Practice({ line }: { line: RepLine }) {
         movableColor={myTurn ? line.color : null}
         onMove={onMove}
         highlights={hint !== 'none' && next ? [next.from] : []}
-        arrows={hint === 'move' && next ? [{ startSquare: next.from, endSquare: next.to, color: 'rgba(36, 120, 255, 0.85)' }] : undefined}
+        arrows={
+          hint === 'move' && next
+            ? [{ startSquare: next.from, endSquare: next.to, color: 'rgba(36, 120, 255, 0.85)' }]
+            : last
+              ? [moveArrow(last.from, last.to, last.mine)]
+              : undefined
+        }
       />
-      {k > 0 && line.notes?.[k - 1] && (
-        <div className="flex items-start gap-2 rounded-xl border border-accent p-3 text-sm" aria-live="polite">
-          <p className="min-w-0 flex-1">
-            <span className="font-mono font-semibold">{sanToFigurine(steps[k - 1]!.san)}</span> · {line.notes[k - 1]}
-          </p>
-          <Speak text={line.notes[k - 1]!} auto className="shrink-0" />
-        </div>
-      )}
+      <LineProgress steps={steps} done={k} />
+      {last && line.notes?.[k - 1] && <NoteCard ply={last.ply} san={last.san} mine={last.mine} note={line.notes[k - 1]!} />}
       <p className={`text-center font-medium ${wrong ? 'text-red-500' : done ? 'text-accent' : ''}`} aria-live="polite">
         {done
           ? mistakes === 0

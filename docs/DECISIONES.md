@@ -447,3 +447,24 @@
 - **Sin cubrir**: no hay test automático del límite de error (el entorno de Vitest es Node, sin DOM; el script de prueba quedó
   fuera del repo). Tampoco se atacó la instalación en el Xiaomi ("No se pudo abrir la app") ni el corte inferior: no hay forma de
   probarlos acá.
+
+## H17 (piloto): notas más vivas y presentación por jugada — solo la Italiana
+- **Pedido**: releer las notas de las líneas buscando frases dudosas y hacerlas más estéticas, dinámicas y atrapantes, en texto y en
+  pantalla. Acordado: **piloto con una apertura (Italiana, 6 líneas)** para ajustar el tono antes de seguir con las otras 20; un solo
+  tono para los dos estilos (Juego y Serio), sin personajes ni emojis.
+- **Guía de voz de las notas**: 1–2 frases cortas; tus jugadas dicen qué hacés y qué consigue (verbo + objetivo + consecuencia); las del
+  rival dicen qué quiere o amenaza; solo afirmaciones que se ven en el tablero; nada de adjetivos vacíos ("natural", "sólido") sin motivo.
+- **Presentación** (`ui/NoteCard.tsx`): tarjeta con barra de color (verde = tuya, ámbar = rival), número de jugada, etiqueta "Tu jugada" /
+  "Rival", etiquetas leídas de la notación (Jaque, Mate, Captura, Enroque, Coronación; `engine/moveTags.ts`, con test), entrada animada
+  (se apaga con "reducir movimiento"), flecha de la última jugada en el tablero y una barra de avance por la línea. Se usa en Estudiar,
+  Practicar y Jugar contra el rival. No se tocaron las notas de partidas de ejemplo ni los ejercicios.
+- **Errores encontrados al releer (Italiana)**: (1) …Ca5 / Ac2: decía "el alfil sigue activo" en c2, pero d3 le tapa la diagonal; ahora dice lo
+  que sí pasa (esquiva el cambio y lo protege la dama). (2) …h6: decía que quitaba g5 al alfil y al caballo; con ♘bd2 jugado el alfil de c1 ya
+  no ve g5, así que solo afecta al caballo (lo detectó la prueba con chess.js). (3) …a6 explicado como "preparar Aa7": no hace falta …a6 para
+  eso; la idea es …b5. (4) 3…d6 decía que dejaba el alfil de c8 "algo encerrado": al revés, lo libera. (5) 5…Ae7 de la Húngara y varias notas
+  de "más espacio" afirmaban más de lo que se ve.
+- **Verificado con chess.js** (prueba descartable, no commiteada): defensores/atacantes de f7 y f2, la transposición it-c3/it-d3, Ac1 abierto
+  tras d3, alfil de c8 libre tras …d6, protecciones de b3/c2/e6, torres conectadas, jugadas de Cd2. Las jugadas no cambiaron, así que los controles
+  con Stockfish de las líneas siguen valiendo.
+- **No verificado**: que 4.Cg5 sea "filosa y de mucha teoría" (conocimiento general, sin fuente consultada), que cada nota diga lo
+  "mejor" posible (es redacción) y la presentación en un teléfono real (probada solo en Chromium a 360 px).

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Board } from '../../ui/Board'
-import { Speak } from '../../ui/Speak'
+import { NoteCard, moveArrow } from '../../ui/NoteCard'
 import type { RepLine } from '../../engine/repertoire'
-import { replay, sanToFigurine, tryMove, type Color, type MoveInput } from '../../engine/game'
+import { replay, tryMove, type Color, type MoveInput } from '../../engine/game'
 import { choices, isMyTurn, lineFor, noteOf, pickRival, type Choice } from '../../engine/sparring'
 import { uciToMove } from '../../engine/puzzle'
 import { markLinePracticed } from '../../data/repertoire'
@@ -73,6 +73,7 @@ export function Sparring({ lines, color, onDone, doneLabel }: { lines: RepLine[]
   )
 
   const last = moves.at(-1)
+  const lastMine = (played.length - 1) % 2 === (color === 'w' ? 0 : 1)
   const note = noteOf(lines, played)
   const lastLine = last?.branch && isMyTurn(color, played) ? lineFor(lines, played) : undefined
 
@@ -107,7 +108,13 @@ export function Sparring({ lines, color, onDone, doneLabel }: { lines: RepLine[]
         movableColor={myTurn ? color : null}
         onMove={onMove}
         highlights={hint !== 'none' && next ? [next.uci.slice(0, 2)] : []}
-        arrows={hint === 'move' && next ? [{ startSquare: next.uci.slice(0, 2), endSquare: next.uci.slice(2, 4), color: 'rgba(36, 120, 255, 0.85)' }] : undefined}
+        arrows={
+          hint === 'move' && next
+            ? [{ startSquare: next.uci.slice(0, 2), endSquare: next.uci.slice(2, 4), color: 'rgba(36, 120, 255, 0.85)' }]
+            : view.lastMove && last
+              ? [moveArrow(view.lastMove.from, view.lastMove.to, lastMine)]
+              : undefined
+        }
       />
       <p className={`text-center font-medium ${wrong ? 'text-red-500' : done ? 'text-accent' : ''}`} aria-live="polite">
         {status}
@@ -117,14 +124,7 @@ export function Sparring({ lines, color, onDone, doneLabel }: { lines: RepLine[]
           El rival eligió otra variante: <span className="font-semibold">{lastLine.name}</span>
         </p>
       )}
-      {last && note && (
-        <div className="flex items-start gap-2 rounded-xl border border-accent p-3 text-sm" aria-live="polite">
-          <p className="min-w-0 flex-1">
-            <span className="font-mono font-semibold">{sanToFigurine(last.san)}</span> · {note}
-          </p>
-          <Speak text={note} auto className="shrink-0" />
-        </div>
-      )}
+      {last && note && <NoteCard ply={played.length - 1} san={last.san} mine={lastMine} note={note} />}
       {done ? (
         <div className="flex flex-col gap-2 rounded-xl bg-surface p-4 text-sm">
           {result && <p>{result.newCards > 0 ? `Sumaste ${result.newCards} ${result.newCards === 1 ? 'posición' : 'posiciones'} al repaso.` : 'Esas posiciones ya estaban en tu repaso.'}</p>}
