@@ -30,9 +30,24 @@ export function GameDetail() {
   const [msg, setMsg] = useState<string | null>(null)
   const abort = useRef<AbortController | null>(null)
 
-  const view = useMemo(() => (game ? replay(game.startFen, game.moves.map(uciToMove)) : null), [game])
-  if (game === undefined) return null
+  const view = useMemo(() => {
+    if (!game) return null
+    try {
+      return replay(game.startFen, game.moves.map(uciToMove))
+    } catch (e) {
+      console.error('Partida con jugadas inválidas', game.id, e)
+      return 'invalid' as const
+    }
+  }, [game])
+  if (game === undefined) return <p className="text-muted">Cargando…</p>
   if (!game || !view) return <p>No encontré esa partida. <Link to="/partidas" className="underline">Volver</Link></p>
+  if (view === 'invalid')
+    return (
+      <p role="alert">
+        Esta partida tiene jugadas que no se pueden reproducir, así que no se puede abrir.{' '}
+        <Link to="/partidas" className="underline">Volver</Link>
+      </p>
+    )
 
   const total = view.moves.length
   const fen = ply === 0 ? game.startFen : view.moves[ply - 1]!.fen
@@ -53,7 +68,7 @@ export function GameDetail() {
     } catch (e) {
       if (!(e instanceof DOMException && e.name === 'AbortError')) {
         console.error(e)
-        setMsg('No se pudo analizar la partida.')
+        setMsg(`No se pudo analizar la partida.${e instanceof Error && e.message ? ` (${e.message})` : ''}`)
       }
     } finally {
       setProgress(null)

@@ -428,3 +428,22 @@
   se descartaron por jugadas flojas o ilegales). Las 85 líneas pasan el control `DEEP=1`.
 - **Límite**: la Escandinava y las aperturas "de peón de rey/dama" genéricas no recibieron ramas nuevas. Las explicaciones
   siguen sin verificarlas ningún programa.
+
+## H16: robustez (aviso de error en vez de pantalla en blanco)
+- **Qué pasaba**: en React, si una pantalla lanza un error al dibujarse y nadie lo atrapa, se desmonta todo el árbol y queda la
+  pantalla en blanco. Esa es la causa más probable de la pantalla en blanco vista una vez al analizar una partida, **pero no la
+  pude reproducir ni confirmar**: lo que hice es cerrar los caminos que sí detecté.
+- **`ui/ErrorBoundary.tsx`**: un límite de error por pantalla (se reinicia al cambiar de ruta, y la barra de pestañas queda
+  fuera, así que siempre se puede salir) y otro alrededor de toda la app. Muestra qué falló, el texto del error y dos botones:
+  Reintentar y Volver a Hoy. También `console.error` con la pila.
+- **Motor** (`lib/stockfish.ts`): si el worker no carga o falla, antes el análisis se quedaba esperando para siempre ("Analizando
+  0/N" sin salida). Ahora se rechaza con "No se pudo cargar el motor", se muestra en la partida y el reintento crea un worker
+  nuevo. Es un camino real para una pantalla "muerta" en un celular (por ejemplo, un WASM que no se pudo descargar).
+- **Detalle de partida**: una partida con jugadas ilegales ya no rompe la pantalla; avisa que no se puede reproducir. Mientras
+  carga, muestra "Cargando…" en vez de nada (la app entera también, antes devolvía `null`).
+- **Probado en el navegador** (Chromium, 360 px, sin service worker, datos sembrados en IndexedDB): partida con jugadas ilegales,
+  registro sin jugadores (el límite de error lo atrapa, la barra sigue y cambiar de pestaña se recupera), motor bloqueado
+  (aviso y reintento posible) y motor que vuelve (el reintento analiza). El e2e sin conexión completo pasa.
+- **Sin cubrir**: no hay test automático del límite de error (el entorno de Vitest es Node, sin DOM; el script de prueba quedó
+  fuera del repo). Tampoco se atacó la instalación en el Xiaomi ("No se pudo abrir la app") ni el corte inferior: no hay forma de
+  probarlos acá.

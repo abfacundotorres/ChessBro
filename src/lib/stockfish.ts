@@ -9,18 +9,32 @@ export class Engine {
   private listeners = new Set<(line: string) => void>()
   private queue: Promise<unknown> = Promise.resolve()
   private ready: Promise<void>
+  /** Se rechaza si el worker no carga o falla (antes el análisis se quedaba esperando para siempre). */
+  private dead: Promise<never>
+  failed = false
 
   constructor(url = `${import.meta.env.BASE_URL}engine/stockfish-19-lite-single.js`) {
     this.worker = new Worker(url)
+    this.dead = new Promise<never>((_, reject) => {
+      this.worker.onerror = (e) => {
+        this.failed = true
+        reject(new Error(`No se pudo cargar el motor${e.message ? `: ${e.message}` : ''}`))
+      }
+    })
+    this.dead.catch(() => undefined) // evita "unhandled rejection" si nadie lo está esperando
     this.worker.onmessage = (e: MessageEvent) => {
       if (typeof e.data !== 'string') return
       for (const l of this.listeners) l(e.data)
     }
-    this.ready = (async () => {
-      await this.sendAndWait('uci', (l) => l === 'uciok')
-      this.post('setoption name Hash value 32')
-      await this.sendAndWait('isready', (l) => l === 'readyok')
-    })()
+    this.ready = Promise.race([
+      (async () => {
+        await this.sendAndWait('uci', (l) => l === 'uciok')
+        this.post('setoption name Hash value 32')
+        await this.sendAndWait('isready', (l) => l === 'readyok')
+      })(),
+      this.dead,
+    ])
+    this.ready.catch(() => undefined)
   }
 
   private post(cmd: string) {
@@ -53,7 +67,7 @@ export class Engine {
     return this.enqueue(async () => {
       await this.ready
       if (signal?.aborted) throw new DOMException('Cancelado', 'AbortError')
-      return new Promise<PositionEval>((resolve, reject) => {
+      return Promise.race([this.dead, new Promise<PositionEval>((resolve, reject) => {
         let last: { score: Score; pv: string[] } | null = null
         const onAbort = () => this.post('stop')
         signal?.addEventListener('abort', onAbort, { once: true })
@@ -80,7 +94,7 @@ export class Engine {
         this.listeners.add(l)
         this.post(`position fen ${fen}`)
         this.post(`go depth ${depth}`)
-      })
+      })])
     })
   }
 
@@ -99,6 +113,10 @@ let shared: Engine | null = null
 
 /** Motor compartido, creado a demanda (el WASM pesa ~1,8 MB). */
 export function getEngine(): Engine {
+  if (shared?.failed) {
+    shared.terminate()
+    shared = null // si el worker murió, el próximo intento crea uno nuevo
+  }
   shared ??= new Engine()
   return shared
 }

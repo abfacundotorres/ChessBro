@@ -33,7 +33,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/content/` — contenido estático (currículo, temas, lecciones). Toda posición/solución
   se valida en tests con chess.js (y con Stockfish desde H2).
 - `src/features/<pantalla>/` — pantallas. `src/ui/` — componentes reutilizables (Board, MoveList).
-- `src/lib/` — integración con el navegador (PWA, motor).
+- `src/lib/` — integración con el navegador (PWA, motor). `src/ui/ErrorBoundary.tsx` — límite de error por pantalla (evita la pantalla en blanco).
 - `src/features/games/` — importación de Lichess, análisis y detalle de partida.
 - `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
 - `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
@@ -87,3 +87,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H13 Aperturas a fondo (1ª entrega): 39 líneas, planes del medio juego, errores del rival y partidas de ejemplo
 - [x] H14 Aperturas a fondo (2ª entrega): las 11 aperturas restantes (72 líneas en total), con planes, errores del rival y partidas de ejemplo
 - [x] H15 Más ramas del rival: 13 líneas nuevas (85 en total) en las aperturas más comunes
+- [x] H16 Robustez: avisos de error en vez de pantalla en blanco (límite de error, motor caído, partidas inválidas)
