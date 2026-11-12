@@ -527,3 +527,20 @@
   y el rey blanco sigue en e1; ♘e5 defendido por d4 y ♗g3 y atacado por ♗d6; el peón de f7 puede jugar …f6.
 - **No verificado**: valoraciones ("igualada", "cómoda"), los nombres de variantes (Eslava, Cambridge Springs, Cambio) y los planes típicos de
   la India de Rey (…f5, …e5): son conocimiento general sin fuente. No corrí el e2e (solo texto).
+
+## H17 (6ª tanda): Ruy López, Escocesa y Evans con la voz nueva
+- **Alcance**: 6 líneas de la Ruy López, 3 de la Escocesa y 3 del Evans: notas, ideas y una pregunta. Mismas jugadas, así que los controles con
+  Stockfish de las líneas no cambian. Las notas de las jugadas comunes (1.e4 e5 2.Cf3 Cc6 ...) se reescribieron en cada línea (las constantes
+  `EVANS`/`EVANS_ACC` de `more2-e4e5.ts` ya no existen; las otras líneas de ese archivo siguen usando `C`). Siguen pendientes 10 aperturas.
+- **Errores encontrados al releer**: (1) …Ae7 "defiende e5": un alfil en e7 no defiende un peón de su columna; prepara el enroque y protege f6.
+  (2) 6.d4 en la Berlinesa "atacaba el caballo de e4": ataca e5 (el caballo no estaba atacado). (3) Ab3 "por la gran diagonal": es la
+  a2–g8. (4) Escocesa 4…Ac5: c3 "cerraba la diagonal del alfil": el caballo de d4 ya la cerraba; c3 solo refuerza al caballo (también se corrigió la
+  pregunta). (5) Escocesa 4…Cxd4: "las negras no tienen cómo atacar la dama" era falso (…c5 la ataca, a costa de debilitar d5). (6) Evans aceptado:
+  tras cxd4 decía "recuperaste el material" y quedás un peón abajo; tras …Cxe4 son dos, y el motor (profundidad 16) ve la posición casi igual
+  (+0,13): ahora la nota lo dice así. (7) Evans con …d6: …Dd7 "defiende b7" (no: lo tapa el peón de c7; b7 ya lo cuida el alfil de c8), …Ch6
+  "evita Cg5" (no lo hace) y Cbd2 "ya no te queda nada por sacar" (falta el alfil de c1). (8) Evans rehusado: "un peón más" donde el material está parejo,
+  y ♗xd5 "apunta a b7" cuando el caballo de c6 se lo tapa. (9) Evans: Aa5 "vigila la diagonal a5–e1" (c3 la tapa).
+- **Verificado con chess.js y Stockfish** (prueba descartable): atacantes y defensores de e5, e4, f7, b7, c3, d4, c6, f6; el alfil de c1 sigue en casa;
+  material tras cada captura; evaluaciones finales: Berlinesa +0,09, Evans aceptado +0,13, Evans con …d6 +0,39, Evans rehusado +0,24 (todas desde las blancas).
+- **No verificado**: valoraciones ("pareja", "cómoda"), nombres de variantes, que la Berlinesa dé "una pequeña ventaja práctica" a las blancas
+  (se redujo a lo que ve el motor) y la teoría de la Escocesa (f4 después del enroque, que se quitó). No corrí el e2e (solo texto).

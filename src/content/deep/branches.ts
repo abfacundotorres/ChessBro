@@ -40,7 +40,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Bc5', 'c3', 'b5', 'Bb3', 'd6', 'd4', 'Bb6', 'Bg5', 'h6'],
     idea: 'Contra …Ac5 en vez de …Ae7, jugás c3 y d4 para ganar tiempo atacando el alfil. Es la forma más directa de aprovechar que las negras sacaron el alfil antes de tiempo.',
     plan: ['c3 y d4 para atacar el alfil y el centro', 'Retirá el alfil a b3 cuando lo ataquen con …b5', 'Clavá el caballo de f6 con Ag5'],
-    tail: ['Las negras sacan el alfil a c5 en lugar de …Ae7: un desarrollo activo que apunta a f2.', 'Preparás d4 para atacar el alfil de c5 y el centro.', 'Las negras echan al alfil con …b5.', 'El alfil se retira a b3, apuntando a f7.', 'Las negras refuerzan el peón de e5.', 'Atacás el alfil de c5 y abrís el centro.', 'El alfil se retira a b6.', 'Clavás el caballo de f6 contra la dama.', 'Las negras le preguntan al alfil con …h6.'],
+    tail: ['…Ac5 sale a una diagonal activa, apuntando a f2.', 'c3 prepara d4 para atacar el alfil de c5 y ganar el centro.', '…b5 echa al alfil.', 'El alfil se retira a b3, apuntando a f7.', '…d6 refuerza e5.', 'd4 ataca el alfil de c5 y abre el centro.', 'El alfil negro se retira a b6.', 'Ag5 clava el caballo de f6 contra la dama.', '…h6 le pregunta al alfil.'],
     quiz: [q('¿Para qué sirven c3 y d4 contra …Ac5?', ['Ganar tiempo atacando el alfil', 'Dar mate', 'Enrocar largo', 'Cambiar damas'], 0, 'Con d4 atacás el alfil y el centro: las negras tienen que mover una pieza que ya estaba desarrollada.')],
   },
   {
@@ -51,7 +51,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'Nge7', 'c3', 'g6', 'd4', 'exd4', 'cxd4', 'd5', 'e5', 'Bg4', 'Nc3', 'Bg7'],
     idea: 'La Defensa Cozio desarrolla el caballo sin bloquear al alfil de f8. Vos ocupás el centro con c3 y d4 y ganás espacio con e5: una posición cómoda con ventaja de espacio.',
     plan: ['c3 y d4 para ocupar el centro', 'e5 para ganar espacio', 'Desarrollá con Cc3 y enrocá'],
-    tail: ['Las negras desarrollan el caballo sin bloquear la diagonal del alfil de f8: la variante Cozio.', 'Preparás d4 con un peón de apoyo.', 'Las negras preparan el fianchetto de su alfil.', 'Ocupás el centro con el peón de d4.', 'Las negras capturan en d4.', 'Recapturás con el peón: tenés el centro.', 'Las negras atacan el peón de e4.', 'Avanzás e5 y ganás espacio.', 'Las negras clavan el caballo de f3 contra la dama.', 'Desarrollás el caballo de dama.', 'Las negras desarrollan el alfil en la gran diagonal.'],
+    tail: ['Cozio: …Cge7 desarrolla el caballo sin bloquear la diagonal del alfil de f8.', 'c3 prepara d4 con un peón de apoyo.', '…g6 prepara el fianchetto del alfil negro.', 'd4 ocupa el centro.', 'Las negras capturan en d4.', 'Recapturás con el peón: te quedás con el centro.', '…d5 ataca tu peón de e4.', 'e5 gana espacio y le corta la diagonal al alfil que va a g7.', '…Ag4 clava el caballo de f3 contra la dama.', 'Desarrollás el caballo de dama.', '…Ag7 va a la gran diagonal, aunque tu peón de e5 se la corta.'],
     quiz: [q('¿Qué ganás con e5 en esta línea?', ['Espacio y una cadena de peones sólida', 'Un peón gratis', 'Un jaque mate', 'El enroque'], 0, 'El peón en e5, apoyado por d4, te da más espacio y limita al alfil negro de g7.')],
   },
   {
