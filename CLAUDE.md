@@ -20,7 +20,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `BASE=/ChessBro/ npm run build && npx vite preview --base /ChessBro/` — probar como en Pages
 - `node scripts/gen-icons.mjs` — regenerar el ícono (el dibujo está en el propio script; escribe el SVG y los PNG)
 - `node scripts/build-lesson-puzzles.mjs` — regenerar `src/content/lessonPuzzles.json` (ejercicios tácticos de las lecciones)
-- `node scripts/e2e-offline.mjs [url] [carpeta]` — prueba de punta a punta sin conexión (necesita Playwright y la app
+- `node scripts/e2e-offline.mjs [url] [carpeta]` — prueba de punta a punta sin conexión (corre en el CI; necesita Playwright y la app
   servida con `vite preview`; ver la cabecera del script)
 - `node scripts/build-puzzles.mjs` — regenerar `public/puzzles/` desde `data-raw/lichess_db_puzzle.csv`
   (ver cabecera del script para la descarga y descompresión)
@@ -91,3 +91,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H16 Robustez: avisos de error en vez de pantalla en blanco (límite de error, motor caído, partidas inválidas)
 - [x] H17 Notas más vivas y tarjeta por jugada (flecha, etiquetas, avance) en las 85 líneas de las 21 aperturas; ~100 afirmaciones dudosas corregidas
 - [x] H18 Estética «Bosque y crema»: paleta clara y oscura, tablero verde y crema, íconos en la barra, tarjetas y acordeones táctiles, persistencia de datos
+- [x] H19 e2e sin conexión en el CI (el deploy lo espera) y bundle partido por pantallas (1 MB → 407 KB)

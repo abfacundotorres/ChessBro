@@ -601,3 +601,14 @@
 - **Probado**: Chromium a 360 y 390 px, claro y oscuro, 13 pantallas con capturas; tsc, eslint, vitest (436), build para Pages y e2e sin conexión. **No probado**: un teléfono
   real (Xiaomi), iOS, la serif en Android y el contraste con una herramienta (se evaluó a ojo). Pantallas que no se revisaron una por una: finales, repaso del repertorio,
   detalle de partida con análisis y las pantallas de táctica con resultados.
+
+## H19: e2e en el CI y bundle partido
+- **Bundle**: las pantallas (táctica, lecciones, finales, aperturas, repertorio, partidas, tablero libre y ajustes) se cargan con `React.lazy` y un `Suspense`
+  ("Cargando…") dentro del límite de error por pantalla. El JS de arranque pasó de **1.031 KB (312 KB comprimidos) a 407 KB (132 KB)** y desapareció el aviso de
+  chunks de más de 500 KB. Hoy y Aprender siguen en el bundle principal (Hoy arrastra el contenido de las lecciones, por eso no baja más). Todos los chunks entran en
+  el precaché del service worker: **se probó sin conexión** con el e2e (20 rutas, motor, puzzle, lección, repertorio y backup). Si un chunk no cargara, el límite de error
+  muestra el aviso con «Reintentar».
+- **CI** (`.github/workflows/deploy.yml`): nuevo job `e2e` que instala Playwright (`npm install --no-save playwright@1.63.0`, no es dependencia del proyecto) y Chromium,
+  compila como en Pages, sirve con `vite preview` y corre `scripts/e2e-offline.mjs`; si falla sube las capturas como artefacto. **El deploy ahora espera a `check` y a `e2e`**:
+  un e2e roto frena la publicación (decisión a revisar si resulta inestable). Los pasos se reprodujeron localmente y el YAML se validó, pero **la primera corrida real en GitHub
+  Actions es la prueba de verdad**.

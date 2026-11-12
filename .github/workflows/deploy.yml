@@ -29,9 +29,39 @@ jobs:
         with:
           path: dist
 
+  # Prueba de punta a punta sin conexión (Chromium real + service worker). Si falla, no se despliega.
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      # Playwright no es dependencia del proyecto: se instala solo para esta prueba.
+      - run: npm install --no-save playwright@1.63.0
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+        env:
+          BASE: /${{ github.event.repository.name }}/
+      - name: Servir la app como en Pages
+        run: |
+          npx vite preview --base /${{ github.event.repository.name }}/ --port 4173 > preview.log 2>&1 &
+          for i in $(seq 1 30); do curl -sf "http://localhost:4173/${{ github.event.repository.name }}/" > /dev/null && exit 0; sleep 1; done
+          cat preview.log; exit 1
+      - run: node scripts/e2e-offline.mjs "http://localhost:4173/${{ github.event.repository.name }}/" e2e-capturas
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: e2e-capturas
+          path: e2e-capturas
+          if-no-files-found: ignore
+
   deploy:
     if: github.event_name != 'pull_request'
-    needs: check
+    needs: [check, e2e]
     runs-on: ubuntu-latest
     permissions:
       pages: write

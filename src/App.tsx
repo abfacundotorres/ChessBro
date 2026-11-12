@@ -1,28 +1,30 @@
-import { useEffect } from 'react'
+import { Suspense, lazy, useEffect } from 'react'
 import { HashRouter, Link, Navigate, Route, Routes, useLocation } from 'react-router-dom'
 import { Home } from './features/home/Home'
-import { Tactics } from './features/tactics/Tactics'
 import { Welcome } from './features/welcome/Welcome'
 import { refreshAnalyses } from './data/games'
 import { toDateStr } from './engine/dates'
 import { useStyleChoice } from './data/style'
 import { useLevelChoice } from './data/level'
-import { Repertoire } from './features/repertoire/Repertoire'
-import { LineView } from './features/repertoire/LineView'
-import { ReviewRepertoire } from './features/repertoire/Review'
-import { Lessons } from './features/lessons/Lessons'
-import { LessonView } from './features/lessons/LessonView'
-import { EndgamePlay } from './features/endgames/EndgamePlay'
-import { Games } from './features/games/Games'
-import { GameDetail } from './features/games/GameDetail'
-import { FreeBoard } from './features/board/FreeBoard'
 import { Learn } from './features/learn/Learn'
-import { Openings } from './features/openings/Openings'
-import { OpeningView } from './features/openings/OpeningView'
-import { Settings } from './features/settings/Settings'
 import { UpdateBanner } from './ui/UpdateBanner'
 import { ErrorBoundary } from './ui/ErrorBoundary'
 import { Icon, type IconName } from './ui/Icon'
+
+/** Cada pantalla pesada se baja aparte (y queda en la caché sin conexión): el arranque carga solo Hoy y Aprender. */
+const Tactics = lazy(() => import('./features/tactics/Tactics').then((m) => ({ default: m.Tactics })))
+const Repertoire = lazy(() => import('./features/repertoire/Repertoire').then((m) => ({ default: m.Repertoire })))
+const LineView = lazy(() => import('./features/repertoire/LineView').then((m) => ({ default: m.LineView })))
+const ReviewRepertoire = lazy(() => import('./features/repertoire/Review').then((m) => ({ default: m.ReviewRepertoire })))
+const Lessons = lazy(() => import('./features/lessons/Lessons').then((m) => ({ default: m.Lessons })))
+const LessonView = lazy(() => import('./features/lessons/LessonView').then((m) => ({ default: m.LessonView })))
+const EndgamePlay = lazy(() => import('./features/endgames/EndgamePlay').then((m) => ({ default: m.EndgamePlay })))
+const Games = lazy(() => import('./features/games/Games').then((m) => ({ default: m.Games })))
+const GameDetail = lazy(() => import('./features/games/GameDetail').then((m) => ({ default: m.GameDetail })))
+const FreeBoard = lazy(() => import('./features/board/FreeBoard').then((m) => ({ default: m.FreeBoard })))
+const Openings = lazy(() => import('./features/openings/Openings').then((m) => ({ default: m.Openings })))
+const OpeningView = lazy(() => import('./features/openings/OpeningView').then((m) => ({ default: m.OpeningView })))
+const Settings = lazy(() => import('./features/settings/Settings').then((m) => ({ default: m.Settings })))
 
 /** Cuatro pestañas; cada una cubre varias rutas (por ejemplo, Aprender incluye lecciones, aperturas, táctica y finales). */
 const NAV: { to: string; label: string; icon: IconName; match: string[] }[] = [
@@ -37,6 +39,7 @@ function RoutedScreens() {
   const { pathname } = useLocation()
   return (
     <ErrorBoundary key={pathname}>
+      <Suspense fallback={<p className="p-4 text-muted">Cargando…</p>}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/aperturas" element={<Openings />} />
@@ -56,6 +59,7 @@ function RoutedScreens() {
         <Route path="/ajustes" element={<Settings />} />
         <Route path="*" element={<Home />} />
       </Routes>
+      </Suspense>
     </ErrorBoundary>
   )
 }
