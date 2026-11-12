@@ -563,3 +563,18 @@
   c2/d3, la trampa de la Petroff (De2 y Cc6+ es jaque), enroque posible en pet-d4, y evaluaciones finales: 4C-Ac5 +0,40, 4C-Cd4 +0,16, Petroff 3.Cc3
   −0,34 y Gambito de Rey …d6 −0,41 (desde las blancas).
 - **No verificado**: valoraciones ("igualada", "sólida"), nombres de variantes (Cuatro Caballos «española», Vienés, Petroff clásica) y la teoría. No corrí el e2e.
+
+## H17 (8ª tanda y cierre): Philidor, Alekhine, Pirc, Colle e Inglesa
+- **Alcance**: 3 líneas de cada una (15). Con esto las **21 aperturas / 85 líneas** tienen la voz nueva y la tarjeta por jugada. Quedan sin líneas las dos
+  entradas genéricas. Se borraron las constantes de notas compartidas que quedaron sin uso.
+- **Errores encontrados al releer**: (1) Pirc clásica: …Ag4 "clavaba el caballo de f3 contra la dama", pero el alfil de e2 está en el medio (no hay
+  clavada). (2) Alekhine moderna: …Ah5 "manteniendo la clavada": después de Ae2 tampoco. (3) Philidor con Ae2: …Te8 "presiona e4" con el alfil de e7 delante.
+  (4) Alekhine, Cuatro Peones: …Cb6 "apoya …d6" (ataca c4) y Ae3 "defiende e5" (refuerza d4). (5) Colle: Cbd2 "sin bloquear al alfil de c1", y
+  De2 "apoya e4": el peón de e3 le tapa la columna; la apoyará cuando e4 avance. (6) Inglesa: Ag2 "apunta a d5 y b7" con el caballo de f3 tapando; a3
+  "libera el peón de b" (en realidad apoya la casilla b4). (7) Inglesa 1…Cf6: la idea decía "ganás material" y el material queda parejo.
+- **Verificado con chess.js** (prueba descartable): quién ataca cada casilla (f3, e4, c4, d4, e5, b4, c6, d5), la pieza que queda detrás del caballo de f3, peones
+  doblados tras …Cxc3 y material al final de la línea de la Inglesa.
+- **No verificado**: valoraciones, nombres (Ataque de los 150, Ataque Austríaco, Sistema Colle, "Siciliana al revés") y los planes típicos. No corrí DEEP=1 (las
+  jugadas no cambiaron: 0 líneas `moves:` modificadas en todo H17).
+- **Cierre del hito**: `tsc`, `eslint`, `vitest` (436), build para Pages y el e2e sin conexión pasan. **No probado**: la tarjeta por jugada en un teléfono real
+  (solo Chromium a 360 px) ni la voz con las notas nuevas. Versión 1.13.0.

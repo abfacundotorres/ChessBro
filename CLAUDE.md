@@ -33,7 +33,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/content/` — contenido estático (currículo, temas, lecciones). Toda posición/solución
   se valida en tests con chess.js (y con Stockfish desde H2).
 - `src/features/<pantalla>/` — pantallas. `src/ui/` — componentes reutilizables (Board, MoveList).
-- `src/lib/` — integración con el navegador (PWA, motor). `src/ui/ErrorBoundary.tsx` — límite de error por pantalla (evita la pantalla en blanco).
+- `src/lib/` — integración con el navegador (PWA, motor). `src/ui/ErrorBoundary.tsx` — límite de error por pantalla (evita la pantalla en blanco). `src/ui/NoteCard.tsx` — tarjeta de la nota de cada jugada (flecha, etiquetas de `engine/moveTags.ts`, barra de avance).
 - `src/features/games/` — importación de Lichess, análisis y detalle de partida.
 - `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
 - `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
@@ -62,6 +62,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   pasa `validateFen` (rechaza posiciones ilegales). Las respuestas de los mini-juegos de tocar salen de
   `engine/structure.ts` (con tests); las adivinanzas de jugadas, de Stockfish. Lo que no se puede verificar
   por código va como opción múltiple de concepto, con fuentes que coincidan.
+- Notas de las líneas (H17): 1–2 frases, verbo + objetivo + consecuencia, solo lo que se ve en el tablero (guía en `docs/DECISIONES.md`). Antes de escribir una afirmación sobre qué ataca/defiende/clava una pieza, comprobala con chess.js (`attackers`); un alfil detrás de un caballo o un peón no cuenta.
 - El repertorio no puede contradecirse (una jugada por posición) y Stockfish verifica cada línea; las
   explicaciones no las verifica nadie: revisarlas.
 - Lecciones lúdicas: tono cálido, personajes, frases cortas; cada desafío explica el porqué al resolver.
@@ -88,4 +89,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H14 Aperturas a fondo (2ª entrega): las 11 aperturas restantes (72 líneas en total), con planes, errores del rival y partidas de ejemplo
 - [x] H15 Más ramas del rival: 13 líneas nuevas (85 en total) en las aperturas más comunes
 - [x] H16 Robustez: avisos de error en vez de pantalla en blanco (límite de error, motor caído, partidas inválidas)
-- [ ] H17 (en curso) Notas más vivas y tarjeta por jugada: ya van 16 aperturas (hechas hasta Petroff), faltan 5 (Philidor, Alekhine, Pirc, Colle, Inglesa)
+- [x] H17 Notas más vivas y tarjeta por jugada (flecha, etiquetas, avance) en las 85 líneas de las 21 aperturas; ~100 afirmaciones dudosas corregidas
