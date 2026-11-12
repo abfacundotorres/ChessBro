@@ -92,3 +92,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H17 Notas más vivas y tarjeta por jugada (flecha, etiquetas, avance) en las 85 líneas de las 21 aperturas; ~100 afirmaciones dudosas corregidas
 - [x] H18 Estética «Bosque y crema»: paleta clara y oscura, tablero verde y crema, íconos en la barra, tarjetas y acordeones táctiles, persistencia de datos
 - [x] H19 e2e sin conexión en el CI (el deploy lo espera) y bundle partido por pantallas (1 MB → 407 KB)
+- [x] H20 Ícono nuevo: rey con dos peones, trazo grueso y dorados sobre verde pastel (dibujo propio)

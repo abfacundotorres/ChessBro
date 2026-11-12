@@ -1,6 +1,6 @@
 {
   "name": "chessbro",
-  "version": "1.15.0",
+  "version": "1.16.0",
   "description": "PWA offline para aprender ajedrez de 0 a 1800",
   "scripts": {
     "dev": "vite",

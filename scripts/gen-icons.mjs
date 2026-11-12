@@ -9,33 +9,45 @@ const { chromium } = require('playwright')
 const dir = fileURLToPath(new URL('../public/icons/', import.meta.url))
 
 /**
- * Un rey de ajedrez sobre un tablero verde y negro (los casilleros llenan todo el ícono).
+ * Un rey con dos peones, de trazo grueso y colores planos dorados, sobre verde pastel (dibujo propio, inspirado en el estilo de línea).
  * @param {{ rounded: boolean, scale: number }} o  rounded: esquinas redondeadas (íconos normales);
- *   scale: tamaño del rey (las variantes "maskable" lo achican para quedar en la zona segura).
+ *   scale: tamaño del dibujo (las variantes "maskable" lo achican para quedar en la zona segura).
  */
 function art({ rounded, scale }) {
-  // Tablero de 8×8: casilleros negros y verdes alternados.
-  let board = ''
-  for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) board += `<rect x="${c * 64}" y="${r * 64}" width="64" height="64" fill="${(r + c) % 2 === 0 ? '#2FA84F' : '#101311'}"/>`
-  const ink = '#0B0D0C'
+  const ink = '#14110B'
+  const gold = '#FFC21F' // cuerpo
+  const tan = '#EDB04E' // partes de luz (cuerpo del rey, collares)
+  const deep = '#D58E26' // sombras (bases)
+  const sw = 14
+  const st = `stroke="${ink}" stroke-width="${sw}" stroke-linejoin="round" stroke-linecap="round"`
+  /** Un peón centrado en cx, con la base apoyada en y=452. */
+  const pawn = (cx) => `
+    <g ${st}>
+      <path d="M${cx - 20} 276L${cx + 20} 276L${cx + 40} 392L${cx - 40} 392Z" fill="${gold}"/>
+      <path d="M${cx - 40} 392L${cx + 40} 392L${cx + 66} 420L${cx - 66} 420Z" fill="${gold}"/>
+      <rect x="${cx - 82}" y="420" width="164" height="30" rx="15" fill="${deep}"/>
+      <rect x="${cx - 38}" y="246" width="76" height="32" rx="16" fill="${tan}"/>
+      <circle cx="${cx}" cy="204" r="44" fill="${gold}"/>
+    </g>`
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
   <defs>
-    <linearGradient id="king" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFF4D6"/><stop offset=".55" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F1D9A0"/></linearGradient>
-    <radialGradient id="glow" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#000" stop-opacity=".0"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></radialGradient>
+    <radialGradient id="bg" cx=".5" cy=".42" r=".75"><stop offset="0" stop-color="#E3F3E1"/><stop offset="1" stop-color="#BFDFC4"/></radialGradient>
     <clipPath id="clip"><rect width="512" height="512" rx="${rounded ? 112 : 0}"/></clipPath>
   </defs>
   <g clip-path="url(#clip)">
-    ${board}
-    <rect width="512" height="512" fill="url(#glow)"/>
-    <g transform="translate(256 256) scale(${scale}) translate(-256 -256)" stroke="${ink}" stroke-width="10" stroke-linejoin="round" stroke-linecap="round">
-      <ellipse cx="256" cy="452" rx="150" ry="18" fill="#000" opacity=".4" stroke="none"/>
-      <rect x="132" y="408" width="248" height="46" rx="23" fill="url(#king)"/>
-      <rect x="150" y="372" width="212" height="42" rx="21" fill="url(#king)"/>
-      <path d="M204 372C196 318 214 282 214 240L298 240C298 282 316 318 308 372Z" fill="url(#king)"/>
-      <rect x="186" y="214" width="140" height="34" rx="17" fill="url(#king)"/>
-      <path d="M200 214C176 170 196 124 256 124C316 124 336 170 312 214Z" fill="url(#king)"/>
-      <path d="M256 124L256 70M232 92L280 92" stroke-width="22" fill="none"/>
-      <path d="M256 124L256 70M232 92L280 92" stroke="#FFF4D6" stroke-width="10" fill="none"/>
+    <rect width="512" height="512" fill="url(#bg)"/>
+    <g transform="translate(256 262) scale(${scale}) translate(-256 -262)">
+      ${pawn(120)}
+      ${pawn(392)}
+      <g ${st}>
+        <rect x="214" y="132" width="84" height="32" rx="16" fill="${tan}"/>
+        <path d="M242 134L242 100L222 100L222 74L242 74L242 50L270 50L270 74L290 74L290 100L270 100L270 134Z" fill="${gold}"/>
+        <path d="M196 168L316 168L302 244L210 244Z" fill="${tan}"/>
+        <rect x="200" y="244" width="112" height="24" rx="6" fill="${gold}"/>
+        <path d="M222 268L290 268L306 350L356 420L156 420L206 350Z" fill="${tan}"/>
+        <rect x="146" y="420" width="220" height="34" rx="17" fill="${deep}"/>
+        <rect x="128" y="448" width="256" height="34" rx="17" fill="${tan}"/>
+      </g>
     </g>
   </g>
 </svg>`

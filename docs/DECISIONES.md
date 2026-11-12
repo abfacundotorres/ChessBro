@@ -612,3 +612,13 @@
   compila como en Pages, sirve con `vite preview` y corre `scripts/e2e-offline.mjs`; si falla sube las capturas como artefacto. **El deploy ahora espera a `check` y a `e2e`**:
   un e2e roto frena la publicación (decisión a revisar si resulta inestable). Los pasos se reprodujeron localmente y el YAML se validó, pero **la primera corrida real en GitHub
   Actions es la prueba de verdad**.
+
+## H20: ícono nuevo, rey con dos peones sobre verde pastel
+- **Pedido**: tres opciones de ícono con la cruz del rey sobre cuatro tableros; ninguna convenció (la cruz sola parecía religiosa). Nuevo modelo: una imagen de referencia con un rey
+  flanqueado por dos peones, trazo grueso y dorados, sobre **fondo verde pastel**.
+- **Cómo**: `scripts/gen-icons.mjs` dibuja un rey y dos peones **propios** (trazo negro grueso, cuerpo dorado `#FFC21F`, luces `#EDB04E`, bases `#D58E26`) sobre un degradé verde pastel
+  (`#E3F3E1` → `#BFDFC4`). **No se usó ni se calcó la imagen de referencia** (parece un ícono de banco de imágenes de licencia propia); solo se tomó la idea de composición y el estilo.
+- **Variantes**: normal (esquinas redondeadas), «maskable» y de iOS (sin esquinas, dibujo al 86 %). Se regeneran con `node scripts/gen-icons.mjs`. Color de la barra del navegador
+  (`#1F8A3F`) y pantalla de carga (crema) sin cambios.
+- **Verificado**: PNG de 192, 512, maskable y iOS generados; se ve legible a 40 px, en máscara circular y sobre fondo oscuro. **No verificado**: cómo lo recorta el Xiaomi en la pantalla de
+  inicio y la pantalla de carga con el ícono nuevo; hay que desinstalar y reinstalar la PWA (o esperar a que Chrome actualice el ícono) para verlo.
