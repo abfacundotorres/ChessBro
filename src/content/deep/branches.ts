@@ -60,9 +60,9 @@ export const BRANCHES: BranchDef[] = [
     color: 'b',
     name: 'Siciliana: 3.Ab5+',
     moves: ['e4', 'c5', 'Nf3', 'd6', 'Bb5+', 'Bd7', 'Bxd7+', 'Qxd7', 'c4', 'Nc6', 'Nc3', 'Nf6', 'd4', 'cxd4', 'Nxd4', 'g6'],
-    idea: 'Contra 3.Ab5+, interponés el alfil y cambiás: el rival evita la teoría pero te deja una posición cómoda. Después de c4 y d4, cambiás en d4 y hacés el fianchetto.',
+    idea: 'Contra 3.Ab5+, interponés el alfil y cambiás: las blancas evitan la teoría y te dejan una posición cómoda. Después de c4 y d4, cambiás en d4 y hacés el fianchetto.',
     plan: ['Interponé …Ad7 y cambiá alfiles', 'Desarrollá con …Cc6 y …Cf6', 'Cambiá en d4 y hacé el fianchetto con …g6'],
-    tail: ['El rival da jaque con el alfil: es una línea tranquila para evitar la teoría.', 'Interponés el alfil: ofrecés cambiar.', 'El rival cambia alfiles.', 'Recapturás con la dama.', 'El rival juega c4 para controlar d5 y preparar d4.', 'Desarrollás el caballo de dama y presionás d4.', 'El rival desarrolla el caballo.', 'Desarrollás el caballo de rey.', 'El rival ocupa el centro con d4.', 'Cambiás peones: abrís la columna c.', 'El rival recaptura con el caballo.', 'Preparás el fianchetto: tu alfil apuntará al flanco de dama.'],
+    tail: ['Ab5+: las blancas dan jaque para esquivar la teoría de la Siciliana abierta.', 'Te interponés con el alfil y ofrecés cambiar.', 'Las blancas aceptan el cambio con jaque.', 'Recapturás con la dama.', 'c4 controla d5 y prepara d4.', 'Tu caballo sale y controla d4.', 'Las blancas sacan el otro caballo.', 'Sacás el caballo de rey y atacás e4.', 'Las blancas abren el centro con d4.', 'Cambiás en d4 y abrís la columna c.', 'Las blancas recapturan con el caballo.', 'Preparás el fianchetto: el alfil de g7 va a apuntar al flanco de dama.'],
     quiz: [q('¿Qué hacés contra 3.Ab5+?', ['Interponés el alfil y cambiás', 'Movés el rey', 'Cambiás damas', 'Interponés el caballo'], 0, '…Ad7 es la forma más simple: cambiás alfiles y seguís con tu desarrollo.')],
   },
   {
@@ -71,9 +71,9 @@ export const BRANCHES: BranchDef[] = [
     color: 'b',
     name: 'Siciliana: Ataque Inglés (Ae3)',
     moves: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5', 'Nb3', 'Be6', 'f3', 'Nbd7', 'Qd2', 'b5'],
-    idea: 'El Ataque Inglés (Ae3, f3 y Dd2) es el plan más agresivo del rival: enroca largo y ataca con peones. Tu respuesta es contraatacar en el flanco de dama con …b5 antes de que lleguen.',
+    idea: 'El Ataque Inglés (Ae3, f3 y Dd2) es el plan más agresivo de las blancas: enrocan largo y avanzan los peones. Tu respuesta es contraatacar en el flanco de dama con …b5 antes de que lleguen.',
     plan: ['Respondé con …e5 y desarrollá con …Ae6 y …Cbd7', 'Contraatacá con …b5 apenas puedas', 'No te quedes pasivo: el que ataca más rápido gana'],
-    tail: ['El rival desarrolla el alfil: es el Ataque Inglés.', 'Echás al caballo de d4 y controlás el centro.', 'El caballo se retira.', 'Desarrollás el alfil y controlás d5.', 'El rival prepara g4 y el enroque largo.', 'Desarrollás el caballo de dama.', 'La dama del rival se une al ataque.', 'Ganás espacio en el flanco de dama: contraatacás antes de que llegue el ataque.'],
+    tail: ['Ae3: arranca el Ataque Inglés.', '…e5 echa al caballo de d4 y gana espacio en el centro.', 'El caballo se retira.', '…Ae6 controla d5 y mira al caballo de b3.', 'f3 sostiene e4 y prepara Dd2 y el enroque largo.', 'Sale el caballo de dama.', 'Dd2 completa el esquema blanco: después vienen el enroque largo y el ataque de peones.', '…b5 contraataca en el flanco de dama antes de que llegue el ataque blanco.'],
     quiz: [q('¿Cómo respondés al Ataque Inglés?', ['Contraatacás con …b5 en el flanco de dama', 'Te quedás quieto', 'Cambiás damas enseguida', 'Enrocás largo'], 0, 'Si el rival ataca por un flanco, tu mejor defensa es un contraataque rápido en el otro.')],
   },
   {

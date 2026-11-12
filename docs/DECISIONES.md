@@ -482,3 +482,17 @@
   la dama de f3 ataca d5; peones doblados en f2/f3.
 - **No verificado**: que la posición de la Escandinava sea "algo mejor para las blancas" en espacio (es una apreciación), ni nada de lo
   dicho sobre b4 (se dejó sin valorar). No corrí el e2e (solo cambió texto de contenido); sí tsc, eslint, vitest y build.
+
+## H17 (3ª tanda): la Siciliana con la voz nueva
+- **Alcance**: las 6 líneas de la Siciliana (con negras): notas e ideas. Mismas jugadas, así que los controles con Stockfish no cambian.
+  Siguen pendientes 18 aperturas (entre ellas Francesa y Caro-Kann, que quedaron para la próxima tanda).
+- **Errores encontrados al releer**: (1) en la línea Alapin con Ae3, tras …cxd4 cxd4 decía que las blancas "vuelven a tener dos peones en el
+  centro"; queda un solo peón central, d4, aislado (sin peones en c ni e). Ahora lo dice, y la idea de la línea apunta a ese peón. (2) Ag2 en la
+  Cerrada "apuntaba a tu flanco de dama": el peón de e4 le tapa la diagonal; ahora dice que queda detrás de e4. (3) …Cc6 en 3.Ab5+ "presionaba
+  d4" cuando no hay peón en d4 (controla la casilla). (4) …e5 en la Najdorf "te quedás con el centro": omitía el hueco de d5, que ningún peón negro
+  cuida. (5) …Ae6 en el Ataque Inglés no mencionaba que mira al caballo de b3.
+- **Verificado con chess.js** (prueba descartable): e5 ataca a Cd4; d5 sin guardia de peón; a6 controla b5; las blancas sin peón de e tras exd5; Cf6
+  protege d5; Cf3/c3 defienden d4; peón único y aislado en d4; Ag2 no ve c6; Ag7 ve c3; Cc6 controla d4 y b4; e6 controla d5; Ae6 ataca b3 y
+  controla d5; f3 sostiene e4; c4 controla d5.
+- **No verificado**: las valoraciones ("posición igualada", "juego para las negras"), los planes (…b5 o …d5, enroque largo blanco) y
+  que 2.c3 y 3.Ab5+ "esquiven teoría" (conocimiento general, sin fuente consultada). No corrí el e2e (solo texto); sí tsc, eslint, vitest, build.
