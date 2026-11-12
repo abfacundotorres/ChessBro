@@ -106,7 +106,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['d4', 'd5', 'Bf4', 'Nc6', 'e3', 'Bf5', 'c3', 'e6', 'Nd2', 'Nf6', 'Ngf3', 'Bd6', 'Bg3', 'O-O'],
     idea: 'Contra …Cc6 el esquema sigue igual: e3 y c3 apuntalan d4, y desarrollás con Cd2 y Cgf3. Después de …Ad6 retirás el alfil a g3 para conservarlo.',
     plan: ['Apuntalá d4 con e3 y c3', 'Desarrollá con Cd2 y Cgf3', 'Retirá el alfil a g3 si te lo ofrecen cambiar'],
-    tail: ['Las negras desarrollan el caballo de dama y presionan d4.', 'Apuntalás d4 y abrís la diagonal del alfil de f1.', 'Las negras desarrollan el alfil afuera.', 'Reforzás d4 con un segundo peón.', 'Las negras abren la diagonal del alfil de f8.', 'Desarrollás el caballo de dama sin bloquear al alfil.', 'Las negras desarrollan el caballo de rey.', 'Desarrollás el caballo de rey: el esquema Londres casi está completo.', 'Las negras ofrecen cambiar alfiles.', 'Retirás el alfil a g3 para conservarlo.', 'Las negras enrocan: el rey queda a salvo.'],
+    tail: ['…Cc6 desarrolla el caballo de dama y presiona d4.', 'e3 apuntala d4 y abre la diagonal del alfil de f1.', '…Af5 saca el alfil de c8 por fuera de la cadena de peones.', 'c3 refuerza d4 con un segundo peón.', '…e6 abre la diagonal del alfil de f8.', 'Cd2 desarrolla el caballo de dama.', 'Las negras sacan el caballo de rey.', 'Cgf3 completa el esquema Londres: casi está todo en su lugar.', '…Ad6 ofrece cambiar alfiles.', 'Ag3 retira el alfil para conservarlo.', 'Las negras enrocan: el rey queda a salvo.'],
     quiz: [q('¿Qué hacés cuando te ofrecen cambiar el alfil de f4?', ['Lo retirás a g3 para conservarlo', 'Lo cambiás siempre', 'Lo dejás colgado', 'Enrocás'], 0, 'El alfil es tu pieza clave en el Londres: en g3 sigue activo y se mantiene.')],
   },
   {
@@ -128,7 +128,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['d4', 'd5', 'c4', 'dxc4', 'Nf3', 'a6', 'e3', 'Nf6', 'Bxc4', 'e6', 'O-O', 'c5', 'Qe2', 'b5', 'Bb3', 'Nc6'],
     idea: 'Si las negras intentan defender el peón con …a6 y …b5, recuperás el peón con el alfil y retirás a b3 cuando lo ataquen. Tu posición es más activa y tenés mejor desarrollo.',
     plan: ['Recuperá el peón con el alfil', 'Retirá el alfil a b3 si lo atacan con …b5', 'Enrocá y presioná el centro'],
-    tail: ['Las negras preparan …b5 para defender el peón de c4.', 'Abrís la diagonal del alfil de f1 para recuperar el peón.', 'Las negras desarrollan el caballo de rey.', 'Recuperás el peón con el alfil.', 'Las negras abren la diagonal del alfil de f8.', 'Enrocás: rey a salvo.', 'Las negras atacan el centro.', 'La dama se prepara para la ruptura en el centro.', 'Las negras ganan espacio y atacan el alfil.', 'El alfil se retira a b3.', 'Las negras desarrollan el caballo de dama.'],
+    tail: ['…a6 prepara …b5 para defender el peón de c4.', 'e3 abre la diagonal del alfil de f1 para recuperar el peón.', 'Las negras sacan el caballo de rey.', 'Recuperás el peón con el alfil.', '…e6 abre la diagonal del alfil de f8.', 'Enrocás: rey a salvo.', '…c5 ataca el centro.', 'La dama sale a e2: protege al alfil de c4 y libera d1 para la torre.', '…b5 gana espacio y ataca al alfil.', 'El alfil se retira a b3: sigue en la misma diagonal y queda a salvo.', 'Las negras sacan el caballo de dama.'],
     quiz: [q('¿Adónde retirás el alfil si lo ataca …b5?', ['A b3', 'A e2', 'A a2', 'No se mueve'], 0, 'En b3 el alfil sigue activo en la misma diagonal y queda a salvo.')],
   },
   {
@@ -139,7 +139,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['d4', 'd5', 'c4', 'dxc4', 'Nf3', 'Nf6', 'e3', 'Bg4', 'Bxc4', 'e6', 'h3', 'Bh5', 'Nc3', 'Nc6'],
     idea: 'Contra …Ag4, recuperás el peón con el alfil y le preguntás al alfil con h3. Tu desarrollo sigue siendo mejor y tenés el centro.',
     plan: ['Recuperá el peón con Axc4', 'Preguntale al alfil con h3', 'Desarrollá con Cc3 y enrocá'],
-    tail: ['Las negras desarrollan el alfil afuera, atacando el caballo de f3.', 'Recuperás el peón con el alfil.', 'Las negras abren la diagonal del alfil de f8.', 'Le preguntás al alfil de g4.', 'El alfil se retira conservando la clavada.', 'Desarrollás el caballo de dama.', 'Las negras desarrollan el caballo de dama.'],
+    tail: ['…Ag4 clava el caballo de f3 contra la dama.', 'Recuperás el peón con el alfil.', '…e6 abre la diagonal del alfil de f8.', 'h3 le pregunta al alfil de g4.', 'El alfil se retira a h5 y conserva la clavada.', 'Desarrollás el caballo de dama.', 'Las negras sacan el caballo de dama.'],
     quiz: [q('¿Para qué sirve h3 en esta línea?', ['Preguntarle al alfil de g4 qué va a hacer', 'Atacar la dama', 'Enrocar', 'Proteger d4'], 0, 'h3 obliga al alfil a retirarse o cambiarse: ganás claridad.')],
   },
   {
@@ -150,7 +150,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Nbd7', 'e3', 'c6', 'Nf3', 'Qa5', 'Nd2', 'Bb4', 'Qc2', 'O-O', 'Be2', 'e5'],
     idea: 'La variante Cambridge Springs: las negras clavan tu caballo con …Da5 y …Ab4. Vos respondés con Cd2 y Dc2 para defender y desarrollar sin perder material.',
     plan: ['Respondé a …Da5 con Cd2, defendiendo el caballo de c3', 'Dc2 refuerza la defensa', 'Enrocá y buscá cxd5 cuando sea seguro'],
-    tail: ['Las negras desarrollan el caballo de dama y defienden el caballo de f6.', 'Apuntalás d4 y abrís la diagonal del alfil de f1.', 'Las negras apuntalan d5 con un peón.', 'Desarrollás el caballo de rey.', 'La dama ataca el caballo de c3 y apoya …Ab4.', 'El caballo se retira a d2 para apoyar el caballo de c3 y la clavada.', 'Las negras clavan el caballo de c3.', 'La dama apoya el centro y defiende c3.', 'Las negras enrocan.', 'Desarrollás el alfil.', 'Las negras rompen en el centro.'],
+    tail: ['…Cbd7 saca el caballo de dama y defiende al de f6.', 'e3 apuntala d4 y abre la diagonal del alfil de f1.', '…c6 apuntala d5 con un peón.', 'Desarrollás el caballo de rey.', '…Da5 ataca al caballo de c3 y prepara …Ab4: es la idea de la variante Cambridge Springs.', 'Cd2 ocupa la casilla d2: así, cuando venga …Ab4, el caballo de c3 no queda clavado contra el rey.', '…Ab4 clava el caballo de c3.', 'Dc2 defiende c3 y apoya el centro.', 'Las negras enrocan.', 'Desarrollás el alfil de rey.', '…e5 rompe en el centro.'],
     quiz: [q('¿Qué hacés contra …Da5 y …Ab4?', ['Defendés el caballo de c3 con Cd2 y Dc2', 'Cambiás damas', 'Ignorás la clavada', 'Enrocás largo'], 0, 'Con Cd2 y Dc2 el caballo queda defendido y vos seguís desarrollando.')],
   },
 ]

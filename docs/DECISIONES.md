@@ -511,3 +511,19 @@
   salida tras Cbd2; la captura al paso tras b4; el peón aislado de d4 en el Panov; la evaluación del final de la línea con Ad3.
 - **No verificado**: las valoraciones ("igualada", "sólido"), los nombres de variantes (Tarrasch, Panov, Dos Caballos) y que Cd2 evite la
   clavada …Ab4 por "flexibilidad" (conocimiento general, sin fuente). No corrí el e2e (solo texto).
+
+## H17 (5ª tanda): Gambito de Dama, India de Rey y Londres con la voz nueva
+- **Alcance**: 7 líneas del Gambito de Dama, 4 de la India de Rey y 5 del Londres: notas, ideas, un plan y una pregunta. Mismas jugadas, así que
+  los controles con Stockfish no cambian. Siguen pendientes 13 aperturas.
+- **Errores encontrados al releer**: (1) GD rehusado: tras ♘f3 decía "ahora podés enrocar", pero el alfil de f1 sigue en casa. (2) India de Rey
+  contra el Londres: …♘bd7 "sin bloquear tu alfil" (también en el plan): el caballo bloquea al alfil de c8. (3) Londres: la pregunta sobre ♘e5
+  decía "sin que un peón enemigo pueda echarlo", pero …f6 sí puede; la nota y la explicación ahora lo dicen. (4) Cambridge Springs: ♘d2 "apoyaba
+  el caballo de c3"; en realidad ocupa d2 para que …♗b4 no lo clave contra el rey. (5) Eslava: ♘f3 "atacaba d5 indirectamente" (no ataca nada). (6)
+  GD aceptado con …a6: ♕e2 "se prepara para la ruptura": lo concreto es que protege al alfil de c4 y libera d1. (7) India de Rey clásica: el
+  plan "…Cd7, …Ce8 y …f5" no sale de esta posición; ahora dice solo …f5 y ataque en el flanco de rey. (8) ♘ge2 del GD Cambio "dejaba libres al
+  alfil de f4 y a la dama"; lo concreto es que permite recapturar en d4 con el caballo.
+- **Verificado con chess.js** (prueba descartable): enroque ilegal con el alfil en f1; clavada absoluta del caballo de c3 con …♗b4 (Eslava) y no
+  absoluta tras ♘d2 (Cambridge Springs); Ac4 protegido por ♕e2; alfil de c8 sin casillas con …♘bd7; ♗d3 apunta a h7; ♘e2 y d3; la torre de e8 ataca e2
+  y el rey blanco sigue en e1; ♘e5 defendido por d4 y ♗g3 y atacado por ♗d6; el peón de f7 puede jugar …f6.
+- **No verificado**: valoraciones ("igualada", "cómoda"), los nombres de variantes (Eslava, Cambridge Springs, Cambio) y los planes típicos de
+  la India de Rey (…f5, …e5): son conocimiento general sin fuente. No corrí el e2e (solo texto).
