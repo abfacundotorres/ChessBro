@@ -28,15 +28,15 @@ interface BoardProps {
   marks?: Readonly<Record<string, 'sel' | 'ok' | 'bad'>>
 }
 
-const LIGHT = '#dee3e6'
-const DARK = '#8ca2ad'
-const LAST_MOVE: CSSProperties = { backgroundColor: 'rgba(155, 199, 0, 0.41)' }
-const SELECTED: CSSProperties = { backgroundColor: 'rgba(20, 85, 30, 0.5)' }
+const LIGHT = 'var(--board-light)'
+const DARK = 'var(--board-dark)'
+const LAST_MOVE: CSSProperties = { backgroundColor: 'var(--board-last)' }
+const SELECTED: CSSProperties = { backgroundColor: 'rgba(255, 214, 70, 0.75)' }
 const TARGET_EMPTY: CSSProperties = {
-  background: 'radial-gradient(rgba(20, 85, 30, 0.5) 22%, transparent 24%)',
+  background: 'radial-gradient(rgba(0, 0, 0, 0.25) 22%, transparent 24%)',
 }
 const TARGET_CAPTURE: CSSProperties = {
-  background: 'radial-gradient(transparent 0%, transparent 78%, rgba(20, 85, 30, 0.45) 80%)',
+  background: 'radial-gradient(transparent 0%, transparent 78%, rgba(0, 0, 0, 0.28) 80%)',
 }
 const MARK_STYLES: Record<'sel' | 'ok' | 'bad', CSSProperties> = {
   sel: { boxShadow: 'inset 0 0 0 5px rgba(36, 120, 255, 0.9)' },

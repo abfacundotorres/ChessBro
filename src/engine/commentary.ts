@@ -223,7 +223,7 @@ function best(e: MoveError, f: Facts | null, seed: number): string {
     if (x.develops) why.push('saca una pieza que seguía en casa')
   }
   const detail = why.length > 0 ? ` ${pick(e, seed, 'bd', ['Esa jugada', 'Con ella', 'Fijate que'])} ${why.join(' y ')}.` : ''
-  const tail = pick(e, seed, 'bt', ['Mirá la flecha verde en el tablero.', 'Está marcada en verde sobre el tablero.', 'Probá ver por qué es mejor: movela mentalmente antes de seguir.', ''])
+  const tail = pick(e, seed, 'bt', ['Mirá la flecha azul en el tablero.', 'Está marcada en azul sobre el tablero.', 'Probá ver por qué es mejor: movela mentalmente antes de seguir.', ''])
   return `${intro}${detail} ${tail}`.replace(/\s+/g, ' ').trim()
 }
 

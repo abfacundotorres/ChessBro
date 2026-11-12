@@ -25,7 +25,7 @@ export function ReviewRepertoire() {
   return (
     <div className="flex flex-col gap-3">
       <header>
-        <Link to="/repertorio" className="text-sm text-muted">
+        <Link to="/repertorio" className="back-link">
           ← Repertorio
         </Link>
         <h1 className="text-xl font-bold">Repaso del repertorio</h1>

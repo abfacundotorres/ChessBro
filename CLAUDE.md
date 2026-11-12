@@ -33,7 +33,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/content/` — contenido estático (currículo, temas, lecciones). Toda posición/solución
   se valida en tests con chess.js (y con Stockfish desde H2).
 - `src/features/<pantalla>/` — pantallas. `src/ui/` — componentes reutilizables (Board, MoveList).
-- `src/lib/` — integración con el navegador (PWA, motor). `src/ui/ErrorBoundary.tsx` — límite de error por pantalla (evita la pantalla en blanco). `src/ui/NoteCard.tsx` — tarjeta de la nota de cada jugada (flecha, etiquetas de `engine/moveTags.ts`, barra de avance).
+- `src/lib/` — integración con el navegador (PWA, motor). `src/ui/ErrorBoundary.tsx` — límite de error por pantalla (evita la pantalla en blanco). `src/ui/Icon.tsx` — íconos propios (barra y tarjetas). Colores: solo tokens de `index.css` (nada de colores sueltos; el tablero usa `--board-*`). `src/ui/NoteCard.tsx` — tarjeta de la nota de cada jugada (flecha, etiquetas de `engine/moveTags.ts`, barra de avance).
 - `src/features/games/` — importación de Lichess, análisis y detalle de partida.
 - `src/features/lessons/`, `src/features/endgames/` — lecciones con ejercicios y finales contra el motor.
 - `src/test/` — utilidades de tests (Stockfish en Node, `verifyExercise`, `verifyMoveChallenge`) y herramientas
@@ -90,3 +90,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H15 Más ramas del rival: 13 líneas nuevas (85 en total) en las aperturas más comunes
 - [x] H16 Robustez: avisos de error en vez de pantalla en blanco (límite de error, motor caído, partidas inválidas)
 - [x] H17 Notas más vivas y tarjeta por jugada (flecha, etiquetas, avance) en las 85 líneas de las 21 aperturas; ~100 afirmaciones dudosas corregidas
+- [x] H18 Estética «Bosque y crema»: paleta clara y oscura, tablero verde y crema, íconos en la barra, tarjetas y acordeones táctiles, persistencia de datos

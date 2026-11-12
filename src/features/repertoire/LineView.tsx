@@ -32,7 +32,7 @@ function Body({ line }: { line: RepLine }) {
   return (
     <div className="flex flex-col gap-3">
       <header>
-        <Link to={line.opening ? `/aperturas/${line.opening}` : '/repertorio'} className="text-sm text-muted">
+        <Link to={line.opening ? `/aperturas/${line.opening}` : '/repertorio'} className="back-link">
           ← {line.opening ? (openingById(line.opening)?.name ?? 'Aperturas') : 'Repertorio'}
         </Link>
         <h1 className="text-xl font-bold">{line.name}</h1>

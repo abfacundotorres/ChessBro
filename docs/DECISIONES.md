@@ -578,3 +578,26 @@
   jugadas no cambiaron: 0 líneas `moves:` modificadas en todo H17).
 - **Cierre del hito**: `tsc`, `eslint`, `vitest` (436), build para Pages y el e2e sin conexión pasan. **No probado**: la tarjeta por jugada en un teléfono real
   (solo Chromium a 360 px) ni la voz con las notas nuevas. Versión 1.13.0.
+
+## H18: nueva estética «Bosque y crema»
+- **Pedido**: auditar y mejorar la estética. Se hicieron tres maquetas fuera del repo (Bosque y crema, Nogal y ámbar, Verde del ícono) y se eligió la
+  **A, Bosque y crema**, con la tarjeta de la primera tarea de Hoy **discreta** (borde verde y una etiqueta «Empezá por acá», no una tarjeta de color).
+  Libertad total sobre paleta y tablero.
+- **Paleta** (tokens en `index.css`, claro y oscuro): fondo crema `#f5f0e4`, tarjetas `#fffcf5` con borde fino y sombra suave, texto `#23201a`, acento verde
+  bosque `#245c37` (en oscuro, verde claro `#7bc08a` sobre marrón casi negro `#16130e`) y un color propio para el rival (`--color-rival`, ámbar). Los títulos
+  (`h1`, `h2`) van en serif del sistema (`Georgia, Noto Serif, Times`): no se carga ninguna fuente (CSP y offline) y en Android cae en Noto Serif, que no se
+  vio en este entorno. Radios más redondeados (`--radius-xl` 1 rem).
+- **Tablero** (`Board.tsx`): casillas crema y verde por variables CSS (`--board-*`, con versión oscura), jugada resaltada en amarillo, selección amarilla y puntos de
+  movimiento oscuros. **Las flechas verdes dejaron de verse sobre el tablero verde** (lo atrapó la verificación visual): las flechas de la última jugada son pizarra
+  oscura (tuya) y naranja (rival) y la del análisis que sugiere el motor pasó de verde a azul (se actualizaron el texto de la pantalla y dos frases del entrenador).
+- **Navegación y pantallas**: barra inferior con íconos propios (`ui/Icon.tsx`, sin dependencias) y estado activo en píldora; Hoy con íconos por tipo de tarea; Aprender
+  con tarjetas de ícono y flecha; acordeones como filas con flecha que gira.
+- **Toque**: los acordeones (`summary`) pasaron de 20–28 px a ≥ 56 px y los «← Volver» de 17 px a ≥ 48 px (reglas globales en `index.css`, clase `.back-link`).
+  Medido de nuevo en 11 pantallas a 360 px: ya no queda ningún botón, enlace ni acordeón por debajo de 44 px, salvo un checkbox de Ajustes (20 px, dentro de una
+  etiqueta táctil).
+- **Datos**: al arrancar la app pide almacenamiento persistente (`navigator.storage.persist()`) para que el navegador no borre IndexedDB si falta espacio. Si lo
+  niega no pasa nada; el backup manual sigue siendo la red de seguridad. No se probó qué responde Chrome en el Xiaomi.
+- **Pantalla de carga**: `background_color` del manifest pasó de negro a crema. Color de la barra del navegador y ícono, sin cambios.
+- **Probado**: Chromium a 360 y 390 px, claro y oscuro, 13 pantallas con capturas; tsc, eslint, vitest (436), build para Pages y e2e sin conexión. **No probado**: un teléfono
+  real (Xiaomi), iOS, la serif en Android y el contraste con una herramienta (se evaluó a ojo). Pantallas que no se revisaron una por una: finales, repaso del repertorio,
+  detalle de partida con análisis y las pantallas de táctica con resultados.

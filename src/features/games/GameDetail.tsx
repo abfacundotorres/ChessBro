@@ -80,7 +80,7 @@ export function GameDetail() {
     focus && ply === focus.ply
       ? [
           { startSquare: game.moves[focus.ply]!.slice(0, 2), endSquare: game.moves[focus.ply]!.slice(2, 4), color: 'rgba(220, 38, 38, 0.8)' },
-          { startSquare: focus.bestUci.slice(0, 2), endSquare: focus.bestUci.slice(2, 4), color: 'rgba(22, 163, 74, 0.85)' },
+          { startSquare: focus.bestUci.slice(0, 2), endSquare: focus.bestUci.slice(2, 4), color: 'rgba(37, 99, 235, 0.9)' },
         ]
       : []
 
@@ -92,7 +92,7 @@ export function GameDetail() {
   return (
     <div className="flex flex-col gap-3">
       <header>
-        <Link to="/partidas" className="text-sm text-muted">
+        <Link to="/partidas" className="back-link">
           ← Partidas
         </Link>
         <h1 className="text-xl font-bold">
@@ -177,7 +177,7 @@ export function GameDetail() {
               ))}
             </ul>
           )}
-          <p className="text-xs text-muted">Flecha roja: lo que jugaste. Verde: lo que sugiere el motor.</p>
+          <p className="text-xs text-muted">Flecha roja: lo que jugaste. Azul: lo que sugiere el motor.</p>
         </section>
       )}
     </div>

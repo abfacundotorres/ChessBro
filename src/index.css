@@ -1,26 +1,41 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-bg: #f4f5f7;
-  --color-surface: #ffffff;
-  --color-surface-2: #e7e9ee;
-  --color-text: #15171c;
-  --color-muted: #5b6270;
-  --color-accent: #2f7d4f;
-  --color-accent-text: #ffffff;
-  --color-border: #d5d9e0;
+  --color-bg: #f5f0e4;
+  --color-surface: #fffcf5;
+  --color-surface-2: #ece4d2;
+  --color-text: #23201a;
+  --color-muted: #6b6454;
+  --color-accent: #245c37;
+  --color-accent-text: #fffcf5;
+  --color-border: #ddd3bd;
+  --color-rival: #b9751a;
+  --font-head: Georgia, 'Noto Serif', 'Times New Roman', serif;
+  --radius-xl: 1rem;
+}
+
+:root {
+  --board-light: #efecd3;
+  --board-dark: #6c9a5a;
+  --board-last: rgba(235, 200, 70, 0.55);
+  --shadow-card: 0 1px 0 rgba(60, 45, 10, 0.04), 0 4px 14px rgba(60, 45, 10, 0.07);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #0f1115;
-    --color-surface: #1a1d23;
-    --color-surface-2: #262a32;
-    --color-text: #e9ebef;
-    --color-muted: #9aa1ad;
-    --color-accent: #4caf73;
-    --color-accent-text: #0b1a10;
-    --color-border: #2f343d;
+    --color-bg: #16130e;
+    --color-surface: #211c15;
+    --color-surface-2: #2e261b;
+    --color-text: #f1ead9;
+    --color-muted: #a89c84;
+    --color-accent: #7bc08a;
+    --color-accent-text: #10200f;
+    --color-border: #3a3225;
+    --color-rival: #e0a53a;
+    --board-light: #d6d3b4;
+    --board-dark: #59804c;
+    --board-last: rgba(224, 180, 60, 0.5);
+    --shadow-card: 0 4px 14px rgba(0, 0, 0, 0.3);
   }
 }
 
@@ -39,7 +54,59 @@ body {
   overflow-x: hidden;
 }
 
+@layer base {
+  h1,
+  h2 {
+    font-family: var(--font-head);
+    letter-spacing: -0.01em;
+  }
+}
+
 @layer components {
+  /* Tarjetas: borde fino y sombra suave (los tokens cambian solos con el tema). */
+  .bg-surface {
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-card);
+  }
+  /* Acordeones: el título ocupa toda la tarjeta (≥ 56 px) para que se toque cómodo con el pulgar. */
+  details > summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 3.5rem;
+    margin: -1rem;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  details > summary::-webkit-details-marker {
+    display: none;
+  }
+  details > summary::after {
+    content: '›';
+    flex: none;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: var(--color-muted);
+    transition: transform 0.15s;
+  }
+  details[open] > summary {
+    margin-bottom: 0;
+  }
+  details[open] > summary::after {
+    transform: rotate(90deg);
+  }
+  /* Volver: botón de al menos 48 px de alto, alineado con el borde del texto. */
+  .back-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 3rem;
+    margin: -0.5rem 0 0 -0.5rem;
+    padding: 0 0.5rem;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+  }
   .btn {
     @apply min-h-12 rounded-xl bg-surface-2 px-4 font-medium text-text active:scale-[0.98] disabled:opacity-40;
   }

@@ -91,7 +91,7 @@ function Body({ o }: { o: Opening }) {
 
   const header = (
     <header>
-      <Link to="/aperturas" className="text-sm text-muted">
+      <Link to="/aperturas" className="back-link">
         ← Aperturas
       </Link>
       <h1 className="text-xl font-bold">{o.name}</h1>
@@ -104,7 +104,7 @@ function Body({ o }: { o: Opening }) {
   if (mode !== 'home') {
     return (
       <div className="flex flex-col gap-3">
-        <button type="button" className="self-start text-sm text-muted" onClick={back}>
+        <button type="button" className="back-link self-start" onClick={back}>
           ← {o.name}
         </button>
         {mode === 'session' && <Session opening={o} lines={deepLines} items={items} plans={plans} punish={punish} quiz={quiz} onExit={back} />}

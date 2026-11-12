@@ -22,13 +22,14 @@ import { OpeningView } from './features/openings/OpeningView'
 import { Settings } from './features/settings/Settings'
 import { UpdateBanner } from './ui/UpdateBanner'
 import { ErrorBoundary } from './ui/ErrorBoundary'
+import { Icon, type IconName } from './ui/Icon'
 
 /** Cuatro pestañas; cada una cubre varias rutas (por ejemplo, Aprender incluye lecciones, aperturas, táctica y finales). */
-const NAV = [
-  { to: '/', label: 'Hoy', match: ['/'] },
-  { to: '/aprender', label: 'Aprender', match: ['/aprender', '/lecciones', '/tactica', '/aperturas', '/repertorio', '/finales', '/tablero'] },
-  { to: '/partidas', label: 'Partidas', match: ['/partidas'] },
-  { to: '/ajustes', label: 'Ajustes', match: ['/ajustes'] },
+const NAV: { to: string; label: string; icon: IconName; match: string[] }[] = [
+  { to: '/', label: 'Hoy', icon: 'hoy', match: ['/'] },
+  { to: '/aprender', label: 'Aprender', icon: 'aprender', match: ['/aprender', '/lecciones', '/tactica', '/aperturas', '/repertorio', '/finales', '/tablero'] },
+  { to: '/partidas', label: 'Partidas', icon: 'partidas', match: ['/partidas'] },
+  { to: '/ajustes', label: 'Ajustes', icon: 'ajustes', match: ['/ajustes'] },
 ]
 
 /** Rutas con la barra de pestañas fuera del límite de error: si una pantalla falla, la barra sigue. */
@@ -63,15 +64,18 @@ function TabBar() {
   const { pathname } = useLocation()
   const active = NAV.find((n) => n.match.some((m) => (m === '/' ? pathname === '/' : pathname === m || pathname.startsWith(`${m}/`)))) ?? NAV[0]
   return (
-    <nav className="fixed inset-x-0 bottom-0 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]">
+    <nav className="fixed inset-x-0 bottom-0 z-20 border-t border-border bg-surface pb-[env(safe-area-inset-bottom)]">
       <ul className="mx-auto grid max-w-lg grid-cols-4">
         {NAV.map((n) => (
           <li key={n.to}>
             <Link
               to={n.to}
               aria-current={n === active ? 'page' : undefined}
-              className={`flex min-h-14 items-center justify-center text-sm font-medium ${n === active ? 'text-accent' : 'text-muted'}`}
+              className={`flex min-h-16 flex-col items-center justify-center gap-0.5 text-xs ${n === active ? 'font-bold text-accent' : 'font-medium text-muted'}`}
             >
+              <span className={`flex h-7 w-14 items-center justify-center rounded-full ${n === active ? 'bg-surface-2' : ''}`}>
+                <Icon name={n.icon} size={21} />
+              </span>
               {n.label}
             </Link>
           </li>

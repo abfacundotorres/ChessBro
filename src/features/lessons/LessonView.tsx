@@ -71,7 +71,7 @@ function LessonBody({ id }: { id: string }) {
 
   const header = (
     <header>
-      <Link to="/lecciones" className="text-sm text-muted">
+      <Link to="/lecciones" className="back-link">
         ← Lecciones
       </Link>
       <h1 className="text-xl font-bold">{l.title}</h1>

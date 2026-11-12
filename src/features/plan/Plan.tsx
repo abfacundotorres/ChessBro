@@ -9,6 +9,7 @@ import { StreakChip } from '../../ui/StreakChip'
 import { FOCUS, MIN_GAMES, type Patterns as PatternsData } from '../../engine/patterns'
 import { lessonById } from '../../content/lessons'
 import { Diagnosis } from '../home/Diagnosis'
+import { IconTile, iconForRoute } from '../../ui/Icon'
 
 const HOURS = Array.from({ length: MAX_HOURS - MIN_HOURS + 1 }, (_, i) => MIN_HOURS + i)
 
@@ -34,7 +35,7 @@ export function Plan() {
   return (
     <div className="flex flex-col gap-4">
       <header>
-        <h1 className="text-2xl font-bold">Hoy</h1>
+        <h1 className="text-3xl font-bold">Hoy</h1>
         <div className="mt-1">
           <StreakChip />
         </div>
@@ -50,7 +51,7 @@ export function Plan() {
           <>
             <p className="text-sm text-muted">Unos {minutes} minutos: una sesión.</p>
             {tasks.map((t, i) => (
-              <TaskRow key={t.id} task={t} index={i + 1} />
+              <TaskRow key={t.id} task={t} first={i === 0} />
             ))}
             {more.length > 0 && (
               <details className="rounded-xl bg-surface p-4 text-sm">
@@ -185,11 +186,15 @@ function Errors({ pat }: { pat: PatternsData }) {
   )
 }
 
-function TaskRow({ task, index }: { task: Task; index?: number }) {
+function TaskRow({ task, first }: { task: Task; first?: boolean }) {
   return (
-    <Link to={task.to} className="flex items-center gap-3 rounded-xl bg-surface-2 p-3 active:scale-[0.99]">
-      {index !== undefined && <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-surface text-sm font-semibold">{index}</span>}
+    <Link
+      to={task.to}
+      className={`flex items-center gap-3 rounded-2xl bg-surface p-3 active:scale-[0.99] ${first ? 'border-l-4 !border-l-accent' : ''}`}
+    >
+      <IconTile name={iconForRoute(task.to)} />
       <span className="min-w-0 flex-1">
+        {first && <span className="block text-xs font-semibold uppercase tracking-wide text-accent">Empezá por acá</span>}
         <span className="block font-semibold">{task.label}</span>
         <span className="block text-sm text-muted">{task.detail}</span>
       </span>
