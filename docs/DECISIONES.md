@@ -496,3 +496,18 @@
   controla d5; f3 sostiene e4; c4 controla d5.
 - **No verificado**: las valoraciones ("posición igualada", "juego para las negras"), los planes (…b5 o …d5, enroque largo blanco) y
   que 2.c3 y 3.Ab5+ "esquiven teoría" (conocimiento general, sin fuente consultada). No corrí el e2e (solo texto); sí tsc, eslint, vitest, build.
+
+## H17 (4ª tanda): Francesa y Caro-Kann con la voz nueva
+- **Alcance**: las 5 líneas de la Francesa y las 6 de la Caro-Kann (con negras): notas e ideas. Mismas jugadas, así que los controles con
+  Stockfish de las líneas no cambian. Siguen pendientes 16 aperturas.
+- **Errores encontrados al releer**: (1) …Db6 "atacaba d4 por segunda vez": la dama no ve d4 mientras el peón de c5 le tapa la diagonal; ahora
+  dice que amenaza b2 y que mirará d4 cuando c5 capture. (2) …c4 "impedía b4": b4 sigue siendo legal, pero se puede tomar al paso. (3) Cbd2
+  "sin bloquear al alfil de c1": lo bloquea (el alfil queda sin casillas). (4) 7…Cf6 del Panov "desarrollás atacando": no ataca nada; suma un
+  defensor a d5. (5) …Ah7 "apuntaba a la gran diagonal": mira la b1–h7. (6) 17…Dxd4 en la Francesa con Ad3 decía "ganaste un peón, pero las blancas
+  tienen algo de actividad": el motor (profundidad 16) da solo unos −0,44 para las blancas, o sea la ventaja negra es de menos de medio peón.
+  (7) Dos notas llevaban asteriscos literales (`*antes*`, en la Caro-Kann y en el Londres): la app no interpreta Markdown y se veían
+  los asteriscos; se sacaron (también en el plan de la Caro-Kann clásica).
+- **Verificado con chess.js y Stockfish**: casillas atacadas y defendidas en d4, b3, b7, d5, f3, f7, h2; la clavada en f6 y f3; el alfil de c1 sin
+  salida tras Cbd2; la captura al paso tras b4; el peón aislado de d4 en el Panov; la evaluación del final de la línea con Ad3.
+- **No verificado**: las valoraciones ("igualada", "sólido"), los nombres de variantes (Tarrasch, Panov, Dos Caballos) y que Cd2 evite la
+  clavada …Ab4 por "flexibilidad" (conocimiento general, sin fuente). No corrí el e2e (solo texto).

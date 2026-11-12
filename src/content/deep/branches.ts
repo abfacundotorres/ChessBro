@@ -82,9 +82,9 @@ export const BRANCHES: BranchDef[] = [
     color: 'b',
     name: 'Caro-Kann: Ataque Panov',
     moves: ['e4', 'c6', 'd4', 'd5', 'exd5', 'cxd5', 'c4', 'Nf6', 'Nc3', 'e6', 'Nf3', 'Be7', 'cxd5', 'Nxd5', 'Bd3', 'Nc6', 'O-O', 'O-O'],
-    idea: 'El Ataque Panov (c4) busca una posición abierta con peón aislado. Vos apuntalás d5 con …e6, desarrollás con calma y recapturás en d5 con el caballo: tu posición es sólida.',
+    idea: 'El Ataque Panov (c4) busca una posición abierta. Apuntalás d5 con …e6, desarrollás con calma y recapturás con el caballo: las blancas quedan con un peón aislado en d4 para presionar.',
     plan: ['Desarrollá con …Cf6, …e6 y …Ae7', 'Recapturá en d5 con el caballo', 'Enrocá y cuidá las diagonales del rival'],
-    tail: ['El rival ataca d5 con el peón de c: es el Ataque Panov.', 'Desarrollás atacando.', 'El rival defiende y desarrolla.', 'Apuntalás d5 y abrís la diagonal del alfil de f8.', 'El rival desarrolla el caballo de rey.', 'Desarrollás el alfil.', 'El rival cambia peones.', 'Recapturás con el caballo, que queda en el centro.', 'El rival desarrolla el alfil.', 'Desarrollás el caballo de dama.', 'El rival enroca.', 'Enrocás: rey a salvo.'],
+    tail: ['c4: Ataque Panov. Las blancas atacan d5 con un peón y buscan una posición abierta.', 'Desarrollás el caballo y sumás un defensor a d5.', 'Las blancas suman presión sobre d5 y desarrollan.', '…e6 apuntala d5 y abre la diagonal del alfil de f8.', 'Las blancas desarrollan el caballo de rey.', 'Tu alfil sale: listo para enrocar.', 'Las blancas cambian peones en d5.', 'Recapturás con el caballo, que queda en el centro. Ahora el peón de d4 blanco queda aislado, sin peones vecinos.', 'El alfil blanco sale.', 'Desarrollás el caballo de dama y atacás d4.', 'Las blancas enrocan.', 'Enrocás: rey a salvo.'],
     quiz: [q('¿Qué hacés contra c4 (Panov)?', ['Apuntalás d5 con …e6 y desarrollás', 'Cambiás damas', 'Enrocás largo', 'Jugás …h5'], 0, 'Con …e6 sostenés d5 y tu posición queda firme.')],
   },
   {
@@ -95,7 +95,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['e4', 'c6', 'Nc3', 'd5', 'Nf3', 'Bg4', 'h3', 'Bxf3', 'Qxf3', 'e6', 'd3', 'Nf6', 'g3', 'Nbd7'],
     idea: 'Contra 2.Cc3, atacás e4 con …d5 igual que siempre. Después de Cf3, clavás el caballo con …Ag4 y cambiás: una posición sólida con una estructura sana.',
     plan: ['Atacá e4 con …d5', 'Clavá el caballo de f3 con …Ag4 y cambiá', 'Cerrá con …e6 y desarrollá con …Cf6 y …Cbd7'],
-    tail: ['El rival desarrolla el caballo de dama: la variante de los Dos Caballos.', 'Atacás e4 como siempre.', 'El rival desarrolla el caballo de rey.', 'Clavás el caballo de f3 contra la dama.', 'El rival le pregunta al alfil.', 'Cambiás alfil por caballo.', 'El rival recaptura con la dama.', 'Abrís la diagonal de tu alfil de f8.', 'El rival apuntala e4.', 'Desarrollás el caballo.', 'El rival prepara el fianchetto.', 'Desarrollás el caballo de dama: posición sólida.'],
+    tail: ['Dos Caballos: las blancas desarrollan el caballo de dama antes de decidir el centro.', '…d5 ataca e4 como siempre.', 'Las blancas sacan el caballo de rey.', 'Tu alfil sale clavando el caballo de f3 contra la dama.', 'h3 le pregunta al alfil: ¿te cambiás o te retirás?', 'Cambiás el alfil por el caballo.', 'La dama blanca recaptura.', '…e6 abre la diagonal del alfil de f8.', 'd3 apuntala e4 y abre el alfil de c1.', 'Desarrollás el caballo.', 'g3 prepara el fianchetto.', 'Desarrollás el caballo de dama: posición sólida.'],
     quiz: [q('¿Qué hacés contra 2.Cc3?', ['Atacás e4 con …d5 de todas formas', 'Cambiás damas', 'Jugás …e5', 'Te pasás a otra apertura'], 0, 'El peón de d5 ataca e4 sin importar si el rival jugó d4 o Cc3.')],
   },
   {
@@ -117,7 +117,7 @@ export const BRANCHES: BranchDef[] = [
     moves: ['e4', 'e6', 'd4', 'd5', 'Nd2', 'Nf6', 'e5', 'Nfd7', 'Bd3', 'c5', 'c3', 'Nc6', 'Ne2', 'cxd4', 'cxd4', 'f6'],
     idea: 'En la Tarrasch el rival evita la clavada …Ab4 con 3.Cd2. Vos seguís con tu plan de siempre: atacar la base de la cadena con …c5 y minar el centro con …f6.',
     plan: ['Retirá el caballo a d7 y presioná e5', 'Atacá el centro con …c5 y …Cc6', 'Minó la cadena con …f6'],
-    tail: ['El rival juega Cd2: la variante Tarrasch, que evita la clavada …Ab4 y mantiene flexible el centro.', 'Desarrollás y atacás e4.', 'El rival avanza atacando el caballo.', 'Retirás el caballo y presionás e5.', 'El rival desarrolla el alfil.', 'Atacás el centro: la ruptura de siempre.', 'El rival apuntala d4.', 'Sumás presión sobre d4.', 'El rival desarrolla el caballo.', 'Cambiás en d4 y abrís la columna c.', 'El rival recaptura.', 'Atacás el peón de e5 con …f6 para minar la cadena.'],
+    tail: ['Tarrasch: Cd2 evita la clavada …Ab4 y mantiene flexible el centro.', 'Sacás el caballo y atacás e4.', 'e5 gana espacio y ataca tu caballo.', 'El caballo se retira y presiona e5.', 'Las blancas desarrollan el alfil.', '…c5: la ruptura de siempre contra la base de la cadena.', 'c3 apoya d4 con un peón.', 'Sumás presión sobre d4.', 'El caballo sale por e2 y defiende d4.', 'Cambiás en d4 y abrís la columna c.', 'Las blancas recapturan.', '…f6 ataca e5, el nudo de la cadena: así se mina el centro blanco.'],
     quiz: [q('¿Qué buscás con …f6?', ['Minar la cadena atacando e5', 'Enrocar', 'Cambiar damas', 'Dar jaque'], 0, 'En la Francesa, el peón de e5 es el nudo de la cadena: atacarlo con …f6 la debilita.')],
   },
   {

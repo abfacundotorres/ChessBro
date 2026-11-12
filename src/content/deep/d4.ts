@@ -94,7 +94,7 @@ export const LINES_D4: DeepDef[] = [
     notes: [
       'Ocupás el centro con el peón de dama.',
       'Las negras copian: bloquean el centro con un peón.',
-      'La idea del Sistema Londres: sacás el alfil de c1 *antes* de jugar e3, para que no quede encerrado detrás de tus peones.',
+      'La idea del Sistema Londres: sacás el alfil de c1 antes de jugar e3, para que no quede encerrado detrás de tus peones.',
       'Las negras desarrollan el caballo de rey y vigilan el centro.',
       'Apuntalás d4 y abrís la diagonal del alfil de f1.',
       'Las negras sostienen el centro con una estructura sólida, aunque su alfil de c8 queda algo encerrado.',
