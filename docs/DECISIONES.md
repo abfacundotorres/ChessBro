@@ -544,3 +544,22 @@
   material tras cada captura; evaluaciones finales: Berlinesa +0,09, Evans aceptado +0,13, Evans con …d6 +0,39, Evans rehusado +0,24 (todas desde las blancas).
 - **No verificado**: valoraciones ("pareja", "cómoda"), nombres de variantes, que la Berlinesa dé "una pequeña ventaja práctica" a las blancas
   (se redujo a lo que ve el motor) y la teoría de la Escocesa (f4 después del enroque, que se quitó). No corrí el e2e (solo texto).
+
+## H17 (7ª tanda): Cuatro Caballos, Alfil, Vienesa, Gambito de Rey y Petroff con la voz nueva
+- **Alcance**: 3 líneas de cada una (15 en total): notas, ideas, dos planes y dos preguntas. Mismas jugadas, así que los controles con Stockfish no
+  cambian. Las constantes compartidas de `more2-e4e5.ts` y `more2-e4.ts` (`C`, `FOURK`, `BISHOP`, `VIENNA`, `KG`, `PET`…) se borraron: cada
+  línea tiene ahora sus notas completas. Siguen pendientes 5 aperturas (Philidor, Alekhine, Pirc/Moderna, Colle, Inglesa).
+- **Errores encontrados al releer**: (1) Cuatro Caballos: …Ab4 "clavaba el caballo de c3 contra el rey" y ♗b4 después de enrocar tampoco: con d2
+  ocupado y luego con el rey en g1 no hay clavada (el caballo se puede mover); ahora dice "presiona". (2) …Cd8 "para salir de la clavada": va a e6 a
+  atacar el alfil de g5. (3) Cuatro Caballos con …Ac5: "Cxe5… el caballo de c6 queda en problemas / ganás tiempo": la línea termina con material
+  parejo y el motor ve +0,40 (casi igual); se reescribió la idea, el plan y la pregunta. (4) Línea Rubinstein: se quitó el nombre (sin fuente) y la
+  "pareja de alfiles" (los dos bandos conservan los dos). (5) Alfil con …Ac5: c3 "daba una casilla de retirada" y …a6 "preparaba …Aa7"; es …b5.
+  (6) Alfil con …Cc6: "Húngara" estaba mal aplicada (la Húngara es …Ae7 en la Italiana con 3…Ae7), y el alfil en c2 "sigue mirando al flanco de rey"
+  cuando d3 le tapa la diagonal (también en la pregunta). (7) Vienés: Cf3 "atacando": no ataca nada (apuntala e5); y el caballo que sale a e7 es el de
+  rey, no el de dama. (8) Gambito de Rey con …Ae7: el caballo de f6 es el de rey (decía "de dama"). (9) Petroff con 3.Cc3: "quedás con un peón
+  de más": el material queda parejo (el motor ve una pequeña ventaja negra, −0,34). (10) Gambito de Rey con …d6: el motor ve la línea algo mejor
+  para las negras (−0,41); se dice en la nota. (11) Vienesa con g3: Ag2 "en la gran diagonal" queda detrás de e4.
+- **Verificado con chess.js y Stockfish**: ausencia de clavada, material tras cada captura (parejo en 4C-Ac5 y Petroff 3.Cc3), la captura al paso exf6/exd6,
+  c2/d3, la trampa de la Petroff (De2 y Cc6+ es jaque), enroque posible en pet-d4, y evaluaciones finales: 4C-Ac5 +0,40, 4C-Cd4 +0,16, Petroff 3.Cc3
+  −0,34 y Gambito de Rey …d6 −0,41 (desde las blancas).
+- **No verificado**: valoraciones ("igualada", "sólida"), nombres de variantes (Cuatro Caballos «española», Vienés, Petroff clásica) y la teoría. No corrí el e2e.
