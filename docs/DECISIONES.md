@@ -643,3 +643,24 @@
   (446), build y e2e sin conexión. **No probado**: un teléfono real, un cambio de día con la app abierta (se recalcula al recargar), ni qué tan difícil resulta el puzzle del día
   elegido por rating (el rating de puzzles es provisional al principio y el primer puzzle mueve mucho: un puzzle fallado puede restar más de 100).
 - **Límite honesto**: las explicaciones de los temas y los textos del saludo no los verifica ningún programa.
+
+## H22: menús lúdicos (camino de nodos)
+- **Pedido**: Aprender, Lecciones y Aperturas eran grillas aburridas; querías un camino con nodos, personajes e ilustraciones propias, en los dos estilos. Decidido con vos: **dos mapas + hub ilustrado**,
+  nodos **todos abiertos** con el «siguiente» resaltado (nada de candados: con 2–5 h/semana y nivel de partida a elección frustran más de lo que motivan), **una pieza guía por banda** y dibujo moderado.
+- **Lecciones** (`/lecciones`): un camino por banda de Elo (Peón 400–800, Caballo 800–1100, Alfil 1100–1400, Torre 1400–1600, Dama 1600–1800) y un tramo «Finales para jugar» guiado por el Rey.
+  Cada nodo lleva un ícono según el tema (`content/pathIcons.ts`; las que no figuran usan el libro). Hecho = círculo verde con ✓ (y estrellas en Juego); empezada = aro verde; el siguiente, aro grande y la guía al lado.
+  El «siguiente» es la primera lección sin hacer desde la lección de partida de tu nivel (`engine/learnPath.ts`, con test); **no tiene en cuenta el punto débil** que usa el plan de Hoy, así que pueden diferir.
+- **Aperturas** (`/aperturas`, pestaña Biblioteca): un camino por grupo (Peón, Caballo, Dama, Alfil: elección mía, sin relación con las bandas). Progreso de cada apertura = sus líneas a fondo practicadas
+  (tabla `replines`); hecha = todas practicadas. El ícono de rayo marca las que tienen trampa. «Tus aperturas» y el acceso al repertorio quedan igual.
+- **Aprender**: tarjeta «Seguí por acá» (próxima lección, con la guía de su banda) y cuatro viñetas ilustradas (libro, tablero con flecha, diana con rayo, tablero libre) en vez de la lista.
+- **Estilo Serio**: mismo camino con nodos e íconos, **sin guías, estrellas ni viñetas** (el hub vuelve a la lista de tarjetas con ícono). Las rachas siguen ocultas como antes.
+- **Dibujos** (todos propios): `ui/Guides.tsx` (Caballo, Alfil, Torre, Dama y Rey en el mismo estilo del Peón: contorno grueso y dorados) sobre un **medallón verde pastel** (el del ícono de la app), porque el contorno casi negro
+  no se veía sobre el fondo oscuro; las viñetas usan solo tokens del tema. Los colores de las guías son fijos (como los del ícono y la mascota), no tokens. Íconos nuevos en `ui/Icon.tsx`: corona, escudo, peón, torre, bandera, rayo.
+- **Iteración visual**: la primera versión ponía las etiquetas debajo del círculo y el trazo del camino las atravesaba; pasaron al costado (del lado con más lugar). Lo atrapó la captura, no los tests.
+- **Probado**: Chromium a 360 y 390 px, claro y oscuro, Juego y Serio, con progreso sembrado (3 lecciones hechas, una empezada, apertura completa y otra a medias); tsc, eslint, vitest (455 + 11 de Stockfish salteados),
+  build para Pages y e2e sin conexión (sin desborde horizontal en 20 rutas). **No probado**: un teléfono real, el toque de los nodos con el pulgar, ni cómo se ve el hub con todo el currículo terminado
+  (el «siguiente» desaparece y no hay un estado de «terminaste»).
+- **Pendiente que apareció**: el JS de arranque volvió a pesar ~669 KB (H19 lo había bajado a 407 KB): ya eran 659 KB antes de H22, desde H21 (Home arrastra el contenido de las lecciones). Este hito sumó ~10 KB.
+  El aviso de chunks de más de 500 KB reapareció. No lo toqué.
+- **Límite honesto**: la asignación de guías y de íconos por lección es mía y ningún programa la verifica; el Caballo es el dibujo con más riesgo de verse raro (un solo ángulo mirado).
+

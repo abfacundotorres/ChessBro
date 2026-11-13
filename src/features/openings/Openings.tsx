@@ -1,11 +1,15 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
-import { GROUP_LABELS, OPENINGS, openingFamily, type OpeningGroup } from '../../content/openings'
+import { GROUP_LABELS, OPENINGS, openingFamily, type Opening, type OpeningGroup } from '../../content/openings'
 import { db, type GameRecord } from '../../data/db'
 import { openingStats, OPENING_PLIES, type OpeningStat, type StatGame } from '../../engine/openingStats'
 import { REPERTOIRE } from '../../content/repertoire'
 import { deepLinesOf } from '../../content/openingLines'
+import { useStyle } from '../../data/style'
+import { countDone, nextInOrder } from '../../engine/learnPath'
+import { PathMap, type PathSection } from '../../ui/PathMap'
+import type { GuideName } from '../../ui/Guides'
 
 const GROUPS: OpeningGroup[] = ['e4-e5', 'e4-otras', 'd4', 'flanco']
 
@@ -43,29 +47,41 @@ export function Openings() {
   )
 }
 
+/** Quién guía cada grupo de aperturas (solo en el estilo juego). */
+const GROUP_GUIDES: Record<OpeningGroup, GuideName> = { 'e4-e5': 'peon', 'e4-otras': 'caballo', d4: 'dama', flanco: 'alfil' }
+
 function Library() {
-  return (
-    <div className="flex flex-col gap-4">
-      {GROUPS.map((g) => (
-        <section key={g} className="flex flex-col gap-2">
-          <h2 className="font-semibold">{GROUP_LABELS[g]}</h2>
-          {OPENINGS.filter((o) => o.group === g).map((o) => (
-            <Link key={o.id} to={`/aperturas/${o.id}`} className="rounded-xl bg-surface p-3 active:scale-[0.99]">
-              <div className="flex items-center justify-between gap-2">
-                <p className="font-medium">{o.name}</p>
-                {deepLinesOf(o.id).length > 0 ? (
-                  <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-accent">{deepLinesOf(o.id).length} líneas a fondo</span>
-                ) : (
-                  o.repLines.length > 0 && <span className="rounded-full bg-surface-2 px-2 py-0.5 text-xs text-muted">en el repertorio</span>
-                )}
-              </div>
-              <p className="text-xs text-muted">{o.side === 'blancas' ? 'Con blancas' : 'Con negras'}{o.trap ? ' · con trampa' : ''}</p>
-            </Link>
-          ))}
-        </section>
-      ))}
-    </div>
-  )
+  const juego = useStyle() === 'juego'
+  const practiced = useLiveQuery(async () => new Set((await db.replines.toArray()).map((r) => r.id)), [])
+  const lineIds = (o: Opening) => (deepLinesOf(o.id).length > 0 ? deepLinesOf(o.id).map((l) => l.id) : o.repLines)
+  const progressOf = (o: Opening) => {
+    const ids = lineIds(o)
+    return { total: ids.length, done: practiced ? ids.filter((id) => practiced.has(id)).length : 0 }
+  }
+  const trainable = OPENINGS.filter((o) => lineIds(o).length > 0)
+  const doneIds = new Set(trainable.filter((o) => progressOf(o).done === progressOf(o).total).map((o) => o.id))
+  const nextId = practiced ? nextInOrder(trainable.map((o) => o.id), doneIds) : null
+  const sections: PathSection[] = GROUPS.map((g) => {
+    const list = OPENINGS.filter((o) => o.group === g)
+    return {
+      id: g,
+      title: GROUP_LABELS[g],
+      guide: GROUP_GUIDES[g],
+      progress: `${countDone(list.map((o) => o.id), doneIds)}/${list.length}`,
+      nodes: list.map((o) => {
+        const { total, done } = progressOf(o)
+        return {
+          id: o.id,
+          to: `/aperturas/${o.id}`,
+          title: o.name,
+          sub: done > 0 && done < total ? `${done}/${total} líneas` : `${o.side === 'blancas' ? 'Con blancas' : 'Con negras'}${total > 0 ? ` · ${total} ${total === 1 ? 'línea' : 'líneas'}` : ''}`,
+          icon: o.trap ? ('rayo' as const) : ('repertorio' as const),
+          status: total > 0 && done === total ? ('done' as const) : done > 0 ? ('partial' as const) : ('open' as const),
+        }
+      }),
+    }
+  })
+  return <PathMap sections={sections} nextId={nextId} juego={juego} />
 }
 
 function nameOf(key: string): { label: string; to: string | null } {

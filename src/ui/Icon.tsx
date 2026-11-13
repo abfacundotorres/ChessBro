@@ -10,6 +10,12 @@ const PATHS = {
   tablero: 'M3 3h6v6H3zm12 0h6v6h-6zM9 9h6v6H9zM3 15h6v6H3zm12 0h6v6h-6z',
   repertorio: 'M6 3h12v18l-6-4-6 4z',
   progreso: 'M4 20V11h4v9zm6 0V4h4v16zm6 0v-6h4v6z',
+  corona: 'M3 18h18l1-10-5 4-5-7-5 7-5-4zM4 20h16v2H4z',
+  escudo: 'M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z',
+  peon: 'M12 3a3.5 3.5 0 011.8 6.5L15 13h-1.2l1.4 5H17v3H7v-3h2.8l1.4-5H9l1.2-3.5A3.5 3.5 0 0112 3z',
+  torre: 'M5 3h3v2h2V3h4v2h2V3h3v6l-2 2v7l2 3H5l2-3v-7L5 9z',
+  bandera: 'M6 2h2v20H6zM9 3l10 4-10 4z',
+  rayo: 'M13 2L5 14h5l-1 8 9-13h-5z',
 } as const
 
 export type IconName = keyof typeof PATHS
