@@ -26,6 +26,8 @@ interface BoardProps {
   onSquareTap?: (square: string) => void
   /** Casillas marcadas: seleccionada, correcta o incorrecta. */
   marks?: Readonly<Record<string, 'sel' | 'ok' | 'bad'>>
+  /** Mostrar letras y números de las casillas (se apagan en los tableros chicos). */
+  notation?: boolean
 }
 
 const LIGHT = 'var(--board-light)'
@@ -55,7 +57,7 @@ function turnOf(fen: string): Color {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w'
 }
 
-export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights, arrows, onSquareTap, marks }: BoardProps) {
+export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights, arrows, onSquareTap, marks, notation = true }: BoardProps) {
   const [selected, setSelected] = useState<{ fen: string; square: string } | null>(null)
   const [promo, setPromo] = useState<{ fen: string; from: string; to: string } | null>(null)
 
@@ -125,6 +127,7 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
           lightSquareStyle: { backgroundColor: LIGHT },
           darkSquareStyle: { backgroundColor: DARK },
           squareStyles,
+          showNotation: notation,
           ...(arrows ? { arrows, allowDrawingArrows: false } : {}),
           allowDragging: canMove && !pendingPromo,
           canDragPiece: ({ piece }) => canMove && piece.pieceType[0] === turn,

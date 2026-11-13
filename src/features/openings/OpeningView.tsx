@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { Board } from '../../ui/Board'
 import { MoveList } from '../../ui/MoveList'
@@ -70,7 +70,8 @@ function Stepper({ moves, orientation }: { moves: string[]; orientation: 'white'
 type Mode = 'home' | 'session' | 'sparring' | 'drill' | 'quiz' | 'trap' | 'plan' | 'punish' | 'model'
 
 function Body({ o }: { o: Opening }) {
-  const [mode, setMode] = useState<Mode>('home')
+  const [params] = useSearchParams()
+  const [mode, setMode] = useState<Mode>(params.get('modo') === 'sesion' ? 'session' : 'home')
   const games = useLiveQuery(() => db.games.toArray(), [], [])
   const mine = openingStats(
     gameStats(games.filter((g) => openingFamily(g.opening)?.id === o.id)),

@@ -10,6 +10,7 @@ import { Learn } from './features/learn/Learn'
 import { UpdateBanner } from './ui/UpdateBanner'
 import { ErrorBoundary } from './ui/ErrorBoundary'
 import { Icon, type IconName } from './ui/Icon'
+import { Progress } from './features/plan/Plan'
 
 /** Cada pantalla pesada se baja aparte (y queda en la caché sin conexión): el arranque carga solo Hoy y Aprender. */
 const Tactics = lazy(() => import('./features/tactics/Tactics').then((m) => ({ default: m.Tactics })))
@@ -28,7 +29,7 @@ const Settings = lazy(() => import('./features/settings/Settings').then((m) => (
 
 /** Cuatro pestañas; cada una cubre varias rutas (por ejemplo, Aprender incluye lecciones, aperturas, táctica y finales). */
 const NAV: { to: string; label: string; icon: IconName; match: string[] }[] = [
-  { to: '/', label: 'Hoy', icon: 'hoy', match: ['/'] },
+  { to: '/', label: 'Hoy', icon: 'hoy', match: ['/', '/progreso'] },
   { to: '/aprender', label: 'Aprender', icon: 'aprender', match: ['/aprender', '/lecciones', '/tactica', '/aperturas', '/repertorio', '/finales', '/tablero'] },
   { to: '/partidas', label: 'Partidas', icon: 'partidas', match: ['/partidas'] },
   { to: '/ajustes', label: 'Ajustes', icon: 'ajustes', match: ['/ajustes'] },
@@ -48,6 +49,7 @@ function RoutedScreens() {
         <Route path="/repertorio/repaso" element={<ReviewRepertoire />} />
         <Route path="/repertorio/:id" element={<LineView />} />
         <Route path="/plan" element={<Navigate to="/" replace />} />
+        <Route path="/progreso" element={<Progress />} />
         <Route path="/aprender" element={<Learn />} />
         <Route path="/lecciones" element={<Lessons />} />
         <Route path="/lecciones/:id" element={<LessonView />} />

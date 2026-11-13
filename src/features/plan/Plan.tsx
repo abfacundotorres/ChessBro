@@ -22,52 +22,67 @@ function Details({ title, open, children }: { title: string; open?: boolean; chi
   )
 }
 
-/** "Hoy": las tareas del día arriba y, plegado, el resto (progreso, errores, banda y horas por semana). */
-export function Plan() {
+/** Las tareas sugeridas para hoy (el plan según tu semana y tus errores), en filas compactas. */
+export function TodayTasks() {
+  const today = toDateStr(new Date())
+  const snap = useLiveQuery(() => planSnapshot(today), [today])
+  if (!snap) return null
+  const { goals, input } = snap
+  const { today: tasks, more } = fitToSession(todayTasks(input), goals.minutesPerSession)
+  const minutes = tasks.reduce((a, t) => a + t.minutes, 0)
+
+  return (
+    <section className="flex flex-col gap-2" aria-labelledby="mas-hoy">
+      <h2 id="mas-hoy" className="text-lg font-semibold">
+        Para seguir hoy
+      </h2>
+      {tasks.length === 0 ? (
+        <p className="rounded-xl bg-surface p-4 text-sm">
+          <span className="font-semibold text-accent">¡Al día!</span> Cumpliste todo lo sugerido de esta semana. Podés jugar un rato en el tablero o repasar lo que quieras.
+        </p>
+      ) : (
+        <>
+          <p className="text-sm text-muted">Unos {minutes} minutos si querés una sesión completa.</p>
+          {tasks.map((t) => (
+            <TaskRow key={t.id} task={t} />
+          ))}
+          {more.length > 0 && (
+            <details className="rounded-xl bg-surface p-4 text-sm">
+              <summary className="font-semibold">Si te queda tiempo ({more.length})</summary>
+              <div className="mt-2 flex flex-col gap-2">
+                {more.map((t) => (
+                  <TaskRow key={t.id} task={t} />
+                ))}
+              </div>
+            </details>
+          )}
+        </>
+      )}
+    </section>
+  )
+}
+
+/** «Tu progreso»: cómo viene la semana, tus errores, tu banda y tu semana tipo. Es lo que antes ocupaba el inicio. */
+export function Progress() {
   const today = toDateStr(new Date())
   const snap = useLiveQuery(() => planSnapshot(today), [today])
   if (!snap) return null
   const { goals, input, patterns: pat } = snap
-  const { today: tasks, more } = fitToSession(todayTasks(input), goals.minutesPerSession)
   const progress = weekProgress(goals, input.counts)
-  const minutes = tasks.reduce((a, t) => a + t.minutes, 0)
 
   return (
     <div className="flex flex-col gap-4">
       <header>
-        <h1 className="text-3xl font-bold">Hoy</h1>
+        <Link to="/" className="back-link">
+          ← Hoy
+        </Link>
+        <h1 className="text-3xl font-bold">Tu progreso</h1>
         <div className="mt-1">
           <StreakChip />
         </div>
       </header>
 
-      <section className="flex flex-col gap-2">
-        <h2 className="text-lg font-semibold">Para hoy</h2>
-        {tasks.length === 0 ? (
-          <p className="rounded-xl bg-surface p-4 text-sm">
-            <span className="font-semibold text-accent">¡Al día!</span> Cumpliste todo lo sugerido de esta semana. Podés jugar un rato en el tablero o repasar lo que quieras.
-          </p>
-        ) : (
-          <>
-            <p className="text-sm text-muted">Unos {minutes} minutos: una sesión.</p>
-            {tasks.map((t, i) => (
-              <TaskRow key={t.id} task={t} first={i === 0} />
-            ))}
-            {more.length > 0 && (
-              <details className="rounded-xl bg-surface p-4 text-sm">
-                <summary className="cursor-pointer font-semibold">Si te queda tiempo ({more.length})</summary>
-                <div className="mt-2 flex flex-col gap-2">
-                  {more.map((t) => (
-                    <TaskRow key={t.id} task={t} />
-                  ))}
-                </div>
-              </details>
-            )}
-          </>
-        )}
-      </section>
-
-      <Details title="Esta semana">
+      <Details title="Esta semana" open>
         <ul className="flex flex-col gap-3">
           {progress.map((p) => (
             <li key={p.key}>
@@ -186,15 +201,11 @@ function Errors({ pat }: { pat: PatternsData }) {
   )
 }
 
-function TaskRow({ task, first }: { task: Task; first?: boolean }) {
+function TaskRow({ task }: { task: Task }) {
   return (
-    <Link
-      to={task.to}
-      className={`flex items-center gap-3 rounded-2xl bg-surface p-3 active:scale-[0.99] ${first ? 'border-l-4 !border-l-accent' : ''}`}
-    >
+    <Link to={task.to} className="flex items-center gap-3 rounded-2xl bg-surface p-3 active:scale-[0.99]">
       <IconTile name={iconForRoute(task.to)} />
       <span className="min-w-0 flex-1">
-        {first && <span className="block text-xs font-semibold uppercase tracking-wide text-accent">Empezá por acá</span>}
         <span className="block font-semibold">{task.label}</span>
         <span className="block text-sm text-muted">{task.detail}</span>
       </span>

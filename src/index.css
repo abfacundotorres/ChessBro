@@ -130,3 +130,34 @@ body {
     animation: note-in 0.22s ease-out;
   }
 }
+
+@keyframes pop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+  100% {
+    transform: none;
+  }
+}
+@keyframes bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .pop {
+    animation: pop 0.45s ease-out;
+  }
+  .bob {
+    animation: bob 3.2s ease-in-out infinite;
+  }
+}

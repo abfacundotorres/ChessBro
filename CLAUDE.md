@@ -44,7 +44,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   `lessonsSerias.ts` — sus versiones serias; `styled.ts` aplica el estilo elegido.
 - `src/content/repertoire.ts` — las 31 líneas del repertorio (1.e4; 1…e5 / 1…d5); `src/engine/repertoire.ts`
   deriva las tarjetas de repaso. `src/engine/plan.ts` — metas y tareas del plan semanal.
-- `src/features/repertoire/`, `src/features/plan/` (pantalla "Hoy"), `src/features/learn/` ("Aprender") — repertorio (estudiar, practicar, repasar), plan y hub.
+- `src/features/home/` ("Hoy": puzzle y apertura del día), `src/features/plan/` (tareas de hoy y «Tu progreso»), `src/features/repertoire/`, `src/features/learn/` ("Aprender") — repertorio (estudiar, practicar, repasar), plan y hub.
 - `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
   de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura; `src/engine/sparring.ts` — árbol de variantes para practicar contra el rival.
   `src/content/deep/` + `openingLines.ts` — 85 líneas con una nota por jugada (`deep/branches.ts` hereda notas) (se reusan en la pantalla del repertorio); `openingExtras.ts` — planes, errores del rival y partidas de ejemplo.
@@ -93,3 +93,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H18 Estética «Bosque y crema»: paleta clara y oscura, tablero verde y crema, íconos en la barra, tarjetas y acordeones táctiles, persistencia de datos
 - [x] H19 e2e sin conexión en el CI (el deploy lo espera) y bundle partido por pantallas (1 MB → 407 KB)
 - [x] H20 Ícono nuevo: rey con dos peones, trazo grueso y dorados sobre verde pastel (dibujo propio)
+- [x] H21 Inicio inmersivo: puzzle del día jugable, apertura del día, mascota y «Tu progreso» aparte

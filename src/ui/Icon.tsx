@@ -9,6 +9,7 @@ const PATHS = {
   libro: 'M5 4h11a3 3 0 013 3v13H8a3 3 0 01-3-3zM8 8h8v2H8z',
   tablero: 'M3 3h6v6H3zm12 0h6v6h-6zM9 9h6v6H9zM3 15h6v6H3zm12 0h6v6h-6z',
   repertorio: 'M6 3h12v18l-6-4-6 4z',
+  progreso: 'M4 20V11h4v9zm6 0V4h4v16zm6 0v-6h4v6z',
 } as const
 
 export type IconName = keyof typeof PATHS

@@ -622,3 +622,24 @@
   (`#1F8A3F`) y pantalla de carga (crema) sin cambios.
 - **Verificado**: PNG de 192, 512, maskable y iOS generados; se ve legible a 40 px, en máscara circular y sobre fondo oscuro. **No verificado**: cómo lo recorta el Xiaomi en la pantalla de
   inicio y la pantalla de carga con el ícono nuevo; hay que desinstalar y reinstalar la PWA (o esperar a que Chrome actualice el ícono) para verlo.
+
+## H21: inicio inmersivo (puzzle del día y apertura del día)
+- **Pedido**: una app más inmersiva y lúdica; el menú de inicio era aburrido y «cómo fue mi semana tipo» no es lo primero que querés ver. Se parte en hitos: este es el
+  primero (inicio); después van menús lúdicos (camino con nodos, ilustraciones), comentarios más largos y más partidas de ejemplo.
+- **Qué te recibe** («Hoy»): fecha, la mascota **Peón** (dibujo propio, `ui/Mascot.tsx`, con tres ánimos) que te saluda según la hora y el estado del puzzle, la racha,
+  el **puzzle del día jugable ahí mismo** y la **apertura del día**. Debajo, «Para seguir hoy» con las tareas sugeridas (las de siempre, en filas compactas). La semana,
+  los errores, tu banda y tu semana tipo pasaron a la pantalla **«Tu progreso»** (`/progreso`), a la que se entra con un ícono arriba a la derecha (no sumó pestaña; la
+  pestaña «Hoy» queda marcada ahí).
+- **Puzzle del día** (`engine/daily.ts`, `data/daily.ts`): depende de la fecha y del rating **redondeado a 100** (no cambia por resolver uno), prefiere puzzles que no
+  hiciste y se **guarda** en la tabla de ajustes (`dailyPuzzle`) con el resultado: al volver a abrir la app el mismo día ves cómo te fue y la solución. Cuenta como un puzzle
+  normal (rating, racha, repaso si falla). El tema se revela recién al terminar, con una **explicación del motivo táctico** (`content/themeBlurbs.ts`: definiciones
+  generales de 25 temas, con test de que cada tema tiene la suya).
+- **Apertura del día**: se recorren las 21 aperturas con líneas a fondo, una por día, en un orden fijo mezclado (en 21 días salen todas una vez; test). La tarjeta muestra la
+  posición característica, la idea, la trampa si hay, y «Entrenar · 5 min» abre directo la sesión (`/aperturas/:id?modo=sesion`).
+- **Detalles**: el tablero chico de la apertura sin coordenadas (`notation` en `Board`); «★ rating» del puzzle en una sola línea; el mensaje de «ya lo viste» solo aparece si
+  el puzzle ya estaba terminado al abrir la app.
+- **Probado**: Chromium (390 px, claro y oscuro, capturas): el puzzle carga, «Ver solución» muestra la explicación, el resultado sobrevive a una recarga y se registra un solo
+  intento; **sin conexión, con el día sin puzzle guardado, el puzzle y la apertura del día aparecen**; «Tu progreso» y el acceso directo a la sesión de 5 min; tsc, eslint, vitest
+  (446), build y e2e sin conexión. **No probado**: un teléfono real, un cambio de día con la app abierta (se recalcula al recargar), ni qué tan difícil resulta el puzzle del día
+  elegido por rating (el rating de puzzles es provisional al principio y el primer puzzle mueve mucho: un puzzle fallado puede restar más de 100).
+- **Límite honesto**: las explicaciones de los temas y los textos del saludo no los verifica ningún programa.
