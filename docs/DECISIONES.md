@@ -664,3 +664,21 @@
   El aviso de chunks de más de 500 KB reapareció. No lo toqué.
 - **Límite honesto**: la asignación de guías y de íconos por lección es mía y ningún programa la verifica; el Caballo es el dibujo con más riesgo de verse raro (un solo ángulo mirado).
 
+## H23: comentarios más largos («Explicame más»)
+- **Pedido**: explicaciones más largas de puzzles, ejercicios y análisis, sin romper la guía H17 (1–2 frases mientras jugás). Decidido con vos: texto corto de siempre + botón **«Explicame más»** que despliega
+  **3 a 5 frases** (qué pasa, por qué y qué mirar la próxima vez), en **ejercicios de lecciones, puzzles y análisis de partidas**. Las notas de jugada de las aperturas y los pasos de lección **no se tocaron**.
+- **Temas de puzzles** (`THEME_MORE`, 27 textos, uno por tema): generales, sin hablar de ninguna posición. Aparecen tras resolver el puzzle del día (hasta 2 temas) y, **novedad**, en la pantalla de Táctica:
+  hasta ahora ahí solo se veía la etiqueta del tema, sin explicación (no se muestran en las tarjetas que vienen de tus partidas, que tienen su propio tipo de error).
+- **Ejercicios de lecciones**: 71 en total. Los 57 de Lichess heredan el texto largo de su tema (`mateIn3` usa el de `mateLong`; `advancedPawn` no tiene y no muestra botón). Los **14 escritos a mano** tienen texto propio
+  (`content/exerciseMore.ts`) que habla de la posición concreta.
+- **Verificación**: `exerciseMore.test.ts` comprueba con chess.js lo que los textos dicen de las posiciones (los mates son mates, quién ataca y defiende f7, que Dg6 es ahogado, el cuadrado de cada peón, las casillas que
+  controla cada rey) y que todos tengan de 3 a 5 frases. Que el resultado (ganar o tablas) sea el dicho lo sigue verificando Stockfish en `lessons.test.ts`. **Lo que ningún programa verifica**: que las explicaciones sean
+  buena pedagogía y que los consejos generales (los 27 temas) sean correctos; los releí uno por uno.
+- **Errores míos que atrapó la relectura**: el `why` de `sq-3` decía que el rey se acerca «por la columna en la que corre» el peón (no es lo que pasa en la línea) y cuatro `why` de finales de peones decían «delante del
+  peón» o «oposición» donde el rey queda al costado o en diagonal; se reescribieron (`op-1`, `op-2`, `hd-1`, `hd-2`, `hd-3`, `sq-3`). Y mi helper del test del cuadrado tenía la dirección al revés (falló el test, no pasó a producción).
+- **Análisis de partidas**: el coach ya era la versión larga (5 preguntas y «Decímelo de otra forma» desde H9), así que **no alargué esas plantillas**. Lo que faltaba era el «qué hacer ahora»: al abrir «¿Cómo lo evito?» aparece
+  **«Para practicarlo»** con el consejo, la lección y los puzzles del tema (o Aperturas), reusando la tabla `FOCUS` del plan semanal.
+- **Probado**: Chromium a 360 px, claro y oscuro: botón y texto desplegado en dos lecciones (mate en 1 y oposición), puzzle de Táctica y puzzle del día tras «Ver solución», y el coach con una partida sembrada (error de
+  mate permitido); tsc, eslint, vitest, build y e2e sin conexión. **No probado**: un teléfono real, la lectura en voz del texto largo, el estilo Serio con los textos largos (son los mismos en los dos estilos).
+- **Costo**: el JS de arranque pasó de ~669 KB a ~681 KB (los textos largos entran en el bundle principal porque Hoy trae las lecciones). Sigue pendiente el recorte que H19 había logrado (407 KB).
+

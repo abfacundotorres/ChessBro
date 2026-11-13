@@ -15,6 +15,7 @@ import { isGoodAlternative, type CardOrigin } from '../../engine/gameCards'
 import { KIND_LABELS, winPercent } from '../../engine/analysis'
 import { getEngine } from '../../lib/stockfish'
 import { Speak } from '../../ui/Speak'
+import { ThemeNotes } from '../../ui/ThemeNotes'
 
 type Mode = 'new' | 'review'
 type Feedback = 'start' | 'good' | 'wrong' | 'checking' | 'done'
@@ -381,6 +382,7 @@ function PuzzleView({
           ) : themeLabels(state.puzzle.themes).length > 0 && (
             <p className="text-muted">{themeLabels(state.puzzle.themes).join(' · ')}</p>
           )}
+          {!current.origin && <ThemeNotes mask={state.puzzle.themes} max={2} />}
           <Speak
             auto
             text={[

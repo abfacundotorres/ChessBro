@@ -3,8 +3,12 @@ import type { Challenge, ChoiceChallenge, TapChallenge } from '../engine/challen
 import type { Exercise } from '../engine/lesson'
 import { tapAnswer } from '../engine/structure'
 import PUZZLES from './lessonPuzzles.json'
+import { THEME_MORE } from './themeBlurbs'
 
 /** Herramientas para escribir lecciones. */
+
+/** Temas de los puzzles de lección que se explican con la clave de otro tema. */
+const THEME_KEY: Record<string, string> = { mateIn3: 'mateLong' }
 
 type RawPuzzle = { id: string; fen: string; line: string[]; rating: number }
 
@@ -13,6 +17,7 @@ type RawPuzzle = { id: string; fen: string; line: string[]; rating: number }
  * otra lección del mismo tema), así dos lecciones no repiten un puzzle.
  */
 export function lichess(theme: string, why: string, take = 4, skip = 0): Exercise[] {
+  const more = THEME_MORE[THEME_KEY[theme] ?? theme]
   const list = ((PUZZLES as Record<string, RawPuzzle[]>)[theme] ?? []).slice(skip, skip + take)
   return list.map((p) => ({
     id: `li-${p.id}`,
@@ -21,6 +26,7 @@ export function lichess(theme: string, why: string, take = 4, skip = 0): Exercis
     line: p.line,
     accept: [p.line[0]!],
     why,
+    ...(more ? { more } : {}),
     source: 'lichess' as const,
   }))
 }

@@ -18,6 +18,8 @@ export interface Exercise {
   accept: string[]
   /** Qué hay que ver. Se muestra tras resolver. */
   why: string
+  /** La versión larga de `why` («Explicame más»): 3 a 5 frases con el porqué y qué mirar la próxima vez. */
+  more?: string
   /** 'lichess': viene de la base de puzzles (verificada por Lichess); 'engine' o ausente: la verifica un test. */
   source?: 'engine' | 'lichess'
 }

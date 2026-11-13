@@ -4,6 +4,7 @@ import { lichess, mate1, pos } from './lessonKit'
 import { NEW_LESSONS } from './lessonsNuevas'
 import { ADVANCED_LESSONS } from './lessonsAvanzadas'
 import { BEGINNER_LESSONS } from './lessonsPrincipiantes'
+import { HAND_MORE } from './exerciseMore'
 
 /**
  * Lecciones del currículo (bandas 800–1400). Cada lección tiene pasos de lectura con un
@@ -399,7 +400,7 @@ const BASE_LESSONS: Lesson[] = [
     ],
     exercises: [
       pos('sq-1', '7k/8/8/8/p7/8/8/4K3 w - - 0 1', 'hold', ['e1d1', 'a4a3'], ['e1d1', 'e1d2'], 'El rey entra al cuadrado del peón (a4–d1). Desde ahí lo alcanza antes de que corone.'),
-      pos('sq-3', '7k/8/8/8/8/p7/8/3K4 w - - 0 1', 'hold', ['d1c2', 'a3a2'], ['d1c1', 'd1c2'], 'Hay que acercarse al peón por la columna en la que corre: el rey lo captura en la casilla de coronación.'),
+      pos('sq-3', '7k/8/8/8/8/p7/8/3K4 w - - 0 1', 'hold', ['d1c2', 'a3a2'], ['d1c1', 'd1c2'], 'El rey entra al cuadrado del peón (a3–c1): desde c2 pasa a b2 y vigila la casilla de coronación, a1.'),
       pos('sq-7', 'k7/8/8/8/8/6p1/8/4K3 w - - 0 1', 'hold', ['e1f1', 'g3g2'], ['e1e2', 'e1f1'], 'El rey ya estaba en el borde del cuadrado: tiene que acercarse, no alejarse.'),
     ],
   },
@@ -433,12 +434,12 @@ const BASE_LESSONS: Lesson[] = [
       },
     ],
     exercises: [
-      pos('op-1', '8/5k2/8/2K1P3/8/8/8/8 w - - 0 1', 'win', ['c5d6', 'f7e8'], ['c5d6'], 'El rey blanco pasa a la sexta fila delante del peón: ahí empuja al rey negro y gana.'),
-      pos('op-2', '8/6K1/8/3kP3/8/8/8/8 w - - 0 1', 'win', ['g7f6', 'd5c5'], ['g7f6'], 'El rey se pone delante del peón y toma las casillas clave.'),
+      pos('op-1', '8/5k2/8/2K1P3/8/8/8/8 w - - 0 1', 'win', ['c5d6', 'f7e8'], ['c5d6'], 'El rey blanco pasa a la sexta fila, junto al peón: ahí empuja al rey negro y gana.'),
+      pos('op-2', '8/6K1/8/3kP3/8/8/8/8 w - - 0 1', 'win', ['g7f6', 'd5c5'], ['g7f6'], 'El rey blanco protege al peón y toma las casillas de adelante (e6 y e7).'),
       pos('op-3', '8/8/5k2/8/2K1P3/8/8/8 w - - 0 1', 'win', ['c4d5', 'f6e7'], ['c4d5'], 'El rey avanza protegiendo al peón y le gana el espacio al rey negro.'),
-      pos('hd-1', '8/8/8/6k1/4P3/3K4/8/8 b - - 0 1', 'hold', ['g5f6', 'd3d4'], ['g5f6'], 'El rey defensor tiene que ponerse delante del peón. Desde f6 impide que las blancas progresen.'),
-      pos('hd-2', '8/8/6k1/4P3/3K4/8/8/8 b - - 0 1', 'hold', ['g6f7', 'd4d5'], ['g6f7'], 'Con el peón en la quinta, el rey negro se retira a f7 para mantener la oposición desde atrás.'),
-      pos('hd-3', '8/8/2k5/4P3/6K1/8/8/8 b - - 0 1', 'hold', ['c6d7', 'g4f5'], ['c6d7'], 'El rey se pone delante del peón y alcanza para tablas aunque el rey blanco esté cerca.'),
+      pos('hd-1', '8/8/8/6k1/4P3/3K4/8/8 b - - 0 1', 'hold', ['g5f6', 'd3d4'], ['g5f6'], 'El rey defensor tiene que adelantarse al peón. Desde f6 controla e5 y e6.'),
+      pos('hd-2', '8/8/6k1/4P3/3K4/8/8/8 b - - 0 1', 'hold', ['g6f7', 'd4d5'], ['g6f7'], 'Con el peón en la quinta, el rey negro se retira a f7 y queda frente al peón.'),
+      pos('hd-3', '8/8/2k5/4P3/6K1/8/8/8 b - - 0 1', 'hold', ['c6d7', 'g4f5'], ['c6d7'], 'El rey negro se adelanta al peón: desde d7 alcanza para tablas aunque el rey blanco esté cerca.'),
     ],
   },
 ]
@@ -451,7 +452,9 @@ const ORDER = [
   'lucena', 'philidor', 'torre-final', 'calculo', 'profilaxis', 'transicion',
 ]
 
-export const LESSONS: Lesson[] = [...BEGINNER_LESSONS, ...BASE_LESSONS, ...NEW_LESSONS, ...ADVANCED_LESSONS].sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
+export const LESSONS: Lesson[] = [...BEGINNER_LESSONS, ...BASE_LESSONS, ...NEW_LESSONS, ...ADVANCED_LESSONS]
+  .sort((a, b) => ORDER.indexOf(a.id) - ORDER.indexOf(b.id))
+  .map((l) => ({ ...l, exercises: l.exercises.map((e) => (HAND_MORE[e.id] && !e.more ? { ...e, more: HAND_MORE[e.id] } : e)) }))
 
 export function lessonById(id: string): Lesson | undefined {
   return LESSONS.find((l) => l.id === id)

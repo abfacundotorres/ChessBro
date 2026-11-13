@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Board } from '../../ui/Board'
 import { Speak } from '../../ui/Speak'
+import { ThemeNotes } from '../../ui/ThemeNotes'
 import { checkSquareOf, sanToFigurine, type MoveInput } from '../../engine/game'
 import { hint, playMove, revealSolution, startPuzzle, type PuzzleState } from '../../engine/puzzle'
 import { THEME_LIST } from '../../content/themes'
@@ -148,12 +149,7 @@ export function DailyPuzzle({ daily, onOutcome }: { daily: DailyState; onOutcome
               <span className="font-mono">{line}</span>
             </p>
           )}
-          {blurbsFor(keys).map((b) => (
-            <div key={b.key} className="rounded-xl bg-surface-2 p-3">
-              <p className="font-semibold">{themeLabel(b.key)}</p>
-              <p className="mt-1">{b.text}</p>
-            </div>
-          ))}
+          <ThemeNotes mask={puzzle.themes} max={2} />
           {delta !== null && (
             <p className="text-muted">
               Tu rating de puzzles: <span className={delta >= 0 ? 'font-semibold text-accent' : 'font-semibold text-red-500'}>{delta >= 0 ? `+${delta}` : delta}</span>

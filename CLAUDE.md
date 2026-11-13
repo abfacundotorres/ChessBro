@@ -50,6 +50,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   `src/content/deep/` + `openingLines.ts` — 85 líneas con una nota por jugada (`deep/branches.ts` hereda notas) (se reusan en la pantalla del repertorio); `openingExtras.ts` — planes, errores del rival y partidas de ejemplo.
 - `src/ui/PathMap.tsx` (camino de nodos), `src/ui/Guides.tsx` (Peón, Caballo, Alfil, Torre, Dama y Rey como guías), `src/ui/Scenes.tsx` (viñetas del hub), `src/engine/learnPath.ts`
   (geometría del camino y «siguiente») y `src/content/pathIcons.ts` (guía por banda, ícono por lección).
+- `src/ui/More.tsx` («Explicame más»), `src/ui/ThemeNotes.tsx` (explicación de los temas de un puzzle), `src/content/exerciseMore.ts` (versión larga de los ejercicios a mano; los de
+  Lichess usan `THEME_MORE` de `themeBlurbs.ts`). Las afirmaciones sobre casillas de esos textos las comprueba `content/__tests__/exerciseMore.test.ts`.
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
@@ -97,3 +99,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H20 Ícono nuevo: rey con dos peones, trazo grueso y dorados sobre verde pastel (dibujo propio)
 - [x] H21 Inicio inmersivo: puzzle del día jugable, apertura del día, mascota y «Tu progreso» aparte
 - [x] H22 Menús lúdicos: camino de nodos en Lecciones y Aperturas, hub de Aprender ilustrado y seis piezas-guía (solo estilo Juego)
+- [x] H23 Comentarios más largos: «Explicame más» en temas de puzzles y ejercicios de lecciones, y accesos para practicar en el coach de partidas
