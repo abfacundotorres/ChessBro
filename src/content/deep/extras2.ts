@@ -38,7 +38,7 @@ const PUNISH: Record<string, MoveItem[]> = {
     pun('colle-pun-ne4', 'Las negras saltaron a e4', 'd4 d5 Nf3 Nf6 e3 e6 Bd3 c5 c3 Nc6 Nbd2 Ne4', 'Nxe4', '…Ce4? cae por Cxe4 dxe4 Axe4: ganás un peón porque tu alfil de d3 recaptura. En el Colle, el alfil de d3 y el caballo de d2 vigilan e4 siempre.', 'El rival se equivocó: ¿qué capturás?'),
   ],
   inglesa: [
-    pun('ing-pun-b5', 'Las negras avanzaron …b5', 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 b5', 'cxb5', '…b5? ofrece un peón sin ninguna compensación: cxb5 lo captura. Los peones de ala que avanzan sin apoyo se pierden.', 'El rival se equivocó: ¿qué capturás?'),
+    pun('ing-pun-b5', 'Las negras avanzaron …b5', 'c4 e5 Nc3 Nf6 Nf3 Nc6 g3 b5', 'cxb5', '…b5? ofrece un peón que no está protegido: cxb5 lo captura. Los peones de ala que avanzan sin apoyo se pierden.', 'El rival se equivocó: ¿qué capturás?'),
   ],
 }
 

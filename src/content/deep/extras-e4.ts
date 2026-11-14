@@ -96,7 +96,7 @@ export const EXTRAS_E4: Record<string, OpeningExtras> = {
         moves: L('e4 c6 d4 d5 Nc3 dxe4 Nxe4 Bf5 Ng3 Bg6 h4 h6 Nf3 Nd7 h5 Bh7 Bd3 Bxd3 Qxd3 e6 Bf4'),
         answer: 'Ngf6',
         alt: ['Qa5+'],
-        why: 'Desarrollá el último caballo con …Cgf6 y después …Ae7 y enrocá. Ojo: …Dc7?? pierde la dama por Axc7: el alfil de f4 vigila esa casilla. También se puede interponer con …Da5+ para desarrollar con tiempo.',
+        why: 'Desarrollá el último caballo con …Cgf6 y después …Ae7 y enrocá. Ojo: …Dc7?? pierde la dama por Axc7: el alfil de f4 vigila esa casilla. También se puede dar jaque con …Da5+ para desarrollar con tiempo.',
       },
       {
         id: 'caro-pun-qd2',

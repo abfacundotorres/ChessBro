@@ -60,7 +60,7 @@ export const EXTRAS_D4: Record<string, OpeningExtras> = {
         moves: L('d4 d5 Bf4 Nf6 e3 e6 Nf3 Bd6 Bg3 O-O Nbd2 c5 c3 Nc6'),
         answer: 'Bd3',
         alt: ['Ne5'],
-        why: 'Ad3 completa el esquema: apunta al flanco de rey y deja lista la casilla e5 para el caballo. Ce5 también vale: es el golpe típico del Londres.',
+        why: 'Ad3 completa el esquema y apunta al flanco de rey. Ce5 también vale: es el golpe típico del Londres.',
       },
       {
         id: 'lon-pun-b5',

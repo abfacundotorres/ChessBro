@@ -14,7 +14,7 @@ export function planFrom(lineId: string, k: number, p: { id: string; title: stri
 export const PLANS2: Record<string, MoveItem[]> = {
   evans: [
     planFrom('evans-d6', 20, { id: 'evans-plan-bb5', title: 'La dama negra está en d7', prompt: '¿Cómo ganás un tiempo?', why: 'Ab5 clava el caballo de c6 contra la dama de d7: el caballo no puede moverse sin dejar la dama expuesta. Es una forma simple de ganar tiempo y mantener la iniciativa que te dio el gambito.' }),
-    planFrom('evans-acc', 12, { id: 'evans-plan-oo', title: 'Después de d4 y …exd4', prompt: '¿Recuperás el peón o desarrollás?', why: 'O-O: preferís desarrollar a recuperar el peón de inmediato. El rey queda a salvo y la torre se conecta; el peón de d4 lo recuperás después, con el centro y las piezas activas a tu favor.' }),
+    planFrom('evans-acc', 12, { id: 'evans-plan-oo', title: 'Después de d4 y …exd4', prompt: '¿Recuperás el peón o desarrollás?', why: 'O-O: preferís desarrollar a recuperar el peón de inmediato. El rey queda a salvo y la torre pasa a f1; el peón de d4 lo recuperás después, con el centro y las piezas activas a tu favor.' }),
   ],
   'cuatro-caballos': [
     planFrom('4c-espanola', 12, { id: '4c-plan-bg5', title: 'Después de d3 y …d6', prompt: '¿Cómo aumentás la presión?', why: 'Ag5 clava el caballo de f6 contra la dama: aumentás la presión sobre el centro negro. Si cambian alfil por caballo, doblan tus peones, pero tus piezas ganan actividad.' }),
@@ -26,7 +26,7 @@ export const PLANS2: Record<string, MoveItem[]> = {
   ],
   viena: [
     planFrom('vie-d5', 12, { id: 'vie-plan-bd3', title: 'Las negras enrocaron', prompt: '¿Cómo seguís desarrollando con presión?', why: 'Ad3 ataca el caballo de e4 y apunta al flanco de rey: es la pieza clave del ataque en la Vienesa.' }),
-    planFrom('vie-nc6', 8, { id: 'vie-plan-nge2', title: 'Vienesa tranquila', prompt: '¿Adónde va el caballo de rey?', why: 'Cge2: el caballo sale por e2 para dejar libre el peón de f y el alfil de g2, y queda listo para ir a g3 o f4.' }),
+    planFrom('vie-nc6', 8, { id: 'vie-plan-nge2', title: 'Vienesa tranquila', prompt: '¿Adónde va el caballo de rey?', why: 'Cge2: el caballo sale por e2 para dejar libre el peón de f y el alfil de g2, y queda listo para ir a d4 o f4.' }),
   ],
   'gambito-rey': [
     planFrom('gr-be7', 8, { id: 'gr-plan-e5', title: 'Las negras desarrollaron el caballo', prompt: '¿Cómo ganás tiempo?', why: 'e5 ataca el caballo de f6 y gana tiempo: el caballo tiene que moverse. Además ocupás más espacio en el centro.' }),
@@ -49,11 +49,11 @@ export const PLANS2: Record<string, MoveItem[]> = {
     planFrom('pirc-150', 13, { id: 'pirc-plan-b5', title: 'El rival prepara g4', prompt: '¿Cómo contraatacás?', why: '…b5 gana espacio en el flanco de dama y contraataca antes de que el rival llegue con sus peones. Contra un ataque, la mejor defensa es otro ataque.' }),
   ],
   colle: [
-    planFrom('colle-be7', 14, { id: 'colle-plan-qe2', title: 'Esquema casi completo', prompt: '¿Dónde va la dama?', why: 'Qe2 prepara la ruptura e4: apoya el peón y deja libre la columna d. Es el paso previo a abrir el juego.' }),
-    planFrom('colle-bd6', 10, { id: 'colle-plan-nbd2', title: 'Colle: falta el caballo de dama', prompt: '¿Cómo lo desarrollás sin bloquear al alfil?', why: 'Cbd2: el caballo sale por d2, sin bloquear el alfil de c1, y se prepara para apoyar e4.' }),
+    planFrom('colle-be7', 14, { id: 'colle-plan-qe2', title: 'Esquema casi completo', prompt: '¿Dónde va la dama?', why: 'Qe2 prepara la ruptura e4 y deja libre la columna d para la torre. Es el paso previo a abrir el juego.' }),
+    planFrom('colle-bd6', 10, { id: 'colle-plan-nbd2', title: 'Colle: falta el caballo de dama', prompt: '¿Cómo lo desarrollás sin bloquear al alfil?', why: 'Cbd2: el caballo sale por d2 sin tapar la salida de b2 del alfil de c1, y se prepara para apoyar e4.' }),
   ],
   inglesa: [
     planFrom('ing-nc6', 10, { id: 'ing-plan-rb1', title: 'Fianchetto completo', prompt: '¿Cómo preparás b4?', why: 'Tb1 prepara b4: ganás espacio en el flanco de dama mientras las negras atacan por el otro. Es el plan típico de la Inglesa.' }),
-    planFrom('ing-nf6', 10, { id: 'ing-plan-bg2', title: 'Después de cambiar en d5', prompt: '¿Dónde ubicás el alfil?', why: 'Ag2 coloca el alfil en la gran diagonal: apunta a d5 y a b7 y se prepara para enrocar.' }),
+    planFrom('ing-nf6', 10, { id: 'ing-plan-bg2', title: 'Después de cambiar en d5', prompt: '¿Dónde ubicás el alfil?', why: 'Ag2 coloca el alfil en la gran diagonal y deja libre el enroque.' }),
   ],
 }
