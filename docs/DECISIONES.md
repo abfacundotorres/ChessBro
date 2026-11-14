@@ -704,3 +704,21 @@
   y estable (+0,3 a +0,6 para las blancas): es lo esperable en esas aperturas, pero no son ejemplos de «ganar».
 - **Probado en pantalla**: Chromium a 360 px, claro y oscuro, Italiana con 3 partidas (selector, aviso y nota). **No probado**: las otras aperturas en pantalla (el código es el mismo), un teléfono real ni la voz con las notas nuevas.
 
+## H25: partidas de ejemplo armadas con el motor (2ª entrega: el resto de las aperturas)
+- **Alcance** (acordado en H24): 3 partidas en total en las 8 aperturas más comunes y 2 en el resto. Esta entrega suma **17 partidas nuevas**: Siciliana ×2, Francesa ×2, Caro-Kann ×2, Gambito de Dama ×2,
+  Londres ×2, India de Rey ×2 y una de Escandinava, Pirc, Alekhine, Colle e Inglesa. Con H24 son **29 partidas nuevas (957 jugadas)**; las 21 aperturas con partida quedan con 2 o 3 (3 las de Italiana, Ruy López, Siciliana, Francesa,
+  Caro-Kann, Gambito de Dama, Londres e India de Rey). Mismo método y mismas herramientas que H24 (`author7`, `modelGames.ts`, `modelGames.test.ts`).
+- **Descartes** (el motor las jugó, yo las miré, no sirven de ejemplo): se pidió que el lado de quien aprende no quedara claramente peor y que la partida no terminara a mitad de una táctica. Se descartaron: Escandinava `d4` (hasta +0,9 para las blancas),
+  Pirc austríaco largo y Pirc 150 (hasta +1,0 y +1,75), Alekhine de los cuatro peones (+1,1), la India de Rey con Ag5 (39 jugadas de cambios), la Siciliana Alapin y el Caro-Kann del Avance (terminaban con una dama capturada o atacada sin resolver),
+  la Francesa clásica (el motor ve mejor a las negras pero las blancas ganan un peón: confuso) y Londres `…Cf6` (puro vaivén de piezas, 0,00). Se ajustó la herramienta: **sigue jugando mientras la última jugada sea captura o jaque** (máx. 10 más).
+  Y se evitó una duplicada: Londres–India de Rey con la misma línea sale idéntica vista desde ambos lados.
+- **Notación**: las notas que escribí usaban letras inglesas (`Nxe5`, `Bb5`, `Qxd8+`) y las heredadas de las líneas a fondo usan español (`Cxd4`, `Ab5`). Se unificó todo a **español** (C, A, T, D, R; 110 reemplazos). En la pantalla,
+  la lista de jugadas sigue en figuras y las notas en letras: no se cambió.
+- **Verificación**: 59 casos de `modelGames.test.ts` (cada afirmación de cada nota comprobada en el tablero, jugada por jugada, de las 29 partidas; todas tus jugadas con nota) y **Stockfish sobre las 29 partidas completas**
+  (`MODELS_CHECK=1`, 329 s): **ninguna de las 957 jugadas pierde más de 8 puntos de probabilidad de ganar (12 las del rival)**; vitest (524), tsc, eslint, build y e2e sin conexión. El JS de arranque no cambió (681 KB).
+- **Lo que ningún programa verifica**: igual que en H24, la pedagogía de las notas y los resúmenes. Algunas partidas son pobres como ejemplo y se dice en el resumen: la de Londres con `…Cc6` reacomoda piezas sin plan en su segunda mitad; el Caro-Kann del Cambio es
+  simétrico (el motor no busca un plan); y las de las negras con desventaja chica y estable (India de Rey fianchetto, Philidor, Petroff) no son «ejemplos de ganar».
+- **Errores míos que atrapó el trabajo**: dos finales engañosos (Siciliana Alapin, Francesa clásica) y una línea que el motor evaluaba mal para quien aprende, descubiertas por la evaluación y no por los tests; un título («parejísima») que
+  sonaba mal y que vi en la captura; y un helper de mi script que se rompió por una variable (`S`) de otro lenguaje.
+- **Probado en pantalla**: Chromium a 360 px, claro y oscuro: Siciliana (partida 3, tablero desde el lado negro) y Londres (partida 3). **No probado**: las otras aperturas en pantalla (el código es el mismo), un teléfono real ni la voz con las notas nuevas.
+

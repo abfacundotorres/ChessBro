@@ -104,3 +104,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H22 Menús lúdicos: camino de nodos en Lecciones y Aperturas, hub de Aprender ilustrado y seis piezas-guía (solo estilo Juego)
 - [x] H23 Comentarios más largos: «Explicame más» en temas de puzzles y ejercicios de lecciones, y accesos para practicar en el coach de partidas
 - [x] H24 Partidas de ejemplo armadas con Stockfish contra sí mismo (1ª entrega: aperturas 1.e4 e5, 12 partidas nuevas)
+- [x] H25 Partidas de ejemplo (2ª entrega: el resto de las aperturas, 17 partidas nuevas; 29 en total, 21 aperturas con 2 a 3 partidas cada una)

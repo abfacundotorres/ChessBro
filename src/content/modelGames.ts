@@ -576,7 +576,7 @@ const GAMES: EngineGame[] = [
     opening: 'london',
     line: 'lon-nc6',
     prefix: 14,
-    title: 'Londres con …Cc6 y …Af5: cambios y una posición parejísima',
+    title: 'Londres con …Cc6 y …Af5: cambios y posición pareja',
     color: 'w',
     moves: 'd4 d5 Bf4 Nc6 e3 Bf5 c3 e6 Nd2 Nf6 Ngf3 Bd6 Bg3 O-O Nh4 Ne7 Bxd6 Qxd6 Nxf5 exf5 g3 Rfe8 Qc2 Qe6 Bd3 Rad8 Rc1 Ne4 Nf3 c6 Kf1 g6',
     notes: {
