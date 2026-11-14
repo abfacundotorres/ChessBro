@@ -682,3 +682,25 @@
   mate permitido); tsc, eslint, vitest, build y e2e sin conexión. **No probado**: un teléfono real, la lectura en voz del texto largo, el estilo Serio con los textos largos (son los mismos en los dos estilos).
 - **Costo**: el JS de arranque pasó de ~669 KB a ~681 KB (los textos largos entran en el bundle principal porque Hoy trae las lecciones). Sigue pendiente el recorte que H19 había logrado (407 KB).
 
+## H24: partidas de ejemplo armadas con el motor (1ª entrega: aperturas 1.e4 e5)
+- **Pedido**: 2–3 partidas de ejemplo por apertura (hoy hay una), armadas con Stockfish contra sí mismo y comentadas jugada a jugada; que la pantalla diga que **no son partidas reales**. Decidido con vos:
+  **3 en total en las 8 aperturas más comunes y 2 en el resto**; notas en **todas tus jugadas y en las del rival que cambian algo**; **cada partida parte de una línea distinta** de la apertura; **dos entregas**
+  (H24: grupo 1.e4 e5; H25: el resto). «Las 8 más comunes» las elegí por la cantidad de líneas a fondo: Italiana, Ruy López, Siciliana, Francesa, Caro-Kann, Gambito de Dama, Londres e India de Rey (**a confirmar antes de H25**).
+- **Esta entrega**: 12 partidas nuevas (30–38 jugadas en total, o sea 15–19 por bando): Italiana ×2 (húngara y a6), Ruy López ×2 (abierta y Berlinesa), y una de Evans (rehusado), Cuatro Caballos (6.Cxe5), Escocesa,
+  Apertura del Alfil, Vienesa, Gambito de Rey, Petroff y Philidor. Con las de siempre, esas aperturas quedan con 2 (3 las de Italiana y Ruy López).
+- **Cómo se armaron** (`src/test/author7.test.ts`, `MODELS=1`): cada partida arranca con las primeras jugadas de una línea a fondo (`prefix`) y el motor (profundidad 14) sigue solo hasta ~30–38 jugadas, imprimiendo jugada por jugada
+  la evaluación y hechos de chess.js (capturas, jaques, qué ataca la pieza movida, qué queda sin defensa). Con eso escribí las notas. Las notas de **tus** jugadas del tramo inicial se **heredan** de la línea a fondo (ya revisadas en H17);
+  el resto son nuevas.
+- **Pantalla**: si una apertura tiene más de una partida, el botón dice «Partidas de ejemplo (N)» y arriba aparece un selector «Partida 1/2/3». Las armadas con el motor muestran: «Partida de ejemplo: Stockfish jugó las dos partes desde
+  una línea de la apertura. No es una partida real.» (`ModelGame.engine`).
+- **Verificación**: (1) `content/__tests__/modelGames.test.ts` comprueba con chess.js que cada partida sea legal, parta de su línea, tenga nota en **todas tus jugadas** y que **cada afirmación de las notas sea cierta en el tablero**
+  (quién ataca o protege qué, capturas, jaques, peones doblados, captura al paso, material parejo, etc.; 25 casos); (2) Stockfish (`MODELS_CHECK=1`): **ninguna jugada de las 12 pierde más de 8 puntos de probabilidad de ganar (12 las del rival)**;
+  (3) tsc, eslint, vitest, build y e2e sin conexión. El JS de arranque no cambió (681 KB): las partidas están en la pantalla de Aperturas, que se carga aparte.
+- **Descartes y errores míos que atrapó la revisión**: en el Gambito de Rey, el motor ve mejor a las negras tanto en el rehusado (…Ac5, −0,5) como en la línea …d6 (−1,2), así que no sirven de modelo para quien juega blancas: usé …d5 contra el centro (+0,5 a +0,8).
+  Terminar una partida en medio de una táctica (el Gambito de Rey con un caballo «ganado» sin recapturar; la Vienesa con un peón regalado) daba un final engañoso: las alargué hasta una posición estable y comprobé el material. En las notas corregí:
+  «el caballo de e4 protege d5» (es el peón de d5 el que lo protege), «pareja de alfiles» antes de tiempo (las negras también tenían los dos) y una nota que se contradecía con la siguiente («no se pueden salvar los dos» y el alfil se salvaba con …Ad6).
+- **Lo que ningún programa verifica**: que las notas sean buena pedagogía y que los **planes** que atribuyo a cada partida («el plan es…», los resúmenes) sean los que de verdad ilustra una partida jugada por el motor. Ese motor no juega con un plan:
+  elige la mejor jugada, y a veces no es la más didáctica. Por eso los resúmenes dicen lo que se ve (espacio, cambios, material) y la evaluación, no intenciones. En las partidas de las negras (Petroff, Philidor) el motor las ve con una desventaja chica
+  y estable (+0,3 a +0,6 para las blancas): es lo esperable en esas aperturas, pero no son ejemplos de «ganar».
+- **Probado en pantalla**: Chromium a 360 px, claro y oscuro, Italiana con 3 partidas (selector, aviso y nota). **No probado**: las otras aperturas en pantalla (el código es el mismo), un teléfono real ni la voz con las notas nuevas.
+
