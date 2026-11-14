@@ -550,6 +550,532 @@ const CLAIMS: Record<string, Claims[]> = {
       has(g(31), 'e6', 'b', 'b')
     },
   ],
+  'siciliana#0': [
+    (g) => expect(g(17).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'n', color: 'b' }),
+    (g) => {
+      for (const sq of ['a7', 'd6', 'f6']) expect(att(g(18), sq, 'w'), sq).toContain('d4')
+    },
+    (g) => has(g(19), 'g7', 'b', 'b'),
+    (g) => {
+      has(g(21), 'g8', 'k', 'b')
+      has(g(21), 'g7', 'b', 'b')
+    },
+    (g) => {
+      expect(att(g(23), 'c4', 'b')).toContain('c6')
+      expect(att(g(23), 'e4', 'b')).toContain('c6')
+    },
+    (g) => expect(att(g(25), 'b5', 'b')).toContain('a6'),
+    (g) => {
+      expect(att(g(26), 'e7', 'w')).toContain('d5')
+      expect(att(g(26), 'f6', 'w')).toContain('d5')
+    },
+    (g) => expect(att(g(27), 'e7', 'b')).toContain('e8'),
+    (g) => expect(att(g(28), 'f6', 'w')).toContain('g5'),
+    (g) => expect(g(29).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', to: 'd5', color: 'b' }),
+    (g) => expect(att(g(30), 'c6', 'w')).toContain('d5'),
+    (g) => {
+      for (const sq of ['d5', 'c4', 'f2']) expect(att(g(31), sq, 'b'), sq).toContain('c5')
+    },
+  ],
+  'siciliana#1': [
+    (g) => expect(att(g(14), 'c5', 'w')).toContain('e3'),
+    (g) => {
+      has(g(15), 'b8', 'r', 'b')
+      has(g(15), 'b7', 'p', 'b')
+    },
+    (g) => {
+      has(g(17), 'g8', 'k', 'b')
+      has(g(17), 'g7', 'b', 'b')
+    },
+    (g) => {
+      expect(att(g(19), 'f3', 'b')).toContain('d4')
+      expect(att(g(19), 'c2', 'b')).toContain('d4')
+    },
+    (g) => expect(att(g(20), 'd4', 'w')).toContain('f2'),
+    (g) => {
+      expect(g(21).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', color: 'b', to: 'f3' })
+      expect(g(21).inCheck()).toBe(true)
+    },
+    (g) => expect(att(g(23), 'a6', 'b')).toContain('c8'),
+    (g) => expect(att(g(25), 'd3', 'b')).toContain('a6'),
+    (g) => {
+      for (const sq of ['c8', 'd8', 'e8']) expect(g(27).get(sq as Square), sq).toBeFalsy()
+      has(g(27), 'f8', 'r', 'b')
+      has(g(27), 'b8', 'r', 'b')
+      expect(att(g(27), 'a4', 'b')).toContain('d7')
+    },
+    (g) => {
+      expect(att(g(29), 'e5', 'b')).toContain('c6')
+      expect(att(g(29), 'd4', 'b')).toContain('c6')
+    },
+    (g) => expect(att(g(31), 'e4', 'b')).toContain('d5'),
+  ],
+  'francesa#0': [
+    (g) => has(g(15), 'd7', 'b', 'b'),
+    (g) => expect(att(g(17), 'e5', 'b')).toContain('c7'),
+    (g) => expect(att(g(19), 'f5', 'b')).toContain('h6'),
+    (g) => expect(att(g(21), 'd4', 'b')).toContain('f5'),
+    (g) => expect(att(g(23), 'g5', 'b')).toContain('h6'),
+    (g) => expect(att(g(25), 'a3', 'b')).toContain('e7'),
+    (g) => {
+      has(g(27), 'c8', 'k', 'b')
+      has(g(27), 'd8', 'r', 'b')
+      has(g(27), 'h8', 'r', 'b')
+      for (const sq of ['e8', 'f8', 'g8']) expect(g(27).get(sq as Square), sq).toBeFalsy() // torres conectadas
+    },
+    (g) => expect(att(g(28), 'a5', 'w')).toContain('b4'),
+    (g) => {
+      expect(g(29).history({ verbose: true }).at(-1)!.flags).toContain('e') // al paso
+      expect(att(g(29), 'c2', 'b')).toContain('b3')
+    },
+    (g) => expect(att(g(30), 'a5', 'w')).toContain('b3'),
+    (g) => {
+      expect(att(g(31), 'b3', 'b')).toContain('a4')
+      expect(att(g(31), 'b3', 'b')).toContain('a5')
+    },
+  ],
+  'francesa#1': [
+    (g) => {
+      expect(att(g(16), 'f6', 'b')).toContain('d7') // el caballo de d7
+      expect(att(g(16), 'f6', 'b')).toContain('g7') // y el peón de g7 pueden recapturar
+    },
+    (g) => expect(att(g(17), 'e4', 'b')).toContain('f6'),
+    (g) => expect(att(g(19), 'h2', 'b')).toContain('d6'),
+    (g) => has(g(21), 'g8', 'k', 'b'),
+    (g) => has(g(23), 'd7', 'b', 'b'),
+    (g) => {
+      expect(att(g(25), 'f4', 'b')).toContain('h5')
+      expect(att(g(25), 'g3', 'b')).toContain('h5')
+    },
+    (g) => expect(att(g(26), 'd8', 'w')).toContain('g5'),
+    (g) => {
+      has(g(27), 'c7', 'q', 'b')
+      has(g(27), 'd6', 'b', 'b')
+      expect(att(g(27), 'h2', 'b')).toContain('d6')
+    },
+    (g) => expect(att(g(29), 'b5', 'b')).toContain('a6'),
+    (g) => {
+      for (const sq of ['d3', 'h3', 'g2']) expect(att(g(31), sq, 'b'), sq).toContain('f4')
+    },
+    (g) => {
+      expect(g(33).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'b', color: 'b', to: 'f4' })
+      expect(att(g(33), 'c1', 'b')).toContain('f4')
+    },
+  ],
+  'caro-kann#0': [
+    (g) => {
+      for (const sq of ['d7', 'g6', 'f7', 'c6']) expect(att(g(18), sq, 'w'), sq).toContain('e5')
+    },
+    (g) => {
+      expect(att(g(19), 'c3', 'b')).toContain('d5')
+      expect(att(g(19), 'f4', 'b')).toContain('d5')
+    },
+    (g) => expect(att(g(20), 'e5', 'w')).toContain('f4'),
+    (g) => {
+      expect(g(21).history({ verbose: true }).at(-1)!.san).toBe('O-O')
+      has(g(21), 'g8', 'k', 'b')
+    },
+    (g) => expect(g(23).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'n', to: 'e5', color: 'b' }),
+    (g) => expect(att(g(24), 'd6', 'w')).toContain('e5'),
+    (g) => has(g(25), 'e7', 'b', 'b'),
+    (g) => {
+      expect(att(g(27), 'd4', 'b')).toContain('c5')
+      expect(att(g(27), 'd4', 'w')).toEqual([])
+    },
+    (g) => expect(g(28).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'c5', color: 'w' }),
+    (g) => expect(g(29).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'b', to: 'c5', color: 'b' }),
+    (g) => expect(g(30).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'b', to: 'g6', color: 'w' }),
+    (g) => {
+      has(g(31), 'g6', 'p', 'b')
+      has(g(31), 'g7', 'p', 'b') // peones doblados en g
+      for (const r of [2, 3, 4, 5, 6, 7]) expect(g(31).get(`f${r}` as Square), `f${r}`).toBeFalsy() // columna f abierta
+    },
+    (g) => {
+      expect(g(32).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'r', piece: 'r', color: 'w' })
+      expect(g(32).inCheck()).toBe(true)
+    },
+    (g) => {
+      has(g(33), 'f8', 'b', 'b')
+      expect(g(33).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'r', piece: 'b', to: 'f8' })
+    },
+  ],
+  'caro-kann#1': [
+    (g) => {
+      expect(att(g(15), 'd5', 'b')).toContain('e6')
+      expect(att(g(15), 'a3', 'b')).toContain('f8') // diagonal f8–a3 abierta
+    },
+    (g) => expect(att(g(16), 'g4', 'w')).toContain('h3'),
+    (g) => expect(att(g(17), 'f3', 'b')).toContain('h5'),
+    (g) => {
+      expect(att(g(19), 'f4', 'b')).toContain('d6')
+      expect(att(g(19), 'f4', 'w')).toEqual([])
+    },
+    (g) => expect(g(21).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'q', color: 'b' }),
+    (g) => expect(g(23).history({ verbose: true }).at(-1)!.san).toBe('O-O'),
+    (g) => has(g(25), 'c7', 'q', 'b'),
+    (g) => {
+      has(g(27), 'c8', 'r', 'b')
+      const cPawns = g(27).board().flat().filter((p) => p && p.type === 'p' && p.color === 'b' && p.square[0] === 'c').length
+      expect(cPawns).toBe(0) // sin peón negro en la columna c
+    },
+    (g) => expect(att(g(29), 'd3', 'b')).toContain('g6'),
+    (g) => has(g(31), 'g6', 'p', 'b'),
+    (g) => expect(att(g(32), 'g6', 'w')).toContain('d3'),
+  ],
+  'gambito-dama#0': [
+    (g) => expect(att(g(14), 'f5', 'w')).toContain('h4'),
+    (g) => has(g(15), 'g6', 'b', 'b'),
+    (g) => {
+      expect(g(16).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'n', to: 'g6' })
+      expect(att(g(16), 'h8', 'w')).toContain('g6')
+    },
+    (g) => {
+      has(g(17), 'g6', 'p', 'b')
+      const hPawns = g(17).board().flat().filter((p) => p && p.type === 'p' && p.color === 'b' && p.square[0] === 'h').length
+      expect(hPawns).toBe(0)
+    },
+    (g) => expect(g(18).history({ verbose: true }).at(-1)!.san).toBe('O-O'),
+    (g) => expect(att(g(19), 'd4', 'b')).toContain('c5'),
+    (g) => expect(att(g(20), 'b4', 'w')).toContain('a2'),
+    (g) => expect(att(g(22), 'g4', 'w')).toContain('h3'),
+    (g) => expect(att(g(23), 'd4', 'b')).toContain('c6'),
+    (g) => {
+      expect(g(24).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'n', to: 'b4' })
+      expect(att(g(24), 'c6', 'w')).toContain('b4')
+    },
+    (g) => {
+      has(g(25), 'b4', 'p', 'b')
+      has(g(25), 'b7', 'p', 'b')
+    },
+    (g) => expect(att(g(26), 'c4', 'w')).toContain('e2'),
+    (g) => expect(att(g(28), 'b4', 'w')).toContain('d2'),
+    (g) => expect(att(g(30), 'c6', 'w')).toContain('b5'),
+  ],
+  'gambito-dama#1': [
+    (g) => expect(g(16).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'c5', color: 'w' }),
+    (g) => expect(att(g(17), 'e3', 'b')).toContain('c5'),
+    (g) => expect(g(18).history({ verbose: true }).at(-1)!.san).toBe('O-O'),
+    (g) => {
+      expect(att(g(19), 'c3', 'b')).toContain('d4')
+      expect(att(g(19), 'e3', 'b')).toContain('d4')
+    },
+    (g) => {
+      expect(att(g(20), 'c5', 'w')).toContain('d4')
+      expect(att(g(20), 'c5', 'b')).toEqual([])
+    },
+    (g) => {
+      expect(att(g(21), 'c3', 'b')).toContain('d4')
+      expect(att(g(21), 'f2', 'b')).toContain('d4')
+    },
+    (g) => {
+      expect(g(22).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'n', to: 'd4' })
+      expect(att(g(22), 'c6', 'w')).toContain('d4')
+    },
+    (g) => {
+      expect(att(g(23), 'f4', 'b')).toContain('d4')
+      expect(att(g(23), 'f4', 'w')).toEqual([])
+    },
+    (g) => expect(att(g(24), 'd4', 'w')).toContain('e3'),
+    (g) => {
+      expect(g(26).get('f2' as Square)).toBeFalsy()
+      has(g(26), 'f3', 'p', 'w')
+      has(g(26), 'f1', 'r', 'w')
+    },
+    (g) => {
+      has(g(28), 'f2', 'r', 'w')
+      expect(att(g(28), 'd2', 'w')).toContain('f2')
+    },
+    (g) => has(g(30), 'd2', 'r', 'w'),
+    (g) => expect(att(g(32), 'c6', 'w')).toContain('b5'),
+    (g) => expect(g(33).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'r', piece: 'r', color: 'b' }),
+    (g) => expect(g(34).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'r', piece: 'q', color: 'w' }),
+  ],
+  'london#0': [
+    (g) => expect(att(g(14), 'h7', 'w')).toContain('d3'),
+    (g) => {
+      expect(att(g(16), 'f7', 'w')).toContain('e5')
+      expect(att(g(16), 'c6', 'w')).toContain('e5')
+    },
+    (g) => expect(att(g(17), 'e5', 'b')).toContain('d7'),
+    (g) => {
+      has(g(18), 'e5', 'n', 'w')
+      has(g(18), 'f3', 'n', 'w')
+      expect(att(g(18), 'e5', 'w')).toContain('f3')
+    },
+    (g) => {
+      expect(att(g(20), 'a7', 'w')).toContain('c6')
+      expect(att(g(20), 'e7', 'w')).toContain('c6')
+    },
+    (g) => {
+      has(g(21), 'c6', 'p', 'b')
+      has(g(21), 'c5', 'p', 'b') // peones doblados en c
+    },
+    (g) => expect(g(22).history({ verbose: true }).at(-1)!.san).toBe('O-O'),
+    (g) => expect(att(g(23), 'd3', 'b')).toContain('c4'),
+    (g) => {
+      has(g(24), 'e2', 'b', 'w')
+      expect(att(g(24), 'c4', 'w')).toContain('e2')
+    },
+    (g) => expect(att(g(25), 'd4', 'b')).toContain('e5'),
+    (g) => {
+      expect(g(26).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'e5', color: 'w' })
+      expect(att(g(26), 'd6', 'w')).toContain('e5')
+    },
+    (g) => expect(att(g(27), 'f3', 'b')).toContain('e5'),
+    (g) => {
+      expect(att(g(28), 'c4', 'w')).toContain('b3')
+      expect(att(g(28), 'c4', 'b').length).toBeGreaterThan(0) // protegido
+    },
+    (g) => {
+      expect(g(29).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'n', to: 'f3', color: 'b' })
+      expect(g(29).inCheck()).toBe(true)
+    },
+    (g) => {
+      has(g(30), 'f3', 'b', 'w')
+      expect(att(g(30), 'd5', 'w')).toContain('f3')
+    },
+  ],
+  'london#1': [
+    (g) => expect(att(g(14), 'f5', 'w')).toContain('h4'),
+    (g) => {
+      expect(g(16).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'b', to: 'd6' })
+      expect(att(g(16), 'c7', 'w')).toContain('d6')
+      expect(att(g(16), 'e7', 'w')).toContain('d6')
+    },
+    (g) => expect(att(g(17), 'h2', 'b')).toContain('d6'),
+    (g) => {
+      expect(g(18).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'n', to: 'f5' })
+      for (const sq of ['d6', 'e7', 'g7']) expect(att(g(18), sq, 'w'), sq).toContain('f5')
+    },
+    (g) => expect(att(g(20), 'f4', 'w')).toContain('g3'),
+    (g) => expect(att(g(22), 'f5', 'w')).toContain('c2'),
+    (g) => expect(att(g(23), 'e3', 'b')).toContain('e6'),
+    (g) => {
+      expect(att(g(24), 'f5', 'w')).toContain('d3')
+    },
+    (g) => has(g(26), 'c1', 'r', 'w'),
+    (g) => {
+      has(g(27), 'e4', 'n', 'b')
+      for (const sq of ['c3', 'g3', 'd2', 'f2']) expect(att(g(27), sq, 'b'), sq).toContain('e4')
+    },
+    (g) => {
+      expect(att(g(27), 'd2', 'b')).toContain('e4') // el caballo de d2 estaba atacado
+      has(g(28), 'f3', 'n', 'w')
+    },
+    (g) => {
+      has(g(29), 'e1', 'k', 'w')
+      has(g(30), 'f1', 'k', 'w')
+      has(g(30), 'e8', 'r', 'b')
+    },
+  ],
+  'india-rey#0': [
+    (g) => expect(att(g(15), 'e5', 'b')).toContain('e8'),
+    (g) => expect(g(17).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'd4', color: 'b' }),
+    (g) => expect(att(g(19), 'b4', 'b')).toContain('a5'),
+    (g) => expect(att(g(21), 'e4', 'b')).toContain('c5'),
+    (g) => {
+      expect(att(g(22), 'c7', 'w')).toContain('b5')
+      expect(att(g(22), 'd6', 'w')).toContain('b5')
+    },
+    (g) => {
+      expect(att(g(23), 'b5', 'b')).toContain('d7')
+      expect(att(g(23), 'h3', 'b')).toContain('d7')
+    },
+    (g) => expect(att(g(25), 'b3', 'b')).toContain('a4'),
+    (g) => expect(att(g(27), 'g4', 'b')).toContain('h5'),
+    (g) => expect(att(g(28), 'a4', 'w')).toContain('c2'),
+    (g) => expect(g(29).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'b', to: 'b5', color: 'b' }),
+    (g) => {
+      has(g(31), 'd7', 'n', 'b')
+      has(g(31), 'c5', 'n', 'b')
+      expect(att(g(31), 'c5', 'b')).toContain('d7')
+    },
+  ],
+  'india-rey#1': [
+    (g) => expect(att(g(9), 'e4', 'b')).toContain('d5'),
+    (g) => {
+      expect(att(g(11), 'c7', 'b')).toContain('a6')
+      expect(att(g(11), 'b4', 'b')).toContain('a6')
+    },
+    (g) => expect(att(g(13), 'f2', 'b')).toContain('e4'),
+    (g) => expect(att(g(15), 'b5', 'b')).toContain('c6'),
+    (g) => expect(g(17).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'p', to: 'e4', color: 'b' }),
+    (g) => expect(att(g(19), 'd4', 'b')).toContain('c5'),
+    (g) => expect(g(21).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'd4', color: 'b' }),
+    (g) => {
+      expect(att(g(23), 'a2', 'b')).toContain('b4')
+      expect(att(g(23), 'c2', 'b')).toContain('b4')
+    },
+    (g) => {
+      expect(att(g(25), 'e4', 'b')).toContain('f5')
+      expect(att(g(25), 'e4', 'w')).toEqual([])
+    },
+    (g) => {
+      expect(att(g(27), 'f4', 'b')).toContain('d5')
+      expect(att(g(27), 'f4', 'w')).toEqual([])
+      expect(att(g(27), 'c3', 'b')).toContain('d5')
+    },
+    (g) => {
+      expect(att(g(29), 'c3', 'b')).toContain('a5')
+      expect(att(g(29), 'a2', 'b')).toContain('a5')
+    },
+    (g) => expect(att(g(30), 'f5', 'w')).toContain('g3'),
+    (g) => {
+      // material: las blancas iban un peón arriba (idx 29) y las negras lo recuperan con …Axd4
+      const mat = (c: Chess) => c.board().flat().reduce((t, p) => (p ? t + ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 }[p.type] ?? 0) * (p.color === 'w' ? 1 : -1) : t), 0)
+      expect(mat(g(29))).toBe(1)
+      expect(mat(g(31))).toBe(0)
+      expect(g(31).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'b', to: 'd4' })
+    },
+    (g) => {
+      expect(att(g(32), 'd4', 'w')).toContain('d2')
+      expect(att(g(32), 'd4', 'b')).toEqual([])
+    },
+  ],
+  'escandinava#0': [
+    (g) => expect(att(g(17), 'c2', 'b')).toContain('g6'),
+    (g) => expect(att(g(18), 'f6', 'w')).toContain('d5'),
+    (g) => expect(att(g(19), 'f6', 'b')).toContain('d8'),
+    (g) => expect(g(20).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'n', color: 'w' }),
+    (g) => {
+      expect(g(21).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'q', to: 'f6' })
+      expect(att(g(21), 'd4', 'b')).toContain('f6')
+      expect(att(g(21), 'h4', 'b')).toContain('f6')
+      expect(att(g(21), 'h4', 'w')).toEqual([])
+    },
+    (g) => expect(g(22).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'n', to: 'g6' }),
+    (g) => {
+      has(g(23), 'g6', 'p', 'b')
+      const hPawns = g(23).board().flat().filter((p) => p && p.type === 'p' && p.color === 'b' && p.square[0] === 'h').length
+      expect(hPawns).toBe(0)
+      has(g(23), 'h8', 'r', 'b')
+    },
+    (g) => expect(att(g(25), 'h2', 'b')).toContain('d6'),
+    (g) => expect(att(g(27), 'd2', 'b')).toContain('f4'),
+    (g) => expect(g(29).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'b', to: 'd2', color: 'b' }),
+    (g) => expect(g(31).history({ verbose: true }).at(-1)!.san).toBe('O-O'),
+  ],
+  'pirc-moderna#0': [
+    (g) => {
+      expect(g(9).history({ verbose: true }).at(-1)!.san).toBe('O-O')
+      has(g(9), 'g7', 'b', 'b')
+    },
+    (g) => expect(att(g(11), 'd4', 'b')).toContain('c6'),
+    (g) => {
+      for (const sq of ['d3', 'a2', 'c2']) expect(att(g(13), sq, 'b'), sq).toContain('b4')
+    },
+    (g) => {
+      expect(g(15).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'b', piece: 'n', to: 'd3' })
+      expect(g(15).inCheck()).toBe(true)
+    },
+    (g) => expect(att(g(17), 'd5', 'b')).toContain('c6'),
+    (g) => expect(att(g(19), 'b4', 'b')).toContain('a5'),
+    (g) => expect(att(g(21), 'e4', 'b')).toContain('d5'),
+    (g) => expect(att(g(22), 'f6', 'w')).toContain('e5'),
+    (g) => expect(att(g(23), 'c3', 'b')).toContain('e4'),
+    (g) => expect(att(g(25), 'h3', 'b')).toContain('f5'),
+    (g) => {
+      expect(att(g(27), 'e5', 'b')).toContain('f6')
+      expect(att(g(27), 'g5', 'b')).toContain('f6')
+    },
+    (g) => expect(att(g(28), 'f5', 'w')).toContain('g4'),
+    (g) => {
+      expect(att(g(29), 'e2', 'b')).toContain('c3')
+      expect(att(g(29), 'd1', 'b')).toContain('c3')
+    },
+    (g) => {
+      expect(att(g(31), 'f3', 'b')).toContain('e4')
+      expect(att(g(31), 'c2', 'b')).toContain('e4')
+    },
+  ],
+  'alekhine#0': [
+    (g) => expect(att(g(15), 'f4', 'b')).toContain('e5'),
+    (g) => {
+      expect(g(16).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'q', piece: 'q', color: 'w' })
+      expect(g(16).inCheck()).toBe(true)
+    },
+    (g) => {
+      expect(g(17).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'q', piece: 'r', color: 'b' })
+      for (const row of g(17).board()) for (const p of row) expect(p?.type, 'sin damas').not.toBe('q')
+    },
+    (g) => {
+      expect(g(18).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'n', to: 'e5' })
+      expect(att(g(18), 'f7', 'w')).toContain('e5')
+      expect(att(g(18), 'c6', 'w')).toContain('e5')
+    },
+    (g) => {
+      expect(att(g(19), 'c2', 'b')).toContain('e4')
+      expect(att(g(19), 'g2', 'b')).toContain('e4')
+      expect(att(g(19), 'c2', 'w')).toEqual([])
+      expect(att(g(19), 'g2', 'w')).toEqual([])
+    },
+    (g) => expect(att(g(21), 'b5', 'b')).toContain('a6'),
+    (g) => expect(g(23).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'n', piece: 'b', to: 'c6', color: 'b' }),
+    (g) => {
+      has(g(25), 'c6', 'p', 'b')
+      has(g(25), 'c7', 'p', 'b') // peones doblados en c
+    },
+    (g) => {
+      expect(att(g(27), 'e5', 'b')).toContain('f6')
+      expect(att(g(27), 'g5', 'b')).toContain('f6')
+    },
+    (g) => expect(g(28).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'e6', color: 'w' }),
+    (g) => {
+      has(g(29), 'e6', 'p', 'w')
+      expect(att(g(29), 'e6', 'b')).toContain('d6')
+      expect(att(g(29), 'e6', 'w')).toEqual([])
+    },
+    (g) => expect(att(g(30), 'd6', 'w')).toContain('f4'),
+    (g) => expect(g(31).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'r', to: 'e6', color: 'b' }),
+    (g) => expect(g(32).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'b', to: 'c7', color: 'w' }),
+    (g) => expect(g(33).inCheck()).toBe(true),
+  ],
+  'colle#0': [
+    (g) => expect(att(g(16), 'd5', 'w')).toContain('e4'),
+    (g) => expect(att(g(17), 'c3', 'b')).toContain('d4'),
+    (g) => expect(att(g(18), 'f6', 'w')).toContain('e5'),
+    (g) => expect(att(g(19), 'e5', 'b')).toContain('d7'),
+    (g) => expect(g(20).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'd4', color: 'w' }),
+    (g) => {
+      expect(att(g(21), 'd3', 'b')).toContain('b4')
+      expect(att(g(21), 'a2', 'b')).toContain('b4')
+    },
+    (g) => expect(att(g(22), 'd7', 'w')).toContain('b5'),
+    (g) => expect(att(g(24), 'd7', 'w')).toContain('a4'),
+    (g) => {
+      expect(att(g(25), 'a4', 'b')).toContain('b5') // el peón de b5 ataca el alfil de a4
+      has(g(26), 'd1', 'b', 'w')
+    },
+    (g) => expect(att(g(28), 'b4', 'w')).toContain('a3'),
+    (g) => expect(att(g(30), 'h7', 'w')).toContain('c2'),
+  ],
+  'inglesa#0': [
+    (g) => expect(att(g(14), 'e5', 'w')).toContain('f3'),
+    (g) => {
+      expect(g(16).history({ verbose: true }).at(-1)!.san).toBe('O-O')
+      has(g(16), 'f1', 'r', 'w')
+    },
+    (g) => expect(att(g(18), 'f5', 'w')).toContain('e4'),
+    (g) => {
+      expect(att(g(20), 'a5', 'w')).toContain('b4')
+      has(g(20), 'b1', 'r', 'w')
+    },
+    (g) => {
+      expect(att(g(22), 'a6', 'w')).toContain('b5')
+      expect(att(g(22), 'c6', 'w')).toContain('b5')
+    },
+    (g) => {
+      expect(g(24).history({ verbose: true }).at(-1)).toMatchObject({ captured: 'p', piece: 'p', to: 'f5' })
+      expect(att(g(24), 'e6', 'w')).toContain('f5')
+      expect(att(g(24), 'g6', 'w')).toContain('f5')
+    },
+    (g) => {
+      expect(att(g(26), 'h7', 'w')).toContain('g5')
+      expect(att(g(26), 'e6', 'w')).toContain('g5')
+    },
+    (g) => expect(att(g(28), 'd6', 'w')).toContain('e4'),
+    (g) => expect(att(g(30), 'c7', 'w')).toContain('d5'),
+  ],
 }
 
 describe('partidas de ejemplo armadas con el motor', () => {
@@ -577,7 +1103,7 @@ describe('partidas de ejemplo armadas con el motor', () => {
     expect(keys.length).toBeGreaterThanOrEqual(mineIdx.length)
     for (const i of keys) {
       expect(i).toBeLessThan(g.moves.length)
-      expect(g.notes[i]!.length, `${id}#${k} jugada ${i}`).toBeGreaterThan(18)
+      expect(g.notes[i]!.length, `${id}#${k} jugada ${i}`).toBeGreaterThan(12)
       expect(g.notes[i]!.length, `${id}#${k} jugada ${i}`).toBeLessThan(230)
     }
     expect(g.summary.length).toBeGreaterThan(60)

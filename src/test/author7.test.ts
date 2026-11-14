@@ -74,7 +74,12 @@ run('partidas de ejemplo', () => {
         ply++
         log(m, ply, '—')
       }
-      while (ply < it.plies && !c.isGameOver()) {
+      // Pasado el largo pedido, sigue mientras la última jugada sea una captura o un jaque (máx. 10 más): no termina a mitad de una táctica.
+      const settling = () => {
+        const last = c.history({ verbose: true }).at(-1)
+        return ply >= it.plies && ply < it.plies + 10 && !!last && (!!last.captured || c.inCheck())
+      }
+      while ((ply < it.plies || settling()) && !c.isGameOver()) {
         const e = await eng.evaluate(c.fen(), 14)
         const b = e.best!
         const mv = c.move({ from: b.slice(0, 2), to: b.slice(2, 4), promotion: b.slice(4) || undefined })
