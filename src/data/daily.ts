@@ -1,5 +1,6 @@
 import type { Puzzle } from '../engine/puzzle'
 import { pickDailyPuzzle } from '../engine/daily'
+import { isProvisional } from '../engine/glicko2'
 import { getSetting, setSetting } from './games'
 import { getProfile, seenPuzzleIds } from './tactics'
 import { loadPoolFor } from './puzzles'
@@ -33,7 +34,7 @@ export async function getDaily(today: string): Promise<DailyState | null> {
   if (saved && saved.date === today) return saved
   const profile = await getProfile()
   const [pool, seen] = await Promise.all([loadPoolFor(profile.rating), seenPuzzleIds()])
-  const puzzle = pickDailyPuzzle(pool, profile.rating, today, seen)
+  const puzzle = pickDailyPuzzle(pool, profile.rating, today, seen, isProvisional(profile))
   if (!puzzle) return null
   const state: DailyState = { date: today, puzzle, outcome: null }
   await setSetting(KEY, JSON.stringify(state))

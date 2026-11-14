@@ -5,6 +5,34 @@ import type { Puzzle } from '../puzzle'
 const mk = (id: string, rating: number): Puzzle => ({ id, fen: '', moves: [], rating, rd: 50, themes: 0 })
 const pool = Array.from({ length: 200 }, (_, i) => mk(`p${String(i).padStart(3, '0')}`, 500 + i * 10))
 
+describe('puzzle del día con rating provisional', () => {
+  it('se busca más abajo: de 100 a 300 puntos por debajo del rating redondeado', () => {
+    const ids = new Set(Array.from({ length: 30 }, (_, i) => pickDailyPuzzle(pool, 1000, `2026-11-${String(i + 1).padStart(2, '0')}`, new Set(), true)?.id))
+    expect(ids.size).toBeGreaterThan(10)
+    for (const id of ids) {
+      const r = pool.find((p) => p.id === id)!.rating
+      expect(r).toBeGreaterThanOrEqual(700)
+      expect(r).toBeLessThanOrEqual(900)
+    }
+  })
+  it('nunca elige uno más difícil que el rating redondeado si hay alternativas más fáciles', () => {
+    for (let d = 1; d <= 28; d++) {
+      const p = pickDailyPuzzle(pool, 1040, `2026-11-${String(d).padStart(2, '0')}`, new Set(), true)!
+      expect(p.rating).toBeLessThanOrEqual(1000)
+    }
+  })
+  it('si no hay nada en la ventana, la amplía de a poco y siempre devuelve uno', () => {
+    expect(pickDailyPuzzle([mk('x', 1500)], 600, '2026-11-13', new Set(), true)?.id).toBe('x')
+    expect(pickDailyPuzzle([], 600, '2026-11-13', new Set(), true)).toBeNull()
+  })
+  it('sin el flag (rating confiable) la ventana sigue siendo la de siempre', () => {
+    const a = pickDailyPuzzle(pool, 1000, '2026-11-13', new Set())
+    const b = pickDailyPuzzle(pool, 1000, '2026-11-13', new Set(), false)
+    expect(a?.id).toBe(b?.id)
+    expect(a!.rating).toBeGreaterThanOrEqual(900)
+  })
+})
+
 describe('puzzle del día', () => {
   it('es el mismo todo el día, aunque cambie el orden del pool o el rating dentro de la misma centena', () => {
     const a = pickDailyPuzzle(pool, 1040, '2026-11-13', new Set())

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { DailyPuzzle, themeKeysOf, themeLabel } from './DailyPuzzle'
+import { DailyPuzzle } from './DailyPuzzle'
 import { DailyOpening } from './DailyOpening'
 import { TodayTasks } from '../plan/Plan'
 import { Mascot, type Mood } from '../../ui/Mascot'
@@ -40,15 +40,12 @@ export function Home() {
   const fecha = new Date().toLocaleDateString('es-AR', { weekday: 'long', day: 'numeric', month: 'long' })
 
   const mood: Mood = puzzle?.outcome === 'solved' ? 'sorprendido' : puzzle?.outcome === 'failed' ? 'pensando' : 'contento'
-  const tema = puzzle && puzzle.outcome === null ? themeKeysOf(puzzle.puzzle.themes)[0] : undefined
   const frase =
     puzzle?.outcome === 'solved'
       ? '¡Qué bien! El puzzle de hoy ya es tuyo.'
       : puzzle?.outcome === 'failed'
         ? 'Hoy costó, pero así se aprende. Mañana hay otro.'
-        : tema
-          ? `Te dejé un puzzle de ${themeLabel(tema).toLowerCase()}. ¿Lo encontrás?`
-          : 'Te dejé un puzzle para hoy. ¿Lo encontrás?'
+        : 'Te dejé un puzzle para hoy. ¿Lo encontrás?'
 
   return (
     <div className="flex flex-col gap-4">

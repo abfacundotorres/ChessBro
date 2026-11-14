@@ -20,12 +20,23 @@ const DAILY_WINDOWS: ReadonlyArray<readonly [number, number]> = [
 ]
 
 /**
+ * Mientras el rating de puzzles es provisional (poca historia: un fallo puede restar más de 100 puntos), el puzzle del día
+ * se busca más abajo: es el que ves primero y no conviene que un fallo te castigue.
+ */
+const DAILY_WINDOWS_PROVISIONAL: ReadonlyArray<readonly [number, number]> = [
+  [-300, -100],
+  [-500, 0],
+  [-700, 200],
+  [-Infinity, Infinity],
+]
+
+/**
  * Puzzle del día: depende solo de la fecha, del rating (redondeado a 100, así no se mueve por resolver uno)
  * y de la base de puzzles. Prefiere los que todavía no hiciste; si no queda ninguno, elige entre todos.
  */
-export function pickDailyPuzzle(pool: readonly Puzzle[], rating: number, date: string, seen: ReadonlySet<string>): Puzzle | null {
+export function pickDailyPuzzle(pool: readonly Puzzle[], rating: number, date: string, seen: ReadonlySet<string>, provisional = false): Puzzle | null {
   const base = Math.round(rating / 100) * 100
-  for (const [lo, hi] of DAILY_WINDOWS) {
+  for (const [lo, hi] of provisional ? DAILY_WINDOWS_PROVISIONAL : DAILY_WINDOWS) {
     const all = pool.filter((p) => p.rating >= base + lo && p.rating <= base + hi)
     const fresh = all.filter((p) => !seen.has(p.id))
     const cands = [...(fresh.length > 0 ? fresh : all)].sort((a, b) => (a.id < b.id ? -1 : 1))
