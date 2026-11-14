@@ -50,7 +50,7 @@ export const PLANS2: Record<string, MoveItem[]> = {
   ],
   colle: [
     planFrom('colle-be7', 14, { id: 'colle-plan-qe2', title: 'Esquema casi completo', prompt: '¿Dónde va la dama?', why: 'Qe2 prepara la ruptura e4 y deja libre la columna d para la torre. Es el paso previo a abrir el juego.' }),
-    planFrom('colle-bd6', 10, { id: 'colle-plan-nbd2', title: 'Colle: falta el caballo de dama', prompt: '¿Cómo lo desarrollás sin bloquear al alfil?', why: 'Cbd2: el caballo sale por d2 sin tapar la salida de b2 del alfil de c1, y se prepara para apoyar e4.' }),
+    planFrom('colle-bd6', 10, { id: 'colle-plan-nbd2', title: 'Colle: falta el caballo de dama', prompt: '¿Cómo desarrollás el caballo de b1?', why: 'Cbd2: el caballo sale por d2 y se prepara para apoyar e4, la ruptura típica del Colle.' }),
   ],
   inglesa: [
     planFrom('ing-nc6', 10, { id: 'ing-plan-rb1', title: 'Fianchetto completo', prompt: '¿Cómo preparás b4?', why: 'Tb1 prepara b4: ganás espacio en el flanco de dama mientras las negras atacan por el otro. Es el plan típico de la Inglesa.' }),

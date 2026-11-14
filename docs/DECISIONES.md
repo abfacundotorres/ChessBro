@@ -722,3 +722,25 @@
   sonaba mal y que vi en la captura; y un helper de mi script que se rompió por una variable (`S`) de otro lenguaje.
 - **Probado en pantalla**: Chromium a 360 px, claro y oscuro: Siciliana (partida 3, tablero desde el lado negro) y Londres (partida 3). **No probado**: las otras aperturas en pantalla (el código es el mismo), un teléfono real ni la voz con las notas nuevas.
 
+## H26: ajustes del inicio, Escandinava y revisión del contenido viejo
+- **Pedido** (decidido con vos): (1) el puzzle del día no tiene que ser tan difícil mientras el rating de puzzles es provisional; (2) el saludo de la mascota no adelanta el tema; (3) **3 ramas nuevas del rival en la Escandinava**;
+  (4) **revisar con chess.js lo que nunca pasó por chess.js**: partidas de ejemplo antiguas, planes y errores del rival, comentarios de ejercicios. Todo en un solo hito.
+- **Puzzle del día**: con rating provisional (`isProvisional`: RD > 110) se busca **100 a 300 puntos por debajo** del rating redondeado (en vez de −100/+200) y la ventana se amplía de a poco si no hay nada; con rating confiable, la de siempre. No toca la matemática del rating
+  ni los puzzles de Táctica. El saludo ya no nombra el tema («Te dejé un puzzle para hoy»; el tema se explica al terminar). **No probado**: cuántos días tarda en dejar de ser provisional con tu uso real.
+- **Escandinava** (88 líneas en total): `esca-c4` (3.c4, el motor ve mejor a las negras: de −0,4 a −0,1), `esca-b4` (4.b4 gambito: de −0,1 a +0,4) y `esca-be2` (3.Cf3 Ag4 4.Ae2: de +0,06 a +0,4). Se desvían por jugadas del **rival** (las líneas de una apertura no
+  pueden contradecir una jugada propia). Se descartaron 4.Cf3 (+0,6 a +0,8 para las blancas: mala para quien aprende), 4.c4 después de 3.d4 y 3…Dd6 (contradice tu …Da5). Verificadas: `escandinavaBranches.test.ts` (cada afirmación de las notas en el tablero; en
+  el camino atrapó un error mío: en 4.b4 la dama en d6 tapa la diagonal del alfil de f8) y Stockfish (`DEEP=1`: ninguna jugada propia pierde más de 8 puntos ni el rival más de 15).
+- **Revisión**: se leyeron las notas de las 21 partidas antiguas (147), las 60 explicaciones de ejercicios de aperturas, las ideas/planes/errores de las 23 aperturas, las 4 trampas, los 69 desafíos de lecciones y las 18 explicaciones genéricas de los ejercicios de Lichess.
+  Para cada nota se miró una hoja de hechos de chess.js (qué hay en cada casilla que menciona y quién la ataca). **37 textos corregidos**, de los que unos **20 afirmaban algo que el tablero contradice**: «torres conectadas» con el alfil o la dama en el medio (Escocesa, Gambito de Dama y
+  la línea `esc-nxd4`), «el alfil de g5» cuando estaba en h4, «clavás contra la dama» con un alfil blanco en e2 (Pirc), «presionás e4» con el alfil de e7 delante (Philidor), «la dama sale del ataque» de un alfil que no la atacaba (Caro-Kann), «ya solo te falta enrocar» sin haber
+  sacado el alfil (Caro-Kann, Escandinava), «una base segura» para un peón de f4 sin defensor (Vienesa), «apunta a d5» con un caballo tapando la diagonal (Inglesa), «apoya e4» con un peón en el medio (Colle), «g3 o f4» con un peón propio en g3 (Vienesa), y el resumen del Evans que decía
+  «material parejo» estando las blancas dos peones abajo. El resto eran precisiones o inconsistencias de estilo (letras inglesas, tercera persona).
+- **Verificado con Stockfish** (`evalfens`, nuevo): las líneas citadas en dos explicaciones (Ruy López `…d5?` → +2,6 y Italiana `…Ch5?` → +3,7), y la **posición final de las 21 partidas antiguas** para comparar con sus resúmenes: se agregó la evaluación en los de Evans (+2,2), Francesa (+0,7),
+  Gambito de Rey (−0,5), Alekhine (+0,8) y Pirc (+0,6), que sonaban más tranquilos de lo que el motor ve.
+- **Se quedó**: `noteLint.test.ts` revisa con patrones **2.117 notas** (antiguas, nuevas y las 88 líneas a fondo) y fija cada corrección; no encuentra nada más, pero **no reemplaza leer**: solo cubre las frases que tienen forma de «ataca el X de f3». Las correcciones que no cubre el detector
+  tienen su comprobación propia en el mismo archivo (`Colle`, `Inglesa`, `Pirc`, `Philidor`, material del Evans, la Vienesa…).
+- **Lo que NO se revisó con este método**: los **132 pasos de lectura** de las lecciones (texto y diagramas), las ideas/planes generales de las aperturas (son consejos, casi sin afirmaciones comprobables: las leí, no las verifiqué), la **pedagogía** de todo lo anterior y las
+  explicaciones de temas de H23. Los 57 ejercicios de Lichess comparten una explicación por tema y no se pueden verificar posición por posición.
+- **Costo**: el JS de arranque pasó de 681 KB a 685 KB (las 3 líneas nuevas). Sigue pendiente el recorte de H19 (407 KB).
+- **Probado en pantalla**: Chromium a 360 px, claro y oscuro: el saludo del inicio (con un puzzle de rating 579 para un nivel de partida de 800) y la lista de 7 líneas de la Escandinava. **No probado**: un teléfono real.
+

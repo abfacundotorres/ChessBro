@@ -58,7 +58,7 @@ export const EXTRAS2: Record<string, OpeningExtras> = {
         18: 'La dama se centraliza y ataca el caballo de e4.',
         24: 'La torre da jaque en la columna e: el rey negro sigue en el centro.',
       },
-      summary: 'El Evans es una apertura de iniciativa: el peón sacrificado compra tiempo y un centro fuerte. Aunque el material queda parejo, el rey negro quedó incómodo en el centro y las blancas tienen todas sus piezas en juego.',
+      summary: 'El Evans es una apertura de iniciativa: el peón sacrificado compra tiempo y un centro fuerte. Las blancas terminan dos peones abajo, pero con todas las piezas en juego y el rey negro incómodo en el centro: Stockfish las ve mejor (+2,2).',
     },
   },
   'cuatro-caballos': {
@@ -112,7 +112,7 @@ export const EXTRAS2: Record<string, OpeningExtras> = {
         14: 'Capturás al paso con el peón de e5.',
         16: 'Enrocás: rey a salvo y torre lista para el centro.',
         18: 'Cambiás caballos: simplificás con ventaja de actividad.',
-        20: 'Recuperás el peón con el alfil, que queda activo.',
+        20: 'Axe4 captura el peón de e4: el alfil queda activo.',
         24: 'El alfil captura el peón de b7: se lleva material.',
       },
       summary: 'La Vienesa permite jugar con iniciativa: f4, captura en e5 y piezas activas. El rival puede defenderse, pero tenés más opciones que él.',
@@ -133,7 +133,7 @@ export const EXTRAS2: Record<string, OpeningExtras> = {
         16: 'Dama con jaque en la columna e: el rey negro todavía en el centro.',
         22: 'Recuperás el peón de f4 con el alfil: lo que ofreciste vuelve.',
       },
-      summary: 'El Gambito de Rey es una apertura filosa: el peón de f4 se recupera pronto y el juego se abre. Cada bando tiene que mirar los jaques.',
+      summary: 'El Gambito de Rey es una apertura filosa: el peón de f4 se recupera pronto y el juego se abre. Cada bando tiene que mirar los jaques. Al final Stockfish ve a las negras algo mejor (−0,5): es una apertura que exige precisión.',
     },
   },
   petroff: {
@@ -188,7 +188,7 @@ export const EXTRAS2: Record<string, OpeningExtras> = {
         25: 'El alfil se retira a g6 conservando la diagonal.',
         27: 'El caballo se reubica atacando c5.',
       },
-      summary: 'La Alekhine te hace jugar al contraataque: el rival avanza y vos atacás los peones avanzados con piezas. Es una apertura de reacción.',
+      summary: 'La Alekhine te hace jugar al contraataque: el rival avanza y vos atacás los peones avanzados con piezas. Es una apertura de reacción. Al final Stockfish ve una ligera ventaja blanca (+0,8).',
     },
   },
   'pirc-moderna': {
@@ -206,7 +206,7 @@ export const EXTRAS2: Record<string, OpeningExtras> = {
         23: 'Recapturás con el peón de b y abrís la columna b.',
         25: 'La torre ocupa la columna b abierta.',
       },
-      summary: 'La Pirc es una defensa flexible: aceptás un centro rival para contraatacarlo con piezas. Los cambios te ayudan a aliviar la posición.',
+      summary: 'La Pirc es una defensa flexible: aceptás un centro rival para contraatacarlo con piezas. Los cambios te ayudan a aliviar la posición. Al final Stockfish ve una ligera ventaja blanca (+0,6).',
     },
   },
   colle: {

@@ -81,9 +81,9 @@ export const EXTRAS_E4: Record<string, OpeningExtras> = {
         19: 'Cambiás torres: la dama blanca recaptura en e1.',
         21: 'Cambiás alfil por caballo: sacás una pieza que defendía el centro y el enroque blanco.',
         25: '…c5: la ruptura central. Desde la simetría, empezás a pelear por la iniciativa.',
-        31: 'Recapturás con el caballo y la partida sigue equilibrada.',
+        31: 'Recapturás con el caballo y la partida sigue casi pareja.',
       },
-      summary: 'Una variante del Cambio típica: simétrica y tranquila, con cambios de piezas y un solo plan claro (…c5). Lo que decide es jugar con precisión y no cometer errores.',
+      summary: 'Una variante del Cambio típica: simétrica y tranquila, con cambios de piezas y un solo plan claro (…c5). Lo que decide es jugar con precisión y no cometer errores. Al final Stockfish ve una ligera ventaja blanca (+0,7).',
     },
   },
   'caro-kann': {

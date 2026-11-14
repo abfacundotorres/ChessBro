@@ -47,7 +47,7 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/features/home/` ("Hoy": puzzle y apertura del día), `src/features/plan/` (tareas de hoy y «Tu progreso»), `src/features/repertoire/`, `src/features/learn/` ("Aprender") — repertorio (estudiar, practicar, repasar), plan y hub.
 - `src/data/chesscom.ts` — importación de Chess.com (API pública). `src/content/openings.ts` + `src/features/openings/` — biblioteca
   de aperturas y "Tus aperturas"; `src/engine/openingStats.ts` — estadísticas por apertura; `src/engine/sparring.ts` — árbol de variantes para practicar contra el rival.
-  `src/content/deep/` + `openingLines.ts` — 85 líneas con una nota por jugada (`deep/branches.ts` hereda notas) (se reusan en la pantalla del repertorio); `openingExtras.ts` — planes, errores del rival y partidas de ejemplo.
+  `src/content/deep/` + `openingLines.ts` — 88 líneas con una nota por jugada (`deep/branches.ts` hereda notas) (se reusan en la pantalla del repertorio); `openingExtras.ts` — planes, errores del rival y partidas de ejemplo.
 - `src/ui/PathMap.tsx` (camino de nodos), `src/ui/Guides.tsx` (Peón, Caballo, Alfil, Torre, Dama y Rey como guías), `src/ui/Scenes.tsx` (viñetas del hub), `src/engine/learnPath.ts`
   (geometría del camino y «siguiente») y `src/content/pathIcons.ts` (guía por banda, ícono por lección).
 - `src/ui/More.tsx` («Explicame más»), `src/ui/ThemeNotes.tsx` (explicación de los temas de un puzzle), `src/content/exerciseMore.ts` (versión larga de los ejercicios a mano; los de
@@ -55,6 +55,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - `src/content/modelGames.ts` — partidas de ejemplo adicionales (`MORE_MODELS`, `modelsOf` en `openingExtras.ts`): parten de una línea a fondo, las sigue Stockfish contra sí mismo y llevan nota en todas
   tus jugadas. Herramienta: `src/test/author7.test.ts` (`MODELS=1`, `MODELS_IN`/`MODELS_OUT`; con `MODELS_CHECK=1` verifica las jugadas con el motor). Las afirmaciones de las notas las comprueba
   `content/__tests__/modelGames.test.ts` con chess.js (hay que agregar ahí las de cada partida nueva).
+- `src/test/noteLint.ts` + `content/__tests__/noteLint.test.ts` — detector de afirmaciones falsas en las notas de jugadas (patrones: «ataca el X de f3», «protege», «recapturás con», «jaque», «torres
+  conectadas») sobre partidas de ejemplo y líneas a fondo, más las correcciones del H26 fijadas con chess.js. `src/test/evalfens.test.ts` (`EVALFENS=1`, `FENS_IN`/`FENS_OUT`) evalúa posiciones con Stockfish para revisar textos.
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
@@ -105,3 +107,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H23 Comentarios más largos: «Explicame más» en temas de puzzles y ejercicios de lecciones, y accesos para practicar en el coach de partidas
 - [x] H24 Partidas de ejemplo armadas con Stockfish contra sí mismo (1ª entrega: aperturas 1.e4 e5, 12 partidas nuevas)
 - [x] H25 Partidas de ejemplo (2ª entrega: el resto de las aperturas, 17 partidas nuevas; 29 en total, 21 aperturas con 2 a 3 partidas cada una)
+- [x] H26 Ajustes del inicio (puzzle del día más fácil con rating provisional, saludo sin spoiler), 3 ramas nuevas del rival en la Escandinava y revisión con chess.js/Stockfish del contenido viejo (37 textos corregidos)

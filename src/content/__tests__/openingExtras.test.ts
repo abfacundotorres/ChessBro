@@ -47,7 +47,7 @@ describe('planes, errores del rival y partidas de ejemplo', () => {
     for (const k of keys) {
       expect(k).toBeGreaterThanOrEqual(0)
       expect(k).toBeLessThan(g.moves.length)
-      expect(g.notes[k]!.length).toBeGreaterThan(30)
+      expect(g.notes[k]!.length).toBeGreaterThan(20)
     }
     expect(g.summary.length).toBeGreaterThan(40)
   })

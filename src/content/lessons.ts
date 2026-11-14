@@ -152,7 +152,7 @@ const BASE_LESSONS: Lesson[] = [
         text: 'Para cada jaque posible: 1) ¿qué responde el rival? Si tiene una sola respuesta, seguí. 2) ¿hay mate después de esa respuesta? Si sí, ya lo tenés.',
       },
     ],
-    exercises: lichess('mateIn2', 'Primero el jaque que deja una sola respuesta, después el mate.'),
+    exercises: lichess('mateIn2', 'Buscá primero los jaques: la jugada que deja una sola respuesta suele llevar al mate.'),
   },
   {
     id: 'horquilla',

@@ -95,3 +95,91 @@ describe('notas antiguas que se corrigieron: lo que dicen ahora es cierto', () =
     expect(g.moves[20]).toBe('Bc1')
   })
 })
+
+describe('explicaciones de ejercicios de aperturas: lo corregido es cierto', () => {
+  const item = (op: string, id: string) => EXTRAS[op]!.items.find((i) => i.id === id)!
+  const play = (it: { moves: string[] }, ...extra: string[]) => {
+    const c = new Chess()
+    for (const m of [...it.moves, ...extra]) c.move(m)
+    return c
+  }
+  it('Inglesa: con el caballo en f3, el alfil de g2 no apunta a d5 (la diagonal está tapada)', () => {
+    const it = item('inglesa', 'ing-plan-bg2')
+    const c = play(it, it.answer)
+    expect(c.get('f3' as Square)).toMatchObject({ type: 'n', color: 'w' })
+    expect(att(c, 'd5', 'w')).not.toContain('g2')
+  })
+  it('Colle: con el peón en e3, la dama de e2 no apoya e4; el caballo de d2 sí', () => {
+    const q = item('colle', 'colle-plan-qe2')
+    const c = play(q, q.answer)
+    expect(c.get('e3' as Square)).toMatchObject({ type: 'p', color: 'w' })
+    expect(att(c, 'e4', 'w')).not.toContain('e2')
+    const n = item('colle', 'colle-plan-nbd2')
+    const d = play(n, n.answer)
+    expect(d.get('d2' as Square)).toMatchObject({ type: 'n', color: 'w' })
+    expect(att(d, 'e4', 'w')).toContain('d2') // el caballo de d2 apoya e4
+  })
+  it('Vienesa: con el peón propio en g3 el caballo de e2 no puede ir a g3, pero sí a d4 y f4', () => {
+    const it = item('viena', 'vie-plan-nge2')
+    const c = play(it, it.answer)
+    expect(c.get('g3' as Square)).toMatchObject({ type: 'p', color: 'w' })
+    expect(c.get('e2' as Square)).toMatchObject({ type: 'n', color: 'w' })
+    for (const sq of ['d4', 'f4']) expect(att(c, sq, 'w'), sq).toContain('e2')
+  })
+  it('Evans: después de enrocar, las torres no están conectadas (quedan piezas entre a1 y f1)', () => {
+    const it = item('evans', 'evans-plan-oo')
+    const c = play(it, it.answer)
+    expect(c.get('f1' as Square)).toMatchObject({ type: 'r', color: 'w' })
+    const between = ['b1', 'c1', 'd1', 'e1'].filter((s) => c.get(s as Square))
+    expect(between.length).toBeGreaterThan(0)
+  })
+  it('Caro-Kann: …Da5+ es jaque y …Dc7?? pierde la dama contra el alfil de f4', () => {
+    const it = item('caro-kann', 'caro-plan-ngf6')
+    const chk = play(it, 'Qa5+')
+    expect(chk.inCheck()).toBe(true)
+    const c = play(it)
+    expect(c.get('f4' as Square)).toMatchObject({ type: 'b', color: 'w' })
+    const after = play(it, 'Qc7')
+    expect(att(after, 'c7', 'w')).toContain('f4')
+  })
+  it('Ruy López …d5?: la línea 6.Cxe5 dxe4 7.Cxc6 … Ce5+ es legal y Ce5+ es jaque descubierto del alfil de a4', () => {
+    const it = item('ruy', 'ruy-pun-d5')
+    const c = play(it, 'Nxe5', 'dxe4', 'Nxc6', 'Qd5', 'Ne5+')
+    expect(c.inCheck()).toBe(true)
+    expect(att(c, 'e8', 'w')).toContain('a4') // el alfil da el jaque; el caballo salió de c6
+    // Stockfish (EVALFENS, profundidad 16): esa posición vale +2,6 para las blancas
+  })
+  it('Italiana …Ch5?: la línea Axf7+ Rxf7 Cxe5+ Cxe5 Dxh5+ es legal y es jaque', () => {
+    const it = item('italiana', 'it-pun-h5')
+    const c = play(it, 'Bxf7+', 'Kxf7', 'Nxe5+', 'Nxe5', 'Qxh5+')
+    expect(c.inCheck()).toBe(true)
+    // Stockfish (EVALFENS, profundidad 16): esa posición vale +3,7 para las blancas
+  })
+})
+
+describe('partidas antiguas: material y evaluación de lo que dicen los resúmenes', () => {
+  const mat = (c: Chess) => c.board().flat().reduce((t, p) => (p ? t + ({ p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 }[p.type] ?? 0) * (p.color === 'w' ? 1 : -1) : t), 0)
+  it('Evans: las blancas terminan dos peones abajo (el resumen no dice «material parejo»)', () => {
+    const g = model('evans')
+    expect(mat(at(g.moves, g.moves.length - 1))).toBe(-2)
+    expect(g.summary).not.toContain('material queda parejo')
+    expect(g.summary).toContain('dos peones abajo')
+    // Stockfish (EVALFENS, profundidad 16): la posición final vale +2,2 para las blancas
+  })
+  it('Vienesa: con Axe4 las blancas ganan un peón (antes iban parejas): la nota no dice «recuperás»', () => {
+    const g = model('viena')
+    expect(mat(at(g.moves, 19))).toBe(0)
+    expect(g.moves[20]).toBe('Bxe4')
+    expect(mat(at(g.moves, 20))).toBe(1)
+    expect(g.notes[20]).not.toContain('Recuperás')
+  })
+  it('Cuatro Caballos: con Cxe5 las blancas ganan un peón', () => {
+    const g = model('cuatro-caballos')
+    expect(mat(at(g.moves, 28))).toBe(1)
+  })
+  it('Gambito de Rey: con Axf4 las blancas recuperan el peón del gambito', () => {
+    const g = model('gambito-rey')
+    expect(mat(at(g.moves, 3))).toBe(-1)
+    expect(mat(at(g.moves, 22))).toBe(0)
+  })
+})

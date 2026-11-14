@@ -183,7 +183,7 @@ export const ADVANCED_LESSONS: Lesson[] = [
         text: 'Antes de jugar la jugada elegida, una última mirada: ¿qué deja colgado? ¿qué amenaza nueva le abre al rival? Un minuto de chequeo evita la mayoría de los desastres.',
       },
     ],
-    exercises: lichess('mateIn3', 'Seguí las jugadas forzadas hasta el final: son tres pasos, y cada una deja una sola respuesta.', 2, 2),
+    exercises: lichess('mateIn3', 'Seguí las jugadas forzadas hasta el final: el mate llega en tres jugadas.', 2, 2),
   },
   {
     id: 'profilaxis',
@@ -269,6 +269,6 @@ export const ADVANCED_LESSONS: Lesson[] = [
         text: 'En los finales de peones se calcula: contá las jugadas de cada peón y de cada rey. La oposición y la regla del cuadrado (ya las practicaste) te dicen si un rey llega a tiempo.',
       },
     ],
-    exercises: lichess('pawnEndgame', 'Contá los tiempos: lo que parece una carrera suele decidirse por una jugada de rey.', 3),
+    exercises: lichess('pawnEndgame', 'Contá los tiempos de cada bando antes de mover: en una carrera, una jugada de más decide.', 3),
   },
 ]
