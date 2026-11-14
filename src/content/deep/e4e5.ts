@@ -249,7 +249,7 @@ export const LINES_E4E5: DeepDef[] = [
       'Las negras sacan el caballo y atacan e4.',
       'Defendés e4 con el caballo y lo desarrollás.',
       'Las negras se preparan para enrocar.',
-      'Enrocás: rey seguro y torres conectadas.',
+      'Enrocás: el rey queda a salvo.',
       'Las negras enrocan. Tenés más espacio y mejor desarrollo: posición cómoda de jugar.',
     ],
     quiz: [q('¿Por qué recapturás con la dama y no con el caballo?', ['Porque la dama queda centralizada y fuerte', 'Para perder tiempo', 'Porque el caballo está clavado', 'Porque es obligatorio'], 0, 'Después de 4…Cxd4 solo podés recapturar con la dama (el caballo ya no está), y en d4 domina el centro.')],

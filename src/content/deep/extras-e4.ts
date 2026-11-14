@@ -33,7 +33,7 @@ export const EXTRAS_E4: Record<string, OpeningExtras> = {
       notes: {
         11: '…e5: echás al caballo de d4 y te quedás con el control del centro.',
         15: 'Enrocás: el rey queda a salvo y ahora podés jugar con calma.',
-        19: 'La dama se ubica en c7: presiona la columna c, donde las negras tienen contrajuego.',
+        19: 'La dama se ubica en c7: presiona la columna c, donde tenés contrajuego.',
         23: 'Cambiás tu alfil por el caballo de d5: lo hacés cuando ese caballo es una pieza fuerte para el rival.',
         25: 'Torre a la columna c: tu contrajuego en el flanco de dama.',
       },
@@ -78,7 +78,7 @@ export const EXTRAS_E4: Record<string, OpeningExtras> = {
       notes: {
         11: 'Los dos enrocan: la posición es simétrica y gana quien juega mejor.',
         15: 'Torre a la columna e: lista para cuando se cambien piezas.',
-        19: 'Cambiás torres y la dama blanca se aleja del centro.',
+        19: 'Cambiás torres: la dama blanca recaptura en e1.',
         21: 'Cambiás alfil por caballo: sacás una pieza que defendía el centro y el enroque blanco.',
         25: '…c5: la ruptura central. Desde la simetría, empezás a pelear por la iniciativa.',
         31: 'Recapturás con el caballo y la partida sigue equilibrada.',
@@ -115,8 +115,8 @@ export const EXTRAS_E4: Record<string, OpeningExtras> = {
       notes: {
         13: 'Desarrollás el caballo de dama y vigilás e5.',
         17: 'Aceptás cambiar alfiles: simplificás y desactivás el alfil rival.',
-        21: 'Con jaque ganás un tiempo: la dama sale del ataque del alfil de f4.',
-        25: 'Desarrollás el último caballo: ya solo te falta enrocar.',
+        21: 'Con jaque ganás un tiempo: las blancas tienen que tapar o mover el rey.',
+        25: 'Desarrollás el último caballo: te quedan el alfil de f8 y el enroque.',
         27: 'El alfil sale a e7 y te prepara para enrocar.',
         31: 'Cambiás caballos para aliviar tu posición.',
         35: '…c5: la ruptura que libera tu posición y ataca el centro.',
@@ -135,7 +135,7 @@ export const EXTRAS_E4: Record<string, OpeningExtras> = {
         moves: L('e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Nf3 c6 Bc4 Bf5 Bd2 e6 O-O'),
         answer: 'Nbd7',
         alt: ['Bb4'],
-        why: 'Desarrollá el último caballo con …Cbd7: ya solo te falta enrocar. Mantené la dama en a5, fuera de peligro, y no te apures con …Axc2??, que pierde una pieza.',
+        why: 'Desarrollá el último caballo con …Cbd7: después te quedan el alfil de f8 y el enroque. Mantené la dama en a5, fuera de peligro, y no te apures con …Axc2??, que pierde una pieza.',
       },
       {
         id: 'esca-pun-bd3',
