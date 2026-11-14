@@ -18,7 +18,7 @@ import { Sparring } from './Sparring'
 import { Session } from './Session'
 import { MovePuzzle } from './MovePuzzle'
 import { ModelGameView } from './ModelGameView'
-import { modelOf, puzzlesOf } from '../../content/openingExtras'
+import { modelsOf, puzzlesOf } from '../../content/openingExtras'
 import { deepLinesOf } from '../../content/openingLines'
 import { ALL_CARDS } from '../../content/repertoireCards'
 import { repStats } from '../../data/repertoire'
@@ -85,7 +85,7 @@ function Body({ o }: { o: Opening }) {
   const quiz = useMemo(() => deepLines.flatMap((l) => l.quiz ?? []), [deepLines])
   const plans = useMemo(() => puzzlesOf(o.id, 'plan'), [o.id])
   const punish = useMemo(() => puzzlesOf(o.id, 'punish'), [o.id])
-  const model = modelOf(o.id)
+  const models = modelsOf(o.id)
   const hasTrap = o.trap?.punishAt !== undefined
   const deep = deepLines.length > 0
   const back = () => setMode('home')
@@ -111,7 +111,7 @@ function Body({ o }: { o: Opening }) {
         {mode === 'session' && <Session opening={o} lines={deepLines} items={items} plans={plans} punish={punish} quiz={quiz} onExit={back} />}
         {mode === 'plan' && <MovePuzzle key="pl" items={plans} />}
         {mode === 'punish' && <MovePuzzle key="pu" items={punish} />}
-        {mode === 'model' && model && <ModelGameView game={model} />}
+        {mode === 'model' && models.length > 0 && <ModelGameView games={models} />}
         {mode === 'sparring' && <Sparring key="sp" lines={deepLines} color={deepLines[0]!.color} onDone={back} doneLabel="Volver" />}
         {mode === 'drill' && <Drill key="dr" items={items} />}
         {mode === 'quiz' && <QuizView key="qz" items={quiz} />}
@@ -155,9 +155,9 @@ function Body({ o }: { o: Opening }) {
                 Trampa
               </button>
             )}
-            {model && (
+            {models.length > 0 && (
               <button type="button" className="btn" onClick={() => setMode('model')}>
-                Partida de ejemplo
+                {models.length > 1 ? `Partidas de ejemplo (${models.length})` : 'Partida de ejemplo'}
               </button>
             )}
           </div>

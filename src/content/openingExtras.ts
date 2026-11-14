@@ -1,6 +1,7 @@
 import { Chess } from 'chess.js'
 import type { Color } from '../engine/game'
 import type { MoveItem, ModelGame, OpeningExtras } from './deep/kit'
+import { MORE_MODELS } from './modelGames'
 import { EXTRAS_E4E5 } from './deep/extras-e4e5'
 import { EXTRAS_E4 } from './deep/extras-e4'
 import { EXTRAS_D4 } from './deep/extras-d4'
@@ -54,4 +55,10 @@ export function puzzlesOf(openingId: string, kind?: MoveItem['kind']): PuzzleIte
 
 export function modelOf(openingId: string): ModelGame | undefined {
   return extrasOf(openingId)?.model
+}
+
+/** Todas las partidas de ejemplo de una apertura: la de siempre y las que armó el motor. */
+export function modelsOf(openingId: string): ModelGame[] {
+  const first = modelOf(openingId)
+  return [...(first ? [first] : []), ...(MORE_MODELS[openingId] ?? [])]
 }

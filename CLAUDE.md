@@ -52,6 +52,9 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   (geometría del camino y «siguiente») y `src/content/pathIcons.ts` (guía por banda, ícono por lección).
 - `src/ui/More.tsx` («Explicame más»), `src/ui/ThemeNotes.tsx` (explicación de los temas de un puzzle), `src/content/exerciseMore.ts` (versión larga de los ejercicios a mano; los de
   Lichess usan `THEME_MORE` de `themeBlurbs.ts`). Las afirmaciones sobre casillas de esos textos las comprueba `content/__tests__/exerciseMore.test.ts`.
+- `src/content/modelGames.ts` — partidas de ejemplo adicionales (`MORE_MODELS`, `modelsOf` en `openingExtras.ts`): parten de una línea a fondo, las sigue Stockfish contra sí mismo y llevan nota en todas
+  tus jugadas. Herramienta: `src/test/author7.test.ts` (`MODELS=1`, `MODELS_IN`/`MODELS_OUT`; con `MODELS_CHECK=1` verifica las jugadas con el motor). Las afirmaciones de las notas las comprueba
+  `content/__tests__/modelGames.test.ts` con chess.js (hay que agregar ahí las de cada partida nueva).
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
@@ -100,3 +103,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H21 Inicio inmersivo: puzzle del día jugable, apertura del día, mascota y «Tu progreso» aparte
 - [x] H22 Menús lúdicos: camino de nodos en Lecciones y Aperturas, hub de Aprender ilustrado y seis piezas-guía (solo estilo Juego)
 - [x] H23 Comentarios más largos: «Explicame más» en temas de puzzles y ejercicios de lecciones, y accesos para practicar en el coach de partidas
+- [x] H24 Partidas de ejemplo armadas con Stockfish contra sí mismo (1ª entrega: aperturas 1.e4 e5, 12 partidas nuevas)

@@ -56,6 +56,8 @@ export interface MoveItem {
 
 export interface ModelGame {
   title: string
+  /** Armada con Stockfish jugando contra sí mismo desde una línea de la apertura (no es una partida real). */
+  engine?: boolean
   /** Quién sos en la partida. */
   color: Color
   moves: string[]

@@ -6,8 +6,28 @@ import type { ModelGame } from '../../content/deep/kit'
 import { START_FEN, replay, sanLineToUci, sanToFigurine } from '../../engine/game'
 import { uciToMove } from '../../engine/puzzle'
 
-/** Partida de ejemplo (ilustrativa), jugada por jugada, con comentarios en los momentos clave. */
-export function ModelGameView({ game }: { game: ModelGame }) {
+/** Partidas de ejemplo de una apertura: si hay más de una, un selector arriba. */
+export function ModelGameView({ games }: { games: ModelGame[] }) {
+  const [idx, setIdx] = useState(0)
+  const game = games[Math.min(idx, games.length - 1)]!
+  return (
+    <div className="flex flex-col gap-3">
+      {games.length > 1 && (
+        <div className="grid gap-2" style={{ gridTemplateColumns: `repeat(${games.length}, minmax(0, 1fr))` }} role="tablist" aria-label="Partidas de ejemplo">
+          {games.map((g, k) => (
+            <button key={g.title} type="button" role="tab" aria-selected={k === idx} className={k === idx ? 'btn-primary' : 'btn'} onClick={() => setIdx(k)}>
+              Partida {k + 1}
+            </button>
+          ))}
+        </div>
+      )}
+      <Game key={game.title} game={game} />
+    </div>
+  )
+}
+
+/** Una partida de ejemplo (ilustrativa), jugada por jugada, con comentarios en los momentos clave. */
+function Game({ game }: { game: ModelGame }) {
   const [i, setI] = useState(0)
   const ucis = useMemo(() => sanLineToUci(START_FEN, game.moves) ?? [], [game])
   const view = useMemo(() => replay(START_FEN, ucis.slice(0, i).map(uciToMove)), [ucis, i])
@@ -19,7 +39,11 @@ export function ModelGameView({ game }: { game: ModelGame }) {
     <div className="flex flex-col gap-3">
       <div>
         <p className="font-semibold">{game.title}</p>
-        <p className="text-sm text-muted">Partida de ejemplo, armada para estudiar: no es una partida real.</p>
+        <p className="text-sm text-muted">
+          {game.engine
+            ? 'Partida de ejemplo: Stockfish jugó las dos partes desde una línea de la apertura. No es una partida real.'
+            : 'Partida de ejemplo, armada para estudiar: no es una partida real.'}
+        </p>
       </div>
       <Board fen={view.fen} orientation={game.color === 'w' ? 'white' : 'black'} lastMove={view.lastMove} checkSquare={view.checkSquare} movableColor={null} />
       <p className="min-h-6 text-center text-sm">
