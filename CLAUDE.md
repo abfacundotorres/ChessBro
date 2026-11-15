@@ -57,6 +57,8 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
   `content/__tests__/modelGames.test.ts` con chess.js (hay que agregar ahí las de cada partida nueva).
 - `src/test/noteLint.ts` + `content/__tests__/noteLint.test.ts` — detector de afirmaciones falsas en las notas de jugadas (patrones: «ataca el X de f3», «protege», «recapturás con», «jaque», «torres
   conectadas») sobre partidas de ejemplo y líneas a fondo, más las correcciones del H26 fijadas con chess.js. `src/test/evalfens.test.ts` (`EVALFENS=1`, `FENS_IN`/`FENS_OUT`) evalúa posiciones con Stockfish para revisar textos.
+- `src/test/steps.test.ts` (`STEPS=1`, `STEPS_OUT`) vuelca los pasos de lectura de las lecciones con su hoja de hechos de chess.js; `content/__tests__/lessonSteps.test.ts` fija lo que esos pasos afirman de sus diagramas
+  (toda jugada con figura que nombra un texto tiene que existir en el diagrama).
 - `src/engine/commentary.ts` (explicación de errores), `src/engine/speak.ts` (texto → voz), `src/lib/speech.ts` y `src/ui/Speak.tsx` (voz del navegador).
 
 ## Convenciones
@@ -108,3 +110,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H24 Partidas de ejemplo armadas con Stockfish contra sí mismo (1ª entrega: aperturas 1.e4 e5, 12 partidas nuevas)
 - [x] H25 Partidas de ejemplo (2ª entrega: el resto de las aperturas, 17 partidas nuevas; 29 en total, 21 aperturas con 2 a 3 partidas cada una)
 - [x] H26 Ajustes del inicio (puzzle del día más fácil con rating provisional, saludo sin spoiler), 3 ramas nuevas del rival en la Escandinava y revisión con chess.js/Stockfish del contenido viejo (37 textos corregidos)
+- [x] H27 Revisión con chess.js/Stockfish de los 132 pasos de lectura de las lecciones (17 textos corregidos, entre ellos un ejemplo con una jugada imposible)

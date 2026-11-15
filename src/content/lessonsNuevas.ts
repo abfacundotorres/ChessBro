@@ -94,7 +94,7 @@ export const NEW_LESSONS: Lesson[] = [
       },
       {
         title: 'Las reglas de la carrera',
-        text: '1) Sacá caballos y alfiles antes que torres y dama.\n2) No muevas dos veces la misma pieza si no hace falta: cada vez regalás un paso.\n3) Enrocá pronto para esconder al rey y conectar las torres.\n\nExcepciones: si te atacan la pieza, o si ganás material, vale mover otra vez.',
+        text: '1) Sacá caballos y alfiles antes que torres y dama.\n2) No muevas dos veces la misma pieza si no hace falta: cada vez regalás un paso.\n3) Enrocá pronto para esconder al rey y sacar la torre de la esquina.\n\nExcepciones: si te atacan la pieza, o si ganás material, vale mover otra vez.',
         challenge: choice(
           'Tu rival mueve tres veces seguidas el mismo caballo y deja el resto dormido. ¿Qué ganaste vos?',
           ['Tiempo: voy a tener más piezas en juego que él', 'Nada: la cantidad de jugadas no importa', 'Material: ya tengo más piezas'],
@@ -315,7 +315,7 @@ export const NEW_LESSONS: Lesson[] = [
     steps: [
       {
         title: 'El Rey Miedoso',
-        text: 'Al comienzo el rey está en el centro, y ahí las columnas abiertas y las piezas rivales lo alcanzan rápido.\n\nPor eso se enroca: lo escondés detrás de peones y de paso conectás las torres.',
+        text: 'Al comienzo el rey está en el centro, y ahí las columnas abiertas y las piezas rivales lo alcanzan rápido.\n\nPor eso se enroca: lo escondés detrás de peones y de paso sacás la torre de la esquina.',
       },
       {
         title: 'El escudo de peones',

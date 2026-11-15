@@ -77,8 +77,11 @@ const BASE_LESSONS: Lesson[] = [
       {
         title: 'Ejemplo',
         text: 'Las negras acaban de jugar ♞f6 y atacan el peón de e4. Si las blancas juegan ♕h5?? sin mirar, el caballo de f6 captura la dama. Una dama que se mueve a una casilla atacada por un peón o una pieza menor casi siempre es un error.',
-        fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3',
-        arrows: [{ from: 'f6', to: 'e4', kind: 'bad' }],
+        fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3',
+        arrows: [
+          { from: 'f6', to: 'e4', kind: 'bad' },
+          { from: 'd1', to: 'h5', kind: 'bad' },
+        ],
       },
       {
         title: 'Ahora, del otro lado',
@@ -95,7 +98,7 @@ const BASE_LESSONS: Lesson[] = [
     steps: [
       {
         title: 'Cómo buscarlo',
-        text: 'Revisá todos los jaques que tengas. Con cada uno preguntate: ¿el rey puede capturar, tapar o escapar? Si la respuesta es no a las tres, es mate.',
+        text: 'Revisá todos los jaques que tengas. Con cada uno preguntate: ¿el rival puede capturar la pieza que da jaque, tapar el jaque o escapar con el rey? Si la respuesta es no a las tres, es mate.',
       },
       {
         title: 'Mate del pasillo',
@@ -167,7 +170,7 @@ const BASE_LESSONS: Lesson[] = [
       },
       {
         title: 'El caballo es el rey de la horquilla',
-        text: 'Un caballo ataca en forma de L y no se puede bloquear. Si da jaque al rey y además ataca otra pieza (horquilla real), ganás esa pieza sí o sí.',
+        text: 'Un caballo ataca en forma de L y no se puede bloquear. Si da jaque al rey y además ataca otra pieza (horquilla real), el rey tiene que salir del jaque y vos te llevás la otra pieza (salvo que puedan capturar tu caballo).',
         fen: 'r3k3/pp3ppp/8/3N4/8/8/PPP2PPP/4K3 w - - 0 1',
         arrows: [
           { from: 'd5', to: 'c7', kind: 'good' },
@@ -195,7 +198,7 @@ const BASE_LESSONS: Lesson[] = [
       },
       {
         title: 'Cómo aprovecharla',
-        text: 'Una pieza clavada es débil: no puede huir ni capturar. Atacala con un peón u otra pieza y la ganás. Y cuidado con tus propias piezas: no dejes caballos delante del rey o la dama donde el alfil rival los clave.',
+        text: 'Una pieza clavada es débil: si se mueve, deja a la vista lo que tiene detrás (y si detrás está el rey, directamente no puede moverse). Atacala con un peón u otra pieza y la ganás. Y cuidado con tus propias piezas: no dejes caballos delante del rey o la dama donde el alfil rival los clave.',
       },
     ],
     exercises: lichess('pin', 'La pieza clavada no puede moverse (o no le conviene), así que se la puede atacar sin que escape.'),
@@ -236,7 +239,7 @@ const BASE_LESSONS: Lesson[] = [
       },
       {
         title: '3. Enrocá pronto',
-        text: 'El enroque pone al rey a salvo y conecta las torres. Idealmente antes de la jugada 10.',
+        text: 'El enroque pone al rey a salvo y saca la torre de la esquina. Idealmente antes de la jugada 10.',
         fen: 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 0 6',
       },
       {
@@ -245,7 +248,7 @@ const BASE_LESSONS: Lesson[] = [
       },
       {
         title: 'Un repertorio mínimo',
-        text: 'Con blancas: 1.e4 y desarrollo natural. Con negras contra 1.e4: 1...e5; contra 1.d4: 1...d5. En H4 de esta app vas a armar y repasar tu repertorio.',
+        text: 'Con blancas: 1.e4 y desarrollo natural. Con negras contra 1.e4: 1...e5; contra 1.d4: 1...d5. En Aprender → Aperturas vas a encontrar tu repertorio para estudiarlo y repasarlo.',
       },
     ],
     exercises: [],
@@ -345,7 +348,7 @@ const BASE_LESSONS: Lesson[] = [
       },
       {
         title: 'Contá atacantes y defensores',
-        text: 'Una pieza está bien defendida si los defensores igualan a los atacantes. Cuando atacás más veces de las que defienden, cambiar piezas gana material.',
+        text: 'Si las piezas valen parecido, una pieza está bien defendida cuando los defensores igualan a los atacantes. Cuando atacás más veces de las que defienden, capturar gana material. (Si el atacante vale menos que la pieza atacada, defenderla no alcanza.)',
       },
     ],
     exercises: lichess('capturingDefender', 'Capturar al defensor deja indefenso lo que protegía.', 3),
@@ -391,7 +394,7 @@ const BASE_LESSONS: Lesson[] = [
       },
       {
         title: 'Un detalle',
-        text: 'Si el peón todavía está en su fila inicial puede avanzar dos casillas: contá el cuadrado desde la tercera fila.',
+        text: 'Si el peón todavía está en su fila inicial puede avanzar dos casillas: armá el cuadrado como si ya hubiera avanzado una casilla.',
       },
       {
         title: 'Los ejercicios',
@@ -413,18 +416,18 @@ const BASE_LESSONS: Lesson[] = [
     steps: [
       {
         title: 'La idea',
-        text: 'Dos reyes están en oposición cuando quedan enfrentados en la misma columna con una casilla en el medio. Quien tiene que mover ahí pierde terreno. El que mueve, cede.',
+        text: 'Dos reyes están en oposición cuando quedan enfrentados en la misma columna (o fila) con una casilla en el medio. Quien tiene que mover ahí pierde terreno. El que mueve, cede.',
         fen: '8/8/4k3/8/4K3/8/8/8 w - - 0 1',
       },
       {
         title: 'Con el peón adelante',
-        text: 'El rey del bando que tiene el peón tiene que ir delante del peón: desde ahí empuja al rey rival hacia atrás y le abre el camino de coronación. El rey rival, en cambio, tiene que ir también delante del peón y mantenerse en oposición.',
+        text: 'El rey del bando que tiene el peón tiene que adelantarse a su peón: desde ahí empuja al rey rival hacia atrás y le abre el camino de coronación. Acá la única jugada que gana es ♔d6: el rey llega a la sexta fila, una fila por delante del peón. El rey rival, en cambio, tiene que ponerse delante del peón y mantenerse en oposición.',
         fen: '8/5k2/8/2K1P3/8/8/8/8 w - - 0 1',
         arrows: [{ from: 'c5', to: 'd6', kind: 'good' }],
       },
       {
         title: 'Ganar',
-        text: 'Cuando el rey de tu bando llega delante del peón, a la altura de la sexta fila o más, el final está ganado. Con el rey en la sexta fila y el peón en la quinta, las blancas ganan.',
+        text: 'Con el peón en la quinta fila y tu rey en la sexta, por delante (en la columna del peón o en una de al lado), el final está ganado, le toque a quien le toque. La excepción es el peón de torre (columnas a y h): si el rey rival llega al rincón, son tablas.',
       },
       {
         title: 'Defender',

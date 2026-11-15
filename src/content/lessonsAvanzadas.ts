@@ -67,7 +67,7 @@ export const ADVANCED_LESSONS: Lesson[] = [
     steps: [
       {
         title: 'La muralla en la sexta',
-        text: 'Ahora del otro lado: tenés torre y rey contra torre, rey y un peón. Si el rey rival se acerca al peón, perdés. La defensa se llama Philidor: tu torre vigila toda la sexta fila, como una muralla que el rey rival no puede cruzar.',
+        text: 'Ahora del otro lado: tenés torre y rey contra torre, rey y un peón. Si el rey rival logra avanzar a la sexta fila, la defensa se vuelve muy difícil. La defensa se llama Philidor: tu torre vigila toda la sexta fila, como una muralla que el rey rival no puede cruzar.',
         fen: PHILIDOR,
         orientation: 'black',
         arrows: [{ from: 'a6', to: 'h6', kind: 'good' }],
@@ -255,7 +255,7 @@ export const ADVANCED_LESSONS: Lesson[] = [
       },
       {
         title: 'El peón pasado exterior',
-        text: 'Un peón pasado lejos de los demás peones (exterior) obliga al rey rival a alejarse para frenarlo. Y cuando ese rey se va, el resto de tus peones queda sin defensa.',
+        text: 'Un peón pasado lejos de los demás peones (exterior) obliga al rey rival a alejarse para frenarlo. Y cuando ese rey se va, el resto de sus peones queda sin defensa.',
         fen: '8/5ppp/4k3/8/P7/4K3/5PPP/8 w - - 0 1',
         challenge: tap('¿Cuál de los peones blancos es el pasado exterior? Tocalo.', '8/5ppp/4k3/8/P7/4K3/5PPP/8 w - - 0 1', 'passed', 'w', 'any', 'El peón de a4 no tiene peones negros en las columnas a ni b: está lejos de los demás y desvía al rey rival.', ['a4']),
       },

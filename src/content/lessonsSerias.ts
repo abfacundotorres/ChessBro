@@ -166,7 +166,7 @@ export const SERIO: Record<string, SerioLesson> = {
     steps: {
       0: {
         title: 'Por qué enrocar',
-        text: 'En el centro, el rey queda expuesto a las columnas abiertas y a las piezas rivales. El enroque lo traslada a un flanco protegido por peones y conecta las torres.',
+        text: 'En el centro, el rey queda expuesto a las columnas abiertas y a las piezas rivales. El enroque lo traslada a un flanco protegido por peones y acerca la torre al centro.',
       },
       1: {
         title: 'Escudo de peones',
@@ -240,7 +240,7 @@ export const SERIO: Record<string, SerioLesson> = {
     steps: {
       0: {
         title: 'Defensa de la tercera fila',
-        text: 'Torre y rey contra torre, rey y peón: si el rey rival se acerca al peón, la posición se pierde. La defensa Philidor consiste en ubicar la torre en la sexta fila (la tercera, contando desde el bando que defiende), de modo que el rey rival no pueda avanzar.',
+        text: 'Torre y rey contra torre, rey y peón: si el rey rival logra avanzar a la sexta fila, la defensa se vuelve muy difícil. La defensa Philidor consiste en ubicar la torre en la sexta fila (la tercera, contando desde el bando que defiende), de modo que el rey rival no pueda avanzar.',
         prompt: '¿Dónde ubica la torre el bando que defiende?',
       },
       1: {

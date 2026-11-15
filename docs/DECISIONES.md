@@ -744,3 +744,24 @@
 - **Costo**: el JS de arranque pasó de 681 KB a 685 KB (las 3 líneas nuevas). Sigue pendiente el recorte de H19 (407 KB).
 - **Probado en pantalla**: Chromium a 360 px, claro y oscuro: el saludo del inicio (con un puzzle de rating 579 para un nivel de partida de 800) y la lista de 7 líneas de la Escandinava. **No probado**: un teléfono real.
 
+
+## H27: revisión de los pasos de lectura de las lecciones
+- **Pedido** (pendiente de H26): pasar por chess.js los **132 pasos** de las 34 lecciones (63 de lectura pura y 69 con desafío; 44 con diagrama), en los dos estilos. Era lo único del contenido que no había pasado por el método de H26.
+- **Cómo**: herramienta nueva `src/test/steps.test.ts` (`STEPS=1`, `STEPS_OUT`): vuelca cada paso con el texto de Juego y de Serio, el tablero, si cada flecha es una jugada legal y, por cada casilla que el texto nombra o resalta,
+  qué hay y quién la ataca. Leí los 132 contra esa hoja.
+- **17 textos corregidos** (15 en Juego, 2 en Serio). Lo que el tablero contradecía:
+  - `seguridad#4`: el ejemplo decía «si las blancas juegan ♕h5??», pero con el caballo blanco en f3 **esa jugada no existe**. Se cambió la posición a 1.e4 e5 2.♘c3 ♞f6 (ahí ♕h5 es legal y ♞xh5 la gana: −8,1 según Stockfish) y se agregó la flecha d1→h5.
+  - `transicion#2` (Juego): «el resto de **tus** peones queda sin defensa»; son los **del rival** (la versión seria lo decía bien).
+  - `apertura#3`, `carrera#2`, `refugio#1` (Juego y Serio): «el enroque conecta las torres». Enrocar solo no las conecta (en el diagrama de `apertura#3` quedan el alfil de c1 y la dama en el medio); ahora dice que saca la torre de la esquina. Un test impide que la frase vuelva.
+  - `philidor#1` (Juego y Serio): «si el rey rival se acerca al peón, perdés», con el rey rival **ya pegado al peón** en el diagrama. Ahora: «si logra avanzar a la sexta fila, la defensa se vuelve muy difícil».
+  - `oposicion#2`: «tiene que ir delante del peón» con una flecha a d6, que está en diagonal (el mismo error que H23 corrigió en los ejercicios). Ahora dice que se adelanta a su peón y que ♔d6 es la única que gana.
+  - `oposicion#3`: la regla «rey en la sexta» estaba dicha sin condiciones; ahora: peón en quinta, rey en sexta por delante (columna del peón o vecina), gana con cualquier turno, salvo peón de torre.
+- **Precisiones** (no eran falsas, pero confundían): `mate1#1` («¿el rey puede capturar, tapar…?»: el que tapa no es el rey), `horquilla#2` («ganás esa pieza sí o sí»: salvo que capturen el caballo), `clavada#2` («no puede huir ni capturar»: la clavada relativa sí puede),
+  `defensor#2` (contar atacantes y defensores solo sirve si las piezas valen parecido), `cuadrado#3` («desde la tercera fila» → «como si ya hubiera avanzado una casilla»), `oposicion#1` (también hay oposición en una fila) y `apertura#5` (decía «En H4 de esta app»: un nombre interno).
+- **Verificado con Stockfish** (`evalfens`, profundidad 16): en `oposicion#2` **solo ♔d6 gana** (+6,3; el resto 0,0); en `oposicion#4` **solo …♚f6 salva** (0,0; el resto +6); en `cuadrado#2` **solo ♔d1 y ♔d2 alcanzan** al peón; Lucena +4,6; Philidor 0,07;
+  y la regla nueva de `oposicion#3` en 10 posiciones (peones e, g y b, con los dos turnos: todas +6 o más) y el peón de torre (0,0).
+- **Se quedó** `content/__tests__/lessonSteps.test.ts` (13 casos, chess.js): cada flecha es una jugada posible, recién hecha o continuación de otra; **toda jugada con figura que nombra un texto existe en su diagrama** (es el test que habría atrapado el ♕h5; se probó que falla con la
+  posición vieja); y las afirmaciones concretas (mates, ahogados, al paso, quién protege f7, la clavada de Légal, la horquilla, el cuadrado, el corte de Lucena, la muralla de Philidor).
+- **Lo que NO verifica ningún programa**: los 88 pasos sin diagrama son consejos generales (los leí; no hay tablero contra el cual comprobarlos), la pedagogía, y que las reglas generales reescritas estén bien dichas más allá de las posiciones de muestra.
+  El refrán de `atrapada#2` («Los caballos en el borde, la desgracia del dueño») no lo pude contrastar con una fuente y lo dejé.
+- **Sin cambios**: los desafíos (revisados en H26), los ejercicios y sus respuestas. El JS de arranque sigue pendiente (685 KB).
