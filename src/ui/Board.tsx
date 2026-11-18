@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { Chessboard, defaultPieces, type Arrow } from 'react-chessboard'
 import {
   legalTargets,
@@ -53,6 +53,13 @@ const CHECK: CSSProperties = {
 const PROMO_ORDER: PromoPiece[] = ['q', 'n', 'r', 'b']
 const PROMO_NAMES: Record<PromoPiece, string> = { q: 'Dama', n: 'Caballo', r: 'Torre', b: 'Alfil' }
 
+/** Cuánto esperar tras levantar el dedo antes de dar por colgado un arrastre que la librería no cerró. */
+const STUCK_DRAG_MS = 350
+/** Tras pedirle a la librería que cancele, cuánto esperar antes de volver a montar el tablero. */
+const STUCK_FALLBACK_MS = 150
+/** Eventos con los que termina (o se interrumpe) un toque o un clic. */
+const RELEASE_EVENTS = ['pointerup', 'pointercancel', 'touchend', 'touchcancel', 'mouseup'] as const
+
 function turnOf(fen: string): Color {
   return fen.split(' ')[1] === 'b' ? 'b' : 'w'
 }
@@ -60,6 +67,41 @@ function turnOf(fen: string): Color {
 export function Board({ fen, orientation = 'white', lastMove, checkSquare, movableColor = 'both', onMove, highlights, arrows, onSquareTap, marks, notation = true }: BoardProps) {
   const [selected, setSelected] = useState<{ fen: string; square: string } | null>(null)
   const [promo, setPromo] = useState<{ fen: string; from: string; to: string } | null>(null)
+  // Seguro contra arrastres colgados: a veces el navegador (sobre todo en teléfonos) pierde el «soltar». La librería
+  // (dnd-kit) sigue creyendo que arrastrás: deja la pieza de origen al 50 % y, mientras dura, un oyente en `document`
+  // se come todos los toques (por eso «no se puede avanzar»). Si pasado un instante de levantar el dedo el arrastre
+  // sigue abierto, se le pide a la librería que lo cancele (ella cancela ante un `resize`) y, si no alcanzó, se vuelve
+  // a montar el tablero (cambia `epoch`).
+  const dragging = useRef(false)
+  const [epoch, setEpoch] = useState(0)
+
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let fallback: ReturnType<typeof setTimeout> | undefined
+    const reset = () => {
+      if (!dragging.current) return
+      setSelected(null)
+      window.dispatchEvent(new Event('resize'))
+      fallback = setTimeout(() => {
+        if (!dragging.current) return
+        dragging.current = false
+        setEpoch((n) => n + 1)
+      }, STUCK_FALLBACK_MS)
+    }
+    const onRelease = (e: Event) => {
+      if (!dragging.current) return
+      // Con otro dedo todavía apoyado, el arrastre puede seguir con él.
+      if ('touches' in e && (e as TouchEvent).touches.length > 0) return
+      clearTimeout(timer)
+      timer = setTimeout(reset, STUCK_DRAG_MS)
+    }
+    for (const t of RELEASE_EVENTS) window.addEventListener(t, onRelease, true)
+    return () => {
+      clearTimeout(timer)
+      clearTimeout(fallback)
+      for (const t of RELEASE_EVENTS) window.removeEventListener(t, onRelease, true)
+    }
+  }, [])
 
   // La selección y la coronación pendiente se invalidan solas si cambia la posición.
   const sel = selected?.fen === fen ? selected.square : null
@@ -127,6 +169,7 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
   return (
     <div className="relative w-full select-none" style={{ touchAction: 'none' }}>
       <Chessboard
+        key={epoch}
         options={{
           position: fen,
           boardOrientation: orientation,
@@ -140,9 +183,14 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
           animationDurationInMs: 150,
           onSquareClick: ({ square }) => onSquareClick(square),
           onPieceDrag: ({ square }) => {
+            dragging.current = true
             if (square) setSelected({ fen, square })
           },
+          onPieceDragCancel: () => {
+            dragging.current = false
+          },
           onPieceDrop: ({ sourceSquare, targetSquare }) => {
+            dragging.current = false
             if (!targetSquare || sourceSquare === targetSquare) return false
             return attempt(sourceSquare, targetSquare)
           },

@@ -104,6 +104,28 @@ await page.waitForTimeout(900)
   const msg = await page.locator('p[aria-live=polite]').first().innerText()
   check(/encontrá la mejor jugada/.test(msg) && (await sq(from).locator(`[data-piece="${king}"]`).count()) === 1, `soltar en una casilla ilegal (${from}→${to}) no cuenta como error (mensaje: «${msg}»)`)
 }
+// Arrastre colgado: si el navegador pierde el «soltar», la pieza de origen no puede quedar atenuada para siempre.
+{
+  const first = await page.evaluate(() => document.querySelector('[data-square]').getAttribute('data-square'))
+  const king = first === 'a8' ? 'wK' : 'bK'
+  const from = await page.evaluate((k) => document.querySelector(`[data-piece="${k}"]`)?.closest('[data-square]')?.getAttribute('data-square') ?? null, king)
+  const col = 'abcdefgh'.indexOf(from[0])
+  const to = `${'abcdefgh'[col < 4 ? col + 1 : col - 1]}${from[1] === '1' ? '2' : '7'}`
+  await page.evaluate(() => {
+    window.__block = true
+    for (const t of ['pointerup', 'pointercancel', 'mouseup', 'touchend', 'touchcancel']) window.addEventListener(t, (e) => window.__block && e.stopImmediatePropagation(), true)
+  })
+  const a = await sq(from).boundingBox()
+  const b = await sq(to).boundingBox()
+  await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 8 })
+  await page.mouse.up() // el evento de soltar no le llega a la librería
+  await page.evaluate(() => { window.__block = false })
+  await page.waitForTimeout(1200)
+  const dimmed = await page.evaluate(() => [...document.querySelectorAll('[data-square], [data-square] *')].filter((el) => getComputedStyle(el).opacity !== '1').length)
+  check(dimmed === 0, `arrastre colgado (se pierde el «soltar»): el tablero se recupera solo (${dimmed} elementos atenuados)`)
+}
 await page.click('text=Ver solución')
 await page.waitForSelector('text=Siguiente')
 check(true, 'puzzle sin conexión: solución mostrada y registrada')
