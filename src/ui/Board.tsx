@@ -71,6 +71,12 @@ export function Board({ fen, orientation = 'white', lastMove, checkSquare, movab
 
   function attempt(from: string, to: string): boolean {
     if (!onMove) return false
+    // Soltar en una casilla a la que la pieza no puede ir: vuelve a su lugar y no se informa como jugada
+    // (antes las pantallas lo tomaban por una respuesta equivocada: marcaba el puzzle como fallado).
+    if (!legalTargets(fen, from).includes(to)) {
+      setSelected(null)
+      return false
+    }
     if (needsPromotion(fen, from, to)) {
       setPromo({ fen, from, to })
       return false

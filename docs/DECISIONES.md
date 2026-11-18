@@ -765,3 +765,13 @@
 - **Lo que NO verifica ningún programa**: los 88 pasos sin diagrama son consejos generales (los leí; no hay tablero contra el cual comprobarlos), la pedagogía, y que las reglas generales reescritas estén bien dichas más allá de las posiciones de muestra.
   El refrán de `atrapada#2` («Los caballos en el borde, la desgracia del dueño») no lo pude contrastar con una fuente y lo dejé.
 - **Sin cambios**: los desafíos (revisados en H26), los ejercicios y sus respuestas. El JS de arranque sigue pendiente (685 KB).
+
+## H28: puzzles que se quedaban trabados tras un error
+- **Síntoma** (tuyo, en el teléfono): después de algunos errores el puzzle «se tilda», la pieza se ve más clara y no se puede jugar por un rato.
+- **Lo que pude reproducir y arreglar** (Chromium con toques reales por CDP, 12 a 40 jugadas erróneas seguidas en Táctica y en el puzzle del día: no se tildó con jugadas legales):
+  1. **Soltar una pieza en una casilla a la que no puede ir contaba como respuesta equivocada** (marcaba el puzzle como fallado, lo registraba y restaba rating; en las lecciones también). Ahora `Board` no informa esas jugadas: la pieza vuelve y no pasa nada.
+  2. **En los ejercicios de tus partidas**, ese mismo soltado ilegal como primer intento dejaba la pantalla en **«Consultando al motor…» para siempre** (`checkAlternative` salía sin limpiar el estado y `onMove` ignora todo mientras dura): comprobado, las jugadas siguientes no hacían nada hasta tocar Pista o Ver solución.
+  3. **Red de seguridad**: la consulta al motor (¿esta otra jugada también sirve?) tiene un **tope de 8 s** (`evaluateWithin`, con `AbortSignal`). Si el motor tarda o no responde (teléfono lento, motor ocupado analizando una partida), se toma como «no es esa» y se puede seguir. Probado demorando 25 s el archivo del motor: la pantalla se liberó a los 8 s.
+- **Lo que NO pude reproducir**: la pieza más clara. En la librería (`react-chessboard`) la pieza que se arrastra deja su casilla de origen al 50 % de opacidad; si un arrastre no se cierra, quedaría así. No lo vi en 52 arrastres (legales, ilegales, fuera del tablero y con el siguiente arrastre apurado), pero **no puedo descartar un problema propio del toque en un Xiaomi real**. Si sigue pasando, hace falta saber en qué pantalla y si es arrastrando o tocando.
+- **Verificación**: `scripts/e2e-offline.mjs` suma «soltar en una casilla ilegal no cuenta como error» (falla con «No es esa. Probá otra.» si se deshace el arreglo de `Board`; se probó). **No hay test unitario** de esto: el arreglo está en componentes y el proyecto no tiene entorno de tests de React.
+- **Efecto secundario a tener en cuenta**: un soltado ilegal ya no penaliza. Antes un desliz del dedo costaba un fallo y rating.

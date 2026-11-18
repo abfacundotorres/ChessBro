@@ -87,6 +87,23 @@ check(/♖e4 \S+/.test(list), `el motor respondió sin conexión (${list})`)
 await go('/tactica')
 await page.waitForSelector('text=encontrá la mejor jugada', { timeout: 20000 })
 await page.waitForTimeout(900)
+// Soltar una pieza en una casilla ilegal (el rey, cuatro columnas más allá): vuelve a su lugar y NO cuenta como error.
+{
+  const first = await page.evaluate(() => document.querySelector('[data-square]').getAttribute('data-square'))
+  const king = first === 'a8' ? 'wK' : 'bK'
+  const from = await page.evaluate((k) => document.querySelector(`[data-piece="${k}"]`)?.closest('[data-square]')?.getAttribute('data-square') ?? null, king)
+  const col = 'abcdefgh'.indexOf(from[0])
+  const to = `${'abcdefgh'[col < 4 ? col + 4 : col - 4]}${from[1]}`
+  const a = await sq(from).boundingBox()
+  const b = await sq(to).boundingBox()
+  await page.mouse.move(a.x + a.width / 2, a.y + a.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(b.x + b.width / 2, b.y + b.height / 2, { steps: 8 })
+  await page.mouse.up()
+  await page.waitForTimeout(500)
+  const msg = await page.locator('p[aria-live=polite]').first().innerText()
+  check(/encontrá la mejor jugada/.test(msg) && (await sq(from).locator(`[data-piece="${king}"]`).count()) === 1, `soltar en una casilla ilegal (${from}→${to}) no cuenta como error (mensaje: «${msg}»)`)
+}
 await page.click('text=Ver solución')
 await page.waitForSelector('text=Siguiente')
 check(true, 'puzzle sin conexión: solución mostrada y registrada')

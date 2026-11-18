@@ -111,3 +111,4 @@ Licencia GPL-3.0-or-later (obligatoria por Stockfish). Deploy en GitHub Pages po
 - [x] H25 Partidas de ejemplo (2ª entrega: el resto de las aperturas, 17 partidas nuevas; 29 en total, 21 aperturas con 2 a 3 partidas cada una)
 - [x] H26 Ajustes del inicio (puzzle del día más fácil con rating provisional, saludo sin spoiler), 3 ramas nuevas del rival en la Escandinava y revisión con chess.js/Stockfish del contenido viejo (37 textos corregidos)
 - [x] H27 Revisión con chess.js/Stockfish de los 132 pasos de lectura de las lecciones (17 textos corregidos, entre ellos un ejemplo con una jugada imposible)
+- [x] H28 Puzzles que se trababan tras un error: soltar en casilla ilegal ya no cuenta como fallo y la consulta al motor en ejercicios de partidas tiene tope de 8 s

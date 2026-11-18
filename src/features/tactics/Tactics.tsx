@@ -65,6 +65,23 @@ function today() {
   return toDateStr(new Date())
 }
 
+/** Tope de espera al motor para decidir si una jugada distinta también sirve (en un teléfono lento o con el motor ocupado). */
+const ENGINE_CHECK_MS = 8000
+
+/** Evalúa con el motor, pero nunca espera más de `ms`: si se pasa, libera al motor y rechaza. */
+async function evaluateWithin(fen: string, depth: number, ms: number) {
+  const ctrl = new AbortController()
+  const timer = setTimeout(() => ctrl.abort(), ms)
+  try {
+    return await Promise.race([
+      getEngine().evaluate(fen, depth, ctrl.signal),
+      new Promise<never>((_, reject) => ctrl.signal.addEventListener('abort', () => reject(new Error('El motor tardó demasiado')), { once: true })),
+    ])
+  } finally {
+    clearTimeout(timer)
+  }
+}
+
 export function Tactics() {
   const profile = useLiveQuery(() => getProfile(), [], initialProfile())
   const dueCount = useLiveQuery(() => db.reviews.where('due').belowOrEqual(today()).count(), [], 0)
@@ -158,16 +175,20 @@ export function Tactics() {
   /** En ejercicios de partidas propias, una jugada distinta puede ser igual de buena: lo decide el motor. */
   async function checkAlternative(c: Current, m: MoveInput) {
     const origin = c.origin
+    const id = c.state.puzzle.id
     const after = tryMove(currentFen(c.state), m)
-    if (!origin || !after) return
+    if (!origin || !after) {
+      // No debería pasar (el tablero solo informa jugadas legales), pero nunca hay que quedarse en «Consultando…».
+      setCurrent((cur) => (cur?.state.puzzle.id === id && cur.feedback === 'checking' ? { ...cur, feedback: 'start' } : cur))
+      return
+    }
     let good = false
     try {
       if (after.san.endsWith('#')) good = true
-      else good = isGoodAlternative(origin.bestCp, (await getEngine().evaluate(after.fen, 12)).score, winPercent)
+      else good = isGoodAlternative(origin.bestCp, (await evaluateWithin(after.fen, 12, ENGINE_CHECK_MS)).score, winPercent)
     } catch (e) {
       console.error(e)
     }
-    const id = c.state.puzzle.id
     if (good) {
       const state = acceptAlternative(c.state, m)
       const done: Current = { ...c, state, shown: state.played.length, feedback: 'done', alternative: true }
